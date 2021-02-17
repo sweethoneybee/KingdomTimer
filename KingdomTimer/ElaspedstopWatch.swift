@@ -11,46 +11,29 @@ enum ElaspedStopwatchStatus {
 class ElaspedstopWatch {
     // MARK:- Properties
     let REFRESH_INTERVAL = TimeInterval(1)
-
-    var isOn: Bool = false
-    var isFinish: Bool = true
-    var idx: Int?
+    var index: Int?
     var title: String
+    var status: ElaspedStopwatchStatus = .idle
     var timer: Timer?
     var timerLabel: UILabel?
     var interval: TimeInterval
-    var finishDate: Date?
+    lazy var finishDate = Date(timeIntervalSinceNow: self.savedLeftTime)
     var leftTime: TimeInterval {
         if self.status == .paused {
             return self.savedLeftTime
         }
         
-        let now = Date()
-        if let _interval = self.finishDate?.timeIntervalSince(now), _interval > 0 {
+        let NOW = Date()
+        let _interval = self.finishDate.timeIntervalSince(NOW)
+        if _interval > 0 {
             self.savedLeftTime = _interval
             return self.savedLeftTime
+        } else {
+            self.savedLeftTime = TimeInterval(0)
+            return self.savedLeftTime
         }
-        
-        self.savedLeftTime = TimeInterval(0)
-        return self.savedLeftTime
     }
     private var savedLeftTime: TimeInterval // self.leftTime이 호출되어야 갱신되는 값
-    
-    var status: ElaspedStopwatchStatus {
-        if self.isOn == false {
-            if self.isFinish == true {
-                return .idle
-            } else {
-                return .paused
-            }
-        } else {
-            if self.isFinish == true {
-                return .finished
-            } else {
-                return .going
-            }
-        }
-    }
     
     // MARK:- Methods
     init(title: String, interval: TimeInterval) {
@@ -59,46 +42,41 @@ class ElaspedstopWatch {
         self.savedLeftTime = interval
     }
     
-    func start() -> Bool{
-        // must not be ElaspedStopWatchStatus.going
-        guard self.status != .going else {
+    func start() {
+        guard self.status == .idle || self.status == .paused else {
             print("toDo.start 실패")
-            return false
+            return
         }
         
-        self.isOn = true
-        self.isFinish = false
+        self.status = .going
         self.finishDate = Date(timeIntervalSinceNow: self.savedLeftTime)
-        
-        self.timer = Timer.scheduledTimer(withTimeInterval: self.REFRESH_INTERVAL, repeats: true, block: refreshInterface(timer:))
-        self.timer?.tolerance = self.REFRESH_INTERVAL * 0.1
-        self.timer?.fire()
-        
-        return true
+        self.timer = scheduleTimer()
+        timer?.fire()
     }
     
     func pause() {
-        // must be ElaspedStopWatchStatus.going
         guard self.status == .going else {
             print("toDo.pause 실패")
             return
         }
         
-        self.isOn = false
+        self.status = .paused
         self.timer?.invalidate()
         self.timer = nil
     }
     
     func finish() {
-        // must be ElaspedStopWatchStatus.going
         guard self.status == .going else {
             print("toDo.finish 실패. 현재 타이머 상태=\(self.status)")
             return
         }
         
+        self.status = .finished
+        
+        // TODO:- changeInterface 함수로 구현할 것
         let leftSecond = Int(self.leftTime)
         self.timerLabel?.text = "\(leftSecond)초. 종료"
-        self.isFinish = true
+        
         // TODO:- 로직상 이부분은 나중에 지워야함. savedLeftTime은 reInit 함수에서 재설정.
         self.savedLeftTime = self.interval
     }
@@ -110,8 +88,7 @@ class ElaspedstopWatch {
             return
         }
         
-        self.isOn = false
-        self.isFinish = true
+        self.status = .idle
         self.savedLeftTime = self.interval
     }
     
@@ -123,12 +100,11 @@ class ElaspedstopWatch {
         }
         
         print("최적화 타이머 시작")
-        if self.leftTime <= 0 {
-            
+        if self.leftTime > 0 {
+            self.timer = scheduleTimer()
+            timer?.fire()
         } else {
-            self.timer = Timer.scheduledTimer(withTimeInterval: self.REFRESH_INTERVAL, repeats: true, block: self.refreshInterface(timer:))
-            self.timer?.tolerance = self.REFRESH_INTERVAL * 0.1
-            self.timer?.fire()
+            self.finish()
         }
     }
     
@@ -144,17 +120,23 @@ class ElaspedstopWatch {
         self.timer = nil
     }
     
-    func refreshInterface(timer: Timer) {
-        if self.leftTime <= 0 {
+    func scheduleTimer() -> Timer {
+        let timer = Timer.scheduledTimer(withTimeInterval: self.REFRESH_INTERVAL, repeats: true, block: self.timerBlock(timer:))
+        timer.tolerance = self.REFRESH_INTERVAL * 0.1
+        return timer
+    }
+    
+    func timerBlock(timer: Timer) {
+        if self.leftTime > 0 {
+            // TODO:- changeInterface 함수 호출해야함
+            let leftSecond = Int(self.leftTime)
+            self.timerLabel?.text = "\(leftSecond)초 남음"
+            print("Timer 객체 반복")
+        } else {
             print("Timer 객체 invalidate")
             self.finish()
             timer.invalidate()
             self.timer = nil
-            return
-        } else {
-            let leftSecond = Int(self.leftTime)
-            self.timerLabel?.text = "\(leftSecond)초 남음"
-            print("Timer 객체 반복")
         }
     }
     

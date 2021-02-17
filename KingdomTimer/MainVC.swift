@@ -29,6 +29,10 @@ class MainVC: UIViewController {
         let pauseWithOptimizationBtn = makeTestButton(center: CGPoint(x: CENTER_WIDTH, y: 300), title: "최적화를 위해 중단")
         pauseWithOptimizationBtn.addTarget(self, action: #selector(pauseWithOptimizationStopwatches(_:)), for: .touchUpInside)
         self.view.addSubview(pauseWithOptimizationBtn)
+        
+        let reInitBtn = makeTestButton(center: CGPoint(x: CENTER_WIDTH, y: 350), title: "타이머초기화")
+        reInitBtn.addTarget(self, action: #selector(reInit(_:)), for: .touchUpInside)
+        self.view.addSubview(reInitBtn)
     }
     
     @objc func addStopwatch(_ sender: Any) {
@@ -44,7 +48,7 @@ class MainVC: UIViewController {
     @objc func startStopwatches(_ sender: Any) {
         print("시작할 타이머 개수=\(self.stopwatches.count)")
         for stopWatch in self.stopwatches {
-            _ = stopWatch.start()
+            stopWatch.start()
         }
     }
     
@@ -69,6 +73,11 @@ class MainVC: UIViewController {
         }
     }
     
+    @objc func reInit(_ sender: Any) {
+        for stopwatch in self.stopwatches {
+            stopwatch.reInit()
+        }
+    }
     func makeTestButton(center: CGPoint, title: String) -> UIButton {
         let btn = UIButton(type: .system)
         btn.setTitle(title, for: .normal)
