@@ -1,57 +1,94 @@
 import UIKit
 
 class MainVC: UIViewController {
-    var time: Date!
-    var task: toDo!
-    var lbl: UILabel!
+    var stopwatches = [ElaspedstopWatch]()
+    var labels = [UILabel]()
+    var labelIndex = 0
+    var nextLabelY: Int = 400
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        let CENTER_WIDTH =  self.view.frame.width / 2
         
-        self.time = Date(timeInterval: TimeInterval(100), since: Date())
-        print("self.time = \(self.time!)")
+        let makeBtn = makeTestButton(center: CGPoint(x: CENTER_WIDTH, y: 100), title: "5초짜리 타이머 생성하고 등록")
+        makeBtn.addTarget(self, action: #selector(addStopwatch(_:)), for: .touchUpInside)
+        self.view.addSubview(makeBtn)
         
+        let startBtn = makeTestButton(center: CGPoint(x: CENTER_WIDTH, y: 150), title: "타이머 시작")
+        startBtn.addTarget(self, action: #selector(startStopwatches(_:)), for: .touchUpInside)
+        self.view.addSubview(startBtn)
         
-        let btn = UIButton(type: .system)
-        btn.setTitle("타이머 5초 시작", for: .normal)
-        btn.frame = CGRect(x: 0, y: 0, width: 100, height: 50)
-        btn.center = CGPoint(x: self.view.frame.width / 2, y: 100)
-        btn.addTarget(self, action: #selector(startTimer(_:)), for: .touchUpInside)
-        btn.sizeToFit()
+        let pauseBtn = makeTestButton(center: CGPoint(x: CENTER_WIDTH, y: 200), title: "타이머 전부 중단")
+        pauseBtn.addTarget(self, action: #selector(pauseStopwatches), for: .touchUpInside)
+        self.view.addSubview(pauseBtn)
         
-        self.view.addSubview(btn)
+        let startWithOptimizationBtn = makeTestButton(center: CGPoint(x: CENTER_WIDTH, y: 250), title: "최적화를 위해 시작")
+        startWithOptimizationBtn.addTarget(self, action: #selector(startWithOptimizationStopwatches(_:)), for: .touchUpInside)
+        self.view.addSubview(startWithOptimizationBtn)
         
-        self.lbl = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
-        self.lbl.font = .systemFont(ofSize: 18)
-        self.lbl.textAlignment = .center
-        self.lbl.center = CGPoint(x: self.view.frame.width / 2, y: 400)
-        self.lbl.text = "임시 텍스트"
-        
-        self.view.addSubview(self.lbl)
-        
-        
+        let pauseWithOptimizationBtn = makeTestButton(center: CGPoint(x: CENTER_WIDTH, y: 300), title: "최적화를 위해 중단")
+        pauseWithOptimizationBtn.addTarget(self, action: #selector(pauseWithOptimizationStopwatches(_:)), for: .touchUpInside)
+        self.view.addSubview(pauseWithOptimizationBtn)
     }
     
-    @objc func startTimer(_ sender: Any) {
-        self.task = toDo(title: "임시", interval: TimeInterval(5))
-        self.lbl.text = "\(self.task.leftSecond)초 남았습니다"
-        self.task.start()
-        self.addTimer(task: self.task)
+    @objc func addStopwatch(_ sender: Any) {
+        self.makeTestLabel()
+        let task = ElaspedstopWatch(title: "임시", interval: TimeInterval(5))
+        task.timerLabel = self.labels[self.labelIndex]
+        self.labelIndex += 1
+        self.stopwatches.append(task)
+        
+        print("등록된 타이머 개수=\(self.stopwatches.count)")
     }
-
-    @objc func timerBlock(_ timer: Timer) {
-        if let task = timer.userInfo as? toDo {
-            self.lbl.text = "\(task.leftSecond)초 남았습니다"
-            if task.leftSecond <= 0 {
-                print("종료")
-                timer.invalidate()
-                return
-            }
-            print("반복")
+    
+    @objc func startStopwatches(_ sender: Any) {
+        print("시작할 타이머 개수=\(self.stopwatches.count)")
+        for stopWatch in self.stopwatches {
+            _ = stopWatch.start()
         }
     }
+    
+    @objc func pauseStopwatches(_ sender: Any) {
+        print("멈출 타이머 개수=\(self.stopwatches.count)")
+        for stopwatch in self.stopwatches {
+            stopwatch.pause()
+        }
+    }
+    
+    @objc func startWithOptimizationStopwatches(_ sender: Any) {
+        print("최적화를 다시 시작할 타이머 개수=\(self.stopwatches.count)")
+        for stopwatch in self.stopwatches {
+            stopwatch.startWithOptimization()
+        }
+    }
+    
+    @objc func pauseWithOptimizationStopwatches(_ sender: Any) {
+        print("최적화를 위해 중단할 타이머 개수=\(self.stopwatches.count)")
+        for stopwatch in self.stopwatches {
+            stopwatch.pauseWithOptimization()
+        }
+    }
+    
+    func makeTestButton(center: CGPoint, title: String) -> UIButton {
+        let btn = UIButton(type: .system)
+        btn.setTitle(title, for: .normal)
+        btn.frame = CGRect(x: 0, y: 0, width: 100, height: 50)
+        btn.center = center
+        btn.sizeToFit()
+        return btn
+    }
 
-    // TODO: 인자에 NSArray 추가해서 timer 추가해주기
-    func addTimer(task: toDo) {
-        let timer = Timer.scheduledTimer(timeInterval: TimeInterval(1), target: self, selector: #selector(timerBlock(_:)), userInfo: task, repeats: true)
+    func makeTestLabel() {
+        let lbl = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
+        lbl.font = .systemFont(ofSize: 18)
+        lbl.textAlignment = .center
+        lbl.center = CGPoint(x: self.view.frame.width / 2, y: CGFloat(nextLabelY))
+        self.nextLabelY += 50
+        
+        self.labels.append(lbl)
+        lbl.text = "\(self.labels.count)번째 테스트 라벨"
+        lbl.sizeToFit()
+        
+        self.view.addSubview(lbl)
     }
 }
