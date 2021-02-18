@@ -1,19 +1,20 @@
 import UIKit
 
-enum ElaspedStopwatchStatus {
+// MARK:- ElapsedStopwatchStatus 열거형 정의
+enum ElapsedStopwatchStatus {
     case idle
     case paused
     case going
     case finished
 }
 
-// MARK:- ToDo 클래스 정의
-class ElaspedstopWatch {
+// MARK:- ElapsedStopwatch 클래스 정의
+class ElapsedStopwatch {
     // MARK:- Properties
     let REFRESH_INTERVAL = TimeInterval(1)
     var index: Int?
     var title: String
-    var status: ElaspedStopwatchStatus = .idle
+    var status: ElapsedStopwatchStatus = .idle
     var timer: Timer?
     var timerLabel: UILabel?
     var interval: TimeInterval
@@ -34,6 +35,7 @@ class ElaspedstopWatch {
         }
     }
     private var savedLeftTime: TimeInterval // self.leftTime이 호출되어야 갱신되는 값
+    var delegate: ElapsedStopwatchDelegate?
     
     // MARK:- Methods
     init(title: String, interval: TimeInterval) {
@@ -44,10 +46,11 @@ class ElaspedstopWatch {
     
     func start() {
         guard self.status == .idle || self.status == .paused else {
-            print("toDo.start 실패")
+            print("ElapsedStopwatch.start 실패. 현재상태=\(self.status)")
             return
         }
         
+        self.delegate?.willChangeStatus(from: self.status, to: .going)
         self.status = .going
         self.finishDate = Date(timeIntervalSinceNow: self.savedLeftTime)
         self.timer = scheduleTimer()
@@ -56,10 +59,11 @@ class ElaspedstopWatch {
     
     func pause() {
         guard self.status == .going else {
-            print("toDo.pause 실패")
+            print("ElapsedStopwatch.pause 실패. 현재상태=\(self.status)")
             return
         }
         
+        self.delegate?.willChangeStatus(from: self.status, to: .paused)
         self.status = .paused
         self.timer?.invalidate()
         self.timer = nil
@@ -67,35 +71,28 @@ class ElaspedstopWatch {
     
     func finish() {
         guard self.status == .going else {
-            print("toDo.finish 실패. 현재 타이머 상태=\(self.status)")
+            print("ElapsedStopwatch.finish 실패. 현재상태=\(self.status)")
             return
         }
         
+        self.delegate?.willChangeStatus(from: self.status, to: .finished)
         self.status = .finished
-        
-        // TODO:- changeInterface 함수로 구현할 것
-        let leftSecond = Int(self.leftTime)
-        self.timerLabel?.text = "\(leftSecond)초. 종료"
-        
-        // TODO:- 로직상 이부분은 나중에 지워야함. savedLeftTime은 reInit 함수에서 재설정.
-        self.savedLeftTime = self.interval
     }
     
     func reInit() {
-        // must be ElaspedStopWatchStatus.finished
         guard self.status == .finished else {
-            print("toDo.reinit 실패")
+            print("ElapsedStopwatch.reinit 실패. 현재상태=\(self.status)")
             return
         }
         
+        self.delegate?.willChangeStatus(from: self.status, to: .idle)
         self.status = .idle
         self.savedLeftTime = self.interval
     }
     
     func startWithOptimization() {
-        // must be ElaspedStopWatchStatus.going
         guard self.status == .going && self.timer == nil else {
-            print("startWithOptimization 실패")
+            print("startWithOptimization 실패. 현재상태=\(self.status)")
             return
         }
         
@@ -109,9 +106,8 @@ class ElaspedstopWatch {
     }
     
     func pauseWithOptimization() {
-        // must be ElaspedStopWatchStatus.going
         guard self.status == .going else {
-            print("pauseWithOptimization 실패")
+            print("pauseWithOptimization 실패. 현재상태=\(self.status)")
             return
         }
         
@@ -120,28 +116,23 @@ class ElaspedstopWatch {
         self.timer = nil
     }
     
-    func scheduleTimer() -> Timer {
-        let timer = Timer.scheduledTimer(withTimeInterval: self.REFRESH_INTERVAL, repeats: true, block: self.timerBlock(timer:))
+    private func scheduleTimer() -> Timer {
+        let timer = Timer.scheduledTimer(withTimeInterval: self.REFRESH_INTERVAL, repeats: true) { timer in
+            self.delegate?.ElapsedStopwatch(leftTime: self.leftTime)
+            if self.leftTime <= 0 {
+                print("Timer 객체 invalidate")
+                self.finish()
+                timer.invalidate()
+                self.timer = nil
+            }
+        }
         timer.tolerance = self.REFRESH_INTERVAL * 0.1
         return timer
     }
-    
-    func timerBlock(timer: Timer) {
-        if self.leftTime > 0 {
-            // TODO:- changeInterface 함수 호출해야함
-            let leftSecond = Int(self.leftTime)
-            self.timerLabel?.text = "\(leftSecond)초 남음"
-            print("Timer 객체 반복")
-        } else {
-            print("Timer 객체 invalidate")
-            self.finish()
-            timer.invalidate()
-            self.timer = nil
-        }
-    }
-    
-    // TODO:- refreshInterface, finish 함수에서 라벨 변환에 사용될 함수
-    func changeInterface() {
-        
-    }
+}
+
+// TODO:- UI 로직을 위해서 구현해야하는 델리게이트
+protocol ElapsedStopwatchDelegate {
+    func ElapsedStopwatch(leftTime: TimeInterval)
+    func willChangeStatus(from: ElapsedStopwatchStatus, to: ElapsedStopwatchStatus)
 }

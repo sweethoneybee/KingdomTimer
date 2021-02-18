@@ -1,13 +1,20 @@
 import UIKit
 
 class MainVC: UIViewController {
-    var stopwatches = [ElaspedstopWatch]()
+    var stopwatches = [ElapsedStopwatch]()
     var labels = [UILabel]()
     var labelIndex = 0
     var nextLabelY: Int = 400
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.makeTestEnv()
+    }
+}
+
+// MARK:- 테스트환경 조성용 코드
+extension MainVC {
+    func makeTestEnv() {
         let CENTER_WIDTH =  self.view.frame.width / 2
         
         let makeBtn = makeTestButton(center: CGPoint(x: CENTER_WIDTH, y: 100), title: "5초짜리 타이머 생성하고 등록")
@@ -37,7 +44,7 @@ class MainVC: UIViewController {
     
     @objc func addStopwatch(_ sender: Any) {
         self.makeTestLabel()
-        let task = ElaspedstopWatch(title: "임시", interval: TimeInterval(5))
+        let task = ElapsedStopwatch(title: "임시", interval: TimeInterval(5))
         task.timerLabel = self.labels[self.labelIndex]
         self.labelIndex += 1
         self.stopwatches.append(task)
