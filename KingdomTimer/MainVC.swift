@@ -1,17 +1,83 @@
 import UIKit
 
 class MainVC: UIViewController {
-    var stopwatches = [ElapsedStopwatch]()
+    // for test
     var labels = [UILabel]()
     var labelIndex = 0
     var nextLabelY: Int = 400
+
+    var stopwatches = [ElapsedStopwatch]()
+    @IBOutlet var collectionView: UICollectionView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.makeTestEnv()
+        
+        let item = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addStopwatch(_:)))
+        self.navigationItem.rightBarButtonItem = item
+        
+        
+        let flowLayout: UICollectionViewFlowLayout
+        flowLayout = UICollectionViewFlowLayout()
+        flowLayout.minimumInteritemSpacing = CGFloat(10)
+        flowLayout.minimumLineSpacing = CGFloat(10)
+        flowLayout.sectionInset = UIEdgeInsets.zero
+        
+        let width = UIScreen.main.bounds.width
+        flowLayout.itemSize = CGSize(width: width * 0.28, height: 100)
+        
+        self.collectionView?.collectionViewLayout = flowLayout
+//        self.makeTestEnv()
     }
 }
 
+extension MainVC: UICollectionViewDataSource, UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return stopwatches.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ElapsedStopwatchCell", for: indexPath) as? ElapsedStopwatchCell else {
+            let errorCell = UICollectionViewCell()
+            return errorCell
+        }
+        
+        let stopwatch = self.stopwatches[indexPath.item]
+        stopwatch.delegate = cell
+        
+        if stopwatch.status == .idle {
+            cell.timerLabel?.text = "\(Int(stopwatch.interval))"
+        } else {
+            cell.timerLabel?.text = "\(Int(stopwatch.leftTime))"
+        }
+        
+        cell.backgroundColor = CellBackgroundColor.backgroundColor(withStatus: stopwatch.status)
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let stopwatch = self.stopwatches[indexPath.item]
+        print("\(indexPath.item)번째 셀 클릭됨")
+        switch stopwatch.status {
+        case .idle:
+            stopwatch.start()
+        case .going:
+            stopwatch.pause()
+        case .paused:
+            stopwatch.start()
+        case .finished:
+            stopwatch.reset()
+        }
+    }
+    
+    @objc func addStopwatch(_ sender: Any) {
+        
+        let task = ElapsedStopwatch(title: "임시", interval: TimeInterval(5))
+        self.stopwatches.append(task)
+        
+        print("등록된 타이머 개수=\(self.stopwatches.count)")
+        self.collectionView?.reloadData()
+    }
+}
 // MARK:- 테스트환경 조성용 코드
 extension MainVC {
     func makeTestEnv() {
@@ -38,18 +104,8 @@ extension MainVC {
         self.view.addSubview(pauseWithOptimizationBtn)
         
         let reInitBtn = makeTestButton(center: CGPoint(x: CENTER_WIDTH, y: 350), title: "타이머초기화")
-        reInitBtn.addTarget(self, action: #selector(reInit(_:)), for: .touchUpInside)
+        reInitBtn.addTarget(self, action: #selector(reset(_:)), for: .touchUpInside)
         self.view.addSubview(reInitBtn)
-    }
-    
-    @objc func addStopwatch(_ sender: Any) {
-        self.makeTestLabel()
-        let task = ElapsedStopwatch(title: "임시", interval: TimeInterval(5))
-        task.timerLabel = self.labels[self.labelIndex]
-        self.labelIndex += 1
-        self.stopwatches.append(task)
-        
-        print("등록된 타이머 개수=\(self.stopwatches.count)")
     }
     
     @objc func startStopwatches(_ sender: Any) {
@@ -80,9 +136,9 @@ extension MainVC {
         }
     }
     
-    @objc func reInit(_ sender: Any) {
+    @objc func reset(_ sender: Any) {
         for stopwatch in self.stopwatches {
-            stopwatch.reInit()
+            stopwatch.reset()
         }
     }
     func makeTestButton(center: CGPoint, title: String) -> UIButton {

@@ -11,14 +11,25 @@ enum ElapsedStopwatchStatus {
 // MARK:- ElapsedStopwatch 클래스 정의
 class ElapsedStopwatch {
     // MARK:- Properties
-    let REFRESH_INTERVAL = TimeInterval(1)
+    var delegate: ElapsedStopwatchDelegate?
+    private var REFRESH_INTERVAL = TimeInterval(1)
+    var refreshInterval: TimeInterval {
+        get {
+            return self.REFRESH_INTERVAL
+        }
+        set (newRefreshInterval) {
+            if (newRefreshInterval > 0.1) {
+                self.REFRESH_INTERVAL = newRefreshInterval
+            }
+        }
+    }
     var index: Int?
     var title: String
     var status: ElapsedStopwatchStatus = .idle
     var timer: Timer?
-    var timerLabel: UILabel?
     var interval: TimeInterval
     lazy var finishDate = Date(timeIntervalSinceNow: self.savedLeftTime)
+    private var savedLeftTime: TimeInterval // self.leftTime이 호출되어야 갱신되는 값
     var leftTime: TimeInterval {
         if self.status == .paused {
             return self.savedLeftTime
@@ -34,8 +45,6 @@ class ElapsedStopwatch {
             return self.savedLeftTime
         }
     }
-    private var savedLeftTime: TimeInterval // self.leftTime이 호출되어야 갱신되는 값
-    var delegate: ElapsedStopwatchDelegate?
     
     // MARK:- Methods
     init(title: String, interval: TimeInterval) {
@@ -50,11 +59,13 @@ class ElapsedStopwatch {
             return
         }
         
-        self.delegate?.willChangeStatus(from: self.status, to: .going)
-        self.status = .going
         self.finishDate = Date(timeIntervalSinceNow: self.savedLeftTime)
         self.timer = scheduleTimer()
         timer?.fire()
+        
+        let oldStatus = self.status
+        self.status = .going
+        self.delegate?.DidChangeStatus(self, originalStatus: oldStatus, newStatus: self.status)
     }
     
     func pause() {
@@ -63,10 +74,12 @@ class ElapsedStopwatch {
             return
         }
         
-        self.delegate?.willChangeStatus(from: self.status, to: .paused)
-        self.status = .paused
         self.timer?.invalidate()
         self.timer = nil
+        
+        let oldStatus = self.status
+        self.status = .paused
+        self.delegate?.DidChangeStatus(self, originalStatus: oldStatus, newStatus: self.status)
     }
     
     func finish() {
@@ -75,19 +88,22 @@ class ElapsedStopwatch {
             return
         }
         
-        self.delegate?.willChangeStatus(from: self.status, to: .finished)
+        let oldStatus = self.status
         self.status = .finished
+        self.delegate?.DidChangeStatus(self, originalStatus: oldStatus, newStatus: self.status)
     }
     
-    func reInit() {
+    func reset() {
         guard self.status == .finished else {
             print("ElapsedStopwatch.reinit 실패. 현재상태=\(self.status)")
             return
         }
         
-        self.delegate?.willChangeStatus(from: self.status, to: .idle)
-        self.status = .idle
         self.savedLeftTime = self.interval
+        
+        let oldStatus = self.status
+        self.status = .idle
+        self.delegate?.DidChangeStatus(self, originalStatus: oldStatus, newStatus: self.status)
     }
     
     func startWithOptimization() {
@@ -118,13 +134,13 @@ class ElapsedStopwatch {
     
     private func scheduleTimer() -> Timer {
         let timer = Timer.scheduledTimer(withTimeInterval: self.REFRESH_INTERVAL, repeats: true) { timer in
-            self.delegate?.ElapsedStopwatch(leftTime: self.leftTime)
             if self.leftTime <= 0 {
                 print("Timer 객체 invalidate")
                 self.finish()
                 timer.invalidate()
                 self.timer = nil
             }
+            self.delegate?.TimerDidTick(leftTime: self.leftTime)
         }
         timer.tolerance = self.REFRESH_INTERVAL * 0.1
         return timer
@@ -133,6 +149,6 @@ class ElapsedStopwatch {
 
 // TODO:- UI 로직을 위해서 구현해야하는 델리게이트
 protocol ElapsedStopwatchDelegate {
-    func ElapsedStopwatch(leftTime: TimeInterval)
-    func willChangeStatus(from: ElapsedStopwatchStatus, to: ElapsedStopwatchStatus)
+    func TimerDidTick(leftTime: TimeInterval)
+    func DidChangeStatus(_ elapsedStopwatch: ElapsedStopwatch, originalStatus from: ElapsedStopwatchStatus, newStatus to: ElapsedStopwatchStatus)
 }
