@@ -25,7 +25,11 @@ class ElapsedStopwatch {
     }
     var index: Int?
     var title: String
-    var status: ElapsedStopwatchStatus = .idle
+    var status: ElapsedStopwatchStatus = .idle {
+        didSet(oldStatus) {
+            self.delegate?.DidChangeStatus(self, originalStatus: oldStatus, newStatus: self.status)
+        }
+    }
     var timer: Timer?
     var interval: TimeInterval
     lazy var finishDate = Date(timeIntervalSinceNow: self.savedLeftTime)
@@ -36,14 +40,7 @@ class ElapsedStopwatch {
         }
         
         let NOW = Date()
-        let _interval = self.finishDate.timeIntervalSince(NOW)
-        if _interval > 0 {
-            self.savedLeftTime = _interval
-            return self.savedLeftTime
-        } else {
-            self.savedLeftTime = TimeInterval(0)
-            return self.savedLeftTime
-        }
+        return self.finishDate.timeIntervalSince(NOW)
     }
     
     // MARK:- Methods
@@ -60,12 +57,14 @@ class ElapsedStopwatch {
         }
         
         self.finishDate = Date(timeIntervalSinceNow: self.savedLeftTime)
-        self.timer = scheduleTimer()
-        timer?.fire()
-        
-        let oldStatus = self.status
         self.status = .going
-        self.delegate?.DidChangeStatus(self, originalStatus: oldStatus, newStatus: self.status)
+        
+        if self.leftTime > 0 {
+            self.timer = scheduleTimer()
+            timer?.fire()
+        } else {
+            self.finish()
+        }
     }
     
     func pause() {
@@ -76,10 +75,9 @@ class ElapsedStopwatch {
         
         self.timer?.invalidate()
         self.timer = nil
+        self.savedLeftTime = self.leftTime
         
-        let oldStatus = self.status
         self.status = .paused
-        self.delegate?.DidChangeStatus(self, originalStatus: oldStatus, newStatus: self.status)
     }
     
     func finish() {
@@ -88,9 +86,7 @@ class ElapsedStopwatch {
             return
         }
         
-        let oldStatus = self.status
         self.status = .finished
-        self.delegate?.DidChangeStatus(self, originalStatus: oldStatus, newStatus: self.status)
     }
     
     func reset() {
@@ -101,9 +97,7 @@ class ElapsedStopwatch {
         
         self.savedLeftTime = self.interval
         
-        let oldStatus = self.status
         self.status = .idle
-        self.delegate?.DidChangeStatus(self, originalStatus: oldStatus, newStatus: self.status)
     }
     
     func startWithOptimization() {
@@ -135,7 +129,6 @@ class ElapsedStopwatch {
     private func scheduleTimer() -> Timer {
         let timer = Timer.scheduledTimer(withTimeInterval: self.REFRESH_INTERVAL, repeats: true) { timer in
             if self.leftTime <= 0 {
-                print("Timer 객체 invalidate")
                 self.finish()
                 timer.invalidate()
                 self.timer = nil

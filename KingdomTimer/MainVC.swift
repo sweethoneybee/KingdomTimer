@@ -56,7 +56,6 @@ extension MainVC: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let stopwatch = self.stopwatches[indexPath.item]
-        print("\(indexPath.item)번째 셀 클릭됨")
         switch stopwatch.status {
         case .idle:
             stopwatch.start()
