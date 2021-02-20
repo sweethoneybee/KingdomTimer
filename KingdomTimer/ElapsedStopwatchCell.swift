@@ -9,19 +9,19 @@ class ElapsedStopwatchCell: UICollectionViewCell, ElapsedStopwatchDelegate {
     }
     
     func DidChangeStatus(_ elasedStopwatch: ElapsedStopwatch, originalStatus from: ElapsedStopwatchStatus, newStatus to: ElapsedStopwatchStatus) {
-        
+
         print("DidChangeStatus from=.\(from) to=.\(to) ")
         switch (from, to) {
         case (.idle, .going):
-            self.backgroundColor = CellBackgroundColor.going
+            self.contentView.backgroundColor = CellBackgroundColor.going
         case (.going, .paused):
-            self.backgroundColor = CellBackgroundColor.paused
+            self.contentView.backgroundColor = CellBackgroundColor.paused
         case (.paused, .going):
-            self.backgroundColor = CellBackgroundColor.going
+            self.contentView.backgroundColor = CellBackgroundColor.going
         case (.going, .finished):
-            self.backgroundColor = CellBackgroundColor.finished
+            self.contentView.backgroundColor = CellBackgroundColor.finished
         case (.finished, .idle):
-            self.backgroundColor = CellBackgroundColor.idle
+            self.contentView.backgroundColor = CellBackgroundColor.idle
             
             let defaultInterval = Int(elasedStopwatch.interval)
             self.timerLabel?.text = "\(defaultInterval)"

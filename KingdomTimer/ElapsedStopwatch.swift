@@ -11,8 +11,22 @@ enum ElapsedStopwatchStatus {
 // MARK:- ElapsedStopwatch 클래스 정의
 class ElapsedStopwatch {
     // MARK:- Properties
-    var delegate: ElapsedStopwatchDelegate?
+
     private var REFRESH_INTERVAL = TimeInterval(1)
+    private var savedLeftTime: TimeInterval
+    
+    var delegate: ElapsedStopwatchDelegate?
+    var index: Int?
+    var title: String
+    var timer: Timer?
+    var interval: TimeInterval
+    lazy var finishDate = Date(timeIntervalSinceNow: self.savedLeftTime)
+    var status: ElapsedStopwatchStatus = .idle {
+        didSet(oldStatus) {
+            self.delegate?.DidChangeStatus(self, originalStatus: oldStatus, newStatus: self.status)
+        }
+    }
+    
     var refreshInterval: TimeInterval {
         get {
             return self.REFRESH_INTERVAL
@@ -23,24 +37,19 @@ class ElapsedStopwatch {
             }
         }
     }
-    var index: Int?
-    var title: String
-    var status: ElapsedStopwatchStatus = .idle {
-        didSet(oldStatus) {
-            self.delegate?.DidChangeStatus(self, originalStatus: oldStatus, newStatus: self.status)
-        }
-    }
-    var timer: Timer?
-    var interval: TimeInterval
-    lazy var finishDate = Date(timeIntervalSinceNow: self.savedLeftTime)
-    private var savedLeftTime: TimeInterval // self.leftTime이 호출되어야 갱신되는 값
+    
     var leftTime: TimeInterval {
-        if self.status == .paused {
+        switch self.status {
+        case .idle:
+            return self.interval
+        case .going:
+            let NOW = Date()
+            return self.finishDate.timeIntervalSince(NOW)
+        case .paused:
             return self.savedLeftTime
+        case .finished:
+            return TimeInterval.zero
         }
-        
-        let NOW = Date()
-        return self.finishDate.timeIntervalSince(NOW)
     }
     
     // MARK:- Methods

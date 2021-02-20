@@ -20,13 +20,14 @@ class MainVC: UIViewController {
         flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumInteritemSpacing = CGFloat(10)
         flowLayout.minimumLineSpacing = CGFloat(10)
-        flowLayout.sectionInset = UIEdgeInsets.zero
         
         let width = UIScreen.main.bounds.width
-        flowLayout.itemSize = CGSize(width: width * 0.28, height: 100)
+        flowLayout.itemSize = CGSize(width: width * 0.28, height: width * 0.28)
+        
+        let inset = width * 0.02
+        flowLayout.sectionInset = UIEdgeInsets(top: CGFloat(inset), left: CGFloat(inset), bottom: CGFloat(inset), right: CGFloat(inset))
         
         self.collectionView?.collectionViewLayout = flowLayout
-//        self.makeTestEnv()
     }
 }
 
@@ -44,13 +45,10 @@ extension MainVC: UICollectionViewDataSource, UICollectionViewDelegate {
         let stopwatch = self.stopwatches[indexPath.item]
         stopwatch.delegate = cell
         
-        if stopwatch.status == .idle {
-            cell.timerLabel?.text = "\(Int(stopwatch.interval))"
-        } else {
-            cell.timerLabel?.text = "\(Int(stopwatch.leftTime))"
-        }
+        cell.timerLabel?.text = "\(Int(stopwatch.leftTime))"
         
-        cell.backgroundColor = CellBackgroundColor.backgroundColor(withStatus: stopwatch.status)
+        cell.contentView.backgroundColor = CellBackgroundColor.backgroundColor(withStatus: stopwatch.status)
+        cell.contentView.layer.cornerRadius = CGFloat(20)
         return cell
     }
     
