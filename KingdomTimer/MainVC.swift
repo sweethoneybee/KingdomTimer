@@ -28,6 +28,9 @@ class MainVC: UIViewController {
         flowLayout.sectionInset = UIEdgeInsets(top: CGFloat(inset), left: CGFloat(inset), bottom: CGFloat(inset), right: CGFloat(inset))
         
         self.collectionView?.collectionViewLayout = flowLayout
+        
+        // for natural content shrinking animation
+        self.collectionView?.delaysContentTouches = false
     }
 }
 
@@ -45,10 +48,22 @@ extension MainVC: UICollectionViewDataSource, UICollectionViewDelegate {
         let stopwatch = self.stopwatches[indexPath.item]
         stopwatch.delegate = cell
         
-        cell.timerLabel?.text = "\(Int(stopwatch.leftTime))"
+        // 테스트
+        cell.statusLabel?.text = ElapsedStopwatchCell.textStatus(status: stopwatch.status)
+        cell.titleLabel?.text = "쫀득쫀득 잼파이 생산하는 걸 텍스트로 표현하고 싶은데 어디까지 작성해야할지 모르겠습니다"
+        cell.timeLabel?.text = "133시간 35분 34초"
+        
+        /*
+         * 실제
+         cell.statusLabel?.text = ElapsedStopwatchCell.textStatus(status: stopwatch.status)
+         cell.titleLabel?.text = stopwatch.title
+         cell.timeLabel?.text = ElapsedStopwatchCell.textLeftTime(left: stopwatch.leftTime)
+         */
+        
         
         cell.contentView.backgroundColor = CellBackgroundColor.backgroundColor(withStatus: stopwatch.status)
         cell.contentView.layer.cornerRadius = CGFloat(20)
+        
         return cell
     }
     
@@ -63,6 +78,24 @@ extension MainVC: UICollectionViewDataSource, UICollectionViewDelegate {
             stopwatch.start()
         case .finished:
             stopwatch.reset()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
+        print("하이라이트아이템=\(indexPath.item)")
+        
+        if let cell = collectionView.cellForItem(at: indexPath) as? ElapsedStopwatchCell {
+            let pressedDownTransform = CGAffineTransform(scaleX: 0.98, y: 0.98)
+            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 3, options: [.curveEaseInOut], animations: { cell.transform = pressedDownTransform })
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
+        print("언하이라이트=\(indexPath.item)")
+        
+        if let cell = collectionView.cellForItem(at: indexPath) as? ElapsedStopwatchCell {
+            let originalTransform = CGAffineTransform(scaleX: 1, y: 1)
+            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 3, options: [.curveEaseInOut], animations: { cell.transform = originalTransform })
         }
     }
     

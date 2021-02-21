@@ -1,16 +1,20 @@
 import UIKit
 
 class ElapsedStopwatchCell: UICollectionViewCell, ElapsedStopwatchDelegate {
-    @IBOutlet var timerLabel: UILabel?
+    
+    @IBOutlet var statusLabel: UILabel?
+    @IBOutlet var titleLabel: UILabel?
+    @IBOutlet var timeLabel: UILabel?
     
     func TimerDidTick(leftTime: TimeInterval) {
-        let leftSecond: Int = Int(leftTime)
-        self.timerLabel?.text = "\(leftSecond)"
+        self.timeLabel?.text = ElapsedStopwatchCell.textLeftTime(left: leftTime)
     }
     
     func DidChangeStatus(_ elasedStopwatch: ElapsedStopwatch, originalStatus from: ElapsedStopwatchStatus, newStatus to: ElapsedStopwatchStatus) {
 
         print("DidChangeStatus from=.\(from) to=.\(to) ")
+        
+        self.statusLabel?.text = ElapsedStopwatchCell.textStatus(status: to)
         switch (from, to) {
         case (.idle, .going):
             self.contentView.backgroundColor = CellBackgroundColor.going
@@ -22,20 +26,45 @@ class ElapsedStopwatchCell: UICollectionViewCell, ElapsedStopwatchDelegate {
             self.contentView.backgroundColor = CellBackgroundColor.finished
         case (.finished, .idle):
             self.contentView.backgroundColor = CellBackgroundColor.idle
-            
+
             let defaultInterval = Int(elasedStopwatch.interval)
-            self.timerLabel?.text = "\(defaultInterval)"
+            self.timeLabel?.text = "\(defaultInterval)"
         default:
             ()
         }
     }
+    
+    static func textStatus(status: ElapsedStopwatchStatus) -> String {
+        switch status {
+        case .idle:
+            return "[대기]"
+        case .going:
+            return "[진행중]"
+        case .paused:
+            return "[일시중지]"
+        case .finished:
+            return "[완료]"
+        }
+    }
+    
+    static func textLeftTime(left: TimeInterval) -> String {
+        let pureSecond = Int(left)
+        
+        let sec = pureSecond % 60
+        let min = (pureSecond - sec) / 60 % 60
+        let hour = (pureSecond - sec) / (60 * 60)
+        
+        return (hour == 0 ? "" : "\(hour)시간 " )
+            + (min == 0 ? "" : "\(min)분 ")
+            + "\(sec)초"
+    }
 }
 
 struct CellBackgroundColor {
-    static let idle: UIColor = .gray
-    static let going: UIColor = .green
-    static let paused: UIColor = .blue
-    static let finished: UIColor = .red
+    static let idle: UIColor = UIColor.fromRGB(rgbValue: 0xdeeed6)
+    static let going: UIColor = UIColor.fromRGB(rgbValue: 0x6daa2c)
+    static let paused: UIColor = UIColor.fromRGB(rgbValue: 0xdad45e)
+    static let finished: UIColor = UIColor.fromRGB(rgbValue: 0xd04648)
     
     static func backgroundColor(withStatus status: ElapsedStopwatchStatus) -> UIColor {
         switch status {
