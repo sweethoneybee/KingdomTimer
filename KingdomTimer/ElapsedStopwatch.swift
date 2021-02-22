@@ -16,7 +16,7 @@ class ElapsedStopwatch {
     private var savedLeftTime: TimeInterval
     
     var delegate: ElapsedStopwatchDelegate?
-    var index: Int?
+    var id: String
     var title: String
     var timer: Timer?
     var interval: TimeInterval
@@ -54,6 +54,7 @@ class ElapsedStopwatch {
     
     // MARK:- Methods
     init(title: String, interval: TimeInterval) {
+        self.id = "test"
         self.title = title
         self.interval = interval
         self.savedLeftTime = interval

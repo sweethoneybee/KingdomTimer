@@ -16,6 +16,7 @@
 		401254EB25DABC4C006931AE /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401254EA25DABC4C006931AE /* MainVC.swift */; };
 		4012550225DF8A43006931AE /* ElapsedStopwatchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4012550125DF8A43006931AE /* ElapsedStopwatchCell.swift */; };
 		40F8592A25E25F3000906F8A /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F8592925E25F3000906F8A /* Utils.swift */; };
+		40F8593325E3D4F200906F8A /* KingdomTimer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 40F8593125E3D4F200906F8A /* KingdomTimer.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		401254EA25DABC4C006931AE /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
 		4012550125DF8A43006931AE /* ElapsedStopwatchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElapsedStopwatchCell.swift; sourceTree = "<group>"; };
 		40F8592925E25F3000906F8A /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		40F8593225E3D4F200906F8A /* KingdomTimer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = KingdomTimer.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,7 @@
 				401254EA25DABC4C006931AE /* MainVC.swift */,
 				40F8592925E25F3000906F8A /* Utils.swift */,
 				401254E725DAB30A006931AE /* ElapsedStopwatch.swift */,
+				40F8593125E3D4F200906F8A /* KingdomTimer.xcdatamodeld */,
 				401254D525D9526F006931AE /* Assets.xcassets */,
 				401254D725D9526F006931AE /* LaunchScreen.storyboard */,
 				401254DA25D9526F006931AE /* Info.plist */,
@@ -149,6 +152,7 @@
 				4012550225DF8A43006931AE /* ElapsedStopwatchCell.swift in Sources */,
 				401254E825DAB30A006931AE /* ElapsedStopwatch.swift in Sources */,
 				401254EB25DABC4C006931AE /* MainVC.swift in Sources */,
+				40F8593325E3D4F200906F8A /* KingdomTimer.xcdatamodeld in Sources */,
 				401254CD25D9526C006931AE /* AppDelegate.swift in Sources */,
 				401254CF25D9526C006931AE /* SceneDelegate.swift in Sources */,
 				40F8592A25E25F3000906F8A /* Utils.swift in Sources */,
@@ -353,6 +357,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		40F8593125E3D4F200906F8A /* KingdomTimer.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				40F8593225E3D4F200906F8A /* KingdomTimer.xcdatamodel */,
+			);
+			currentVersion = 40F8593225E3D4F200906F8A /* KingdomTimer.xcdatamodel */;
+			path = KingdomTimer.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 401254C125D9526C006931AE /* Project object */;
 }

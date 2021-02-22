@@ -27,8 +27,8 @@ class ElapsedStopwatchCell: UICollectionViewCell, ElapsedStopwatchDelegate {
         case (.finished, .idle):
             self.contentView.backgroundColor = CellBackgroundColor.idle
 
-            let defaultInterval = Int(elasedStopwatch.interval)
-            self.timeLabel?.text = "\(defaultInterval)"
+            let defaultInterval = elasedStopwatch.interval
+            self.timeLabel?.text = ElapsedStopwatchCell.textLeftTime(left: defaultInterval)
         default:
             ()
         }
