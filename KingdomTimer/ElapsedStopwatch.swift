@@ -1,27 +1,68 @@
 import UIKit
+import CoreData
 
 // MARK:- ElapsedStopwatchStatus 열거형 정의
-enum ElapsedStopwatchStatus {
-    case idle
-    case paused
-    case going
-    case finished
+enum ElapsedStopwatchStatus: String {
+    case idle = "idle"
+    case paused = "paused"
+    case going = "going"
+    case finished = "finished"
 }
 
 // MARK:- ElapsedStopwatch 클래스 정의
 class ElapsedStopwatch {
     // MARK:- Properties
-
+    private var entity: ElapsedStopwatchEntity
     private var REFRESH_INTERVAL = TimeInterval(1)
-    private var savedLeftTime: TimeInterval
+    private var savedLeftTime: TimeInterval {
+        get {
+            return TimeInterval(self.entity.savedLeftTime)
+        }
+        set(value) {
+            self.entity.savedLeftTime = Int64(value)
+        }
+    }
     
     var delegate: ElapsedStopwatchDelegate?
-    var id: String
-    var title: String
+    var id: Int {
+        get {
+            return Int(self.entity.id)
+        }
+        set(value) {
+            self.entity.id = Int64(value)
+        }
+    }
+    
+    var title: String {
+        get {
+            return self.entity.title ?? "이름불러오기실패"
+        }
+        set(value) {
+            self.entity.title = value
+        }
+    }
+    
+    // TODO:- 타이머 분리하기
     var timer: Timer?
-    var interval: TimeInterval
-    lazy var finishDate = Date(timeIntervalSinceNow: self.savedLeftTime)
-    var status: ElapsedStopwatchStatus = .idle {
+    var interval: TimeInterval {
+        get {
+            TimeInterval(self.entity.interval)
+        }
+        set(value) {
+            self.entity.interval = Int64(value)
+        }
+    }
+    
+    var finishDate: Date {
+        get {
+            return self.entity.finishDate ?? Date(timeIntervalSinceNow: self.savedLeftTime)
+        }
+        set (value) {
+            self.entity.finishDate = value
+        }
+    }
+    
+    var status: ElapsedStopwatchStatus {
         didSet(oldStatus) {
             self.delegate?.DidChangeStatus(self, originalStatus: oldStatus, newStatus: self.status)
         }
@@ -53,11 +94,21 @@ class ElapsedStopwatch {
     }
     
     // MARK:- Methods
-    init(title: String, interval: TimeInterval) {
-        self.id = "test"
-        self.title = title
-        self.interval = interval
-        self.savedLeftTime = interval
+    init(fetchedObject: ElapsedStopwatchEntity) {
+        self.entity = fetchedObject
+        let status = entity.status
+        switch status {
+        case ElapsedStopwatchStatus.idle.rawValue:
+            self.status = .idle
+        case ElapsedStopwatchStatus.going.rawValue:
+            self.status = .going
+        case ElapsedStopwatchStatus.paused.rawValue:
+            self.status = .paused
+        case ElapsedStopwatchStatus.finished.rawValue:
+            self.status = .finished
+        default:
+            self.status = .idle
+        }
     }
     
     func start() {
@@ -66,7 +117,11 @@ class ElapsedStopwatch {
             return
         }
         
-        self.finishDate = Date(timeIntervalSinceNow: self.savedLeftTime)
+        if self.status == .idle {
+            self.finishDate = Date(timeIntervalSinceNow: self.interval)
+        } else {
+            self.finishDate = Date(timeIntervalSinceNow: self.savedLeftTime)
+        }
         self.status = .going
         
         if self.leftTime > 0 {

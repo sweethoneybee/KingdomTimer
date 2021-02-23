@@ -1,4 +1,5 @@
 import UIKit
+import CoreData
 
 class MainVC: UIViewController {
     
@@ -27,6 +28,11 @@ class MainVC: UIViewController {
         
         // for natural content shrinking animation
         self.collectionView?.delaysContentTouches = false
+        
+        
+        // coredata
+//        let context = AppDelegate.viewContext
+        
     }
 }
 
@@ -97,10 +103,25 @@ extension MainVC: UICollectionViewDataSource, UICollectionViewDelegate {
     
     @objc func addStopwatch(_ sender: Any) {
         
-        let task = ElapsedStopwatch(title: "임시", interval: TimeInterval(5))
-        self.stopwatches.append(task)
+//        let task = ElapsedStopwatch(title: "임시", interval: TimeInterval(5))
+//        self.stopwatches.append(task)
+//
+//        print("등록된 타이머 개수=\(self.stopwatches.count)")
+//        self.collectionView?.reloadData()
+//
         
-        print("등록된 타이머 개수=\(self.stopwatches.count)")
+        let stopwatchObject = ElapsedStopwatchEntity(context: AppDelegate.viewContext)
+        let id = UserDefaults.standard.integer(forKey: "autoIncrement")
+        stopwatchObject.id = Int64(id)
+        UserDefaults.standard.set(id + 1, forKey: "autoIncrement")
+        
+        stopwatchObject.title = "임시타이틀"
+        stopwatchObject.interval = Int64(5)
+        stopwatchObject.savedLeftTime = 0
+        stopwatchObject.status = ElapsedStopwatchStatus.idle.rawValue
+        
+        let stopwatch = ElapsedStopwatch(fetchedObject: stopwatchObject)
+        self.stopwatches.append(stopwatch)
         self.collectionView?.reloadData()
     }
 }
