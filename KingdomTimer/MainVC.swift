@@ -9,8 +9,8 @@ class MainVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let item = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addStopwatch(_:)))
-        self.navigationItem.rightBarButtonItem = item
+        let addItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addStopwatch(_:)))
+        self.navigationItem.rightBarButtonItem = addItem
         
         
         let flowLayout: UICollectionViewFlowLayout
@@ -31,8 +31,49 @@ class MainVC: UIViewController {
         
         
         // coredata
-//        let context = AppDelegate.viewContext
+        let request: NSFetchRequest<ElapsedStopwatchEntity> = NSFetchRequest(entityName: "ElapsedStopwatchEntity")
+        let sortDescriptor = NSSortDescriptor(key: "id", ascending: true)
+        request.sortDescriptors = [sortDescriptor]
         
+        let context = AppDelegate.viewContext
+        let fetchedObjects = try? context.fetch(request)
+        
+        // TODO:- 저장된 status가 .going 이면 leftTime이 마이너스가 나올 수 있음. 그걸 여기서 계산해서 상태를 갱신해줘야함
+        if let fetchedStopwatches = fetchedObjects {
+            for fetchedStopwatch in fetchedStopwatches {
+                let stopwatch = ElapsedStopwatch(fetchedObject: fetchedStopwatch)
+                if stopwatch.status == .going {
+                    if stopwatch.leftTime <= 0 {
+                        stopwatch.finish()
+                    } else {
+                        stopwatch.startWithOptimization()
+                    }
+                }
+                self.stopwatches.append(stopwatch)
+            }
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        for stopwatch in self.stopwatches {
+            stopwatch.startWithOptimization()
+        }
+        self.collectionView?.reloadData()
+    }
+    // TODO:- 저장이 정확히 언제 되는건지 모르겠음
+    override func viewWillDisappear(_ animated: Bool) {
+        for stopwatch in self.stopwatches {
+            stopwatch.pauseWithOptimization()
+        }
+        let context = AppDelegate.viewContext
+        if context.hasChanges {
+            do {
+                try context.save()
+                print("저장성공")
+            } catch {
+                print("저장실패")
+            }
+        }
     }
 }
 
@@ -51,16 +92,15 @@ extension MainVC: UICollectionViewDataSource, UICollectionViewDelegate {
         stopwatch.delegate = cell
         
         // 테스트
-        cell.statusLabel?.text = ElapsedStopwatchCell.textStatus(status: stopwatch.status)
-        cell.titleLabel?.text = "쫀득쫀득 잼파이 생산하는 걸 텍스트로 표현하고 싶은데 어디까지 작성해야할지 모르겠습니다"
-        cell.timeLabel?.text = "133시간 35분 34초"
+//        cell.statusLabel?.text = ElapsedStopwatchCell.textStatus(status: stopwatch.status)
+//        cell.titleLabel?.text = "쫀득쫀득 잼파이 생산하는 걸 텍스트로 표현하고 싶은데 어디까지 작성해야할지 모르겠습니다"
+//        cell.timeLabel?.text = "133시간 35분 34초"
         
-        /*
-         * 실제
-         cell.statusLabel?.text = ElapsedStopwatchCell.textStatus(status: stopwatch.status)
-         cell.titleLabel?.text = stopwatch.title
-         cell.timeLabel?.text = ElapsedStopwatchCell.textLeftTime(left: stopwatch.leftTime)
-         */
+        // 실제
+        cell.statusLabel?.text = ElapsedStopwatchCell.textStatus(status: stopwatch.status)
+        cell.titleLabel?.text = stopwatch.title
+        cell.timeLabel?.text = ElapsedStopwatchCell.textLeftTime(left: stopwatch.leftTime)
+         
         
         
         cell.contentView.backgroundColor = CellBackgroundColor.backgroundColor(withStatus: stopwatch.status)
@@ -84,8 +124,6 @@ extension MainVC: UICollectionViewDataSource, UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
-        print("하이라이트아이템=\(indexPath.item)")
-        
         if let cell = collectionView.cellForItem(at: indexPath) as? ElapsedStopwatchCell {
             let pressedDownTransform = CGAffineTransform(scaleX: 0.98, y: 0.98)
             UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 3, options: [.curveEaseInOut], animations: { cell.transform = pressedDownTransform })
@@ -93,8 +131,6 @@ extension MainVC: UICollectionViewDataSource, UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
-        print("언하이라이트=\(indexPath.item)")
-        
         if let cell = collectionView.cellForItem(at: indexPath) as? ElapsedStopwatchCell {
             let originalTransform = CGAffineTransform(scaleX: 1, y: 1)
             UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 3, options: [.curveEaseInOut], animations: { cell.transform = originalTransform })
@@ -102,26 +138,20 @@ extension MainVC: UICollectionViewDataSource, UICollectionViewDelegate {
     }
     
     @objc func addStopwatch(_ sender: Any) {
-        
-//        let task = ElapsedStopwatch(title: "임시", interval: TimeInterval(5))
-//        self.stopwatches.append(task)
-//
-//        print("등록된 타이머 개수=\(self.stopwatches.count)")
-//        self.collectionView?.reloadData()
-//
-        
         let stopwatchObject = ElapsedStopwatchEntity(context: AppDelegate.viewContext)
         let id = UserDefaults.standard.integer(forKey: "autoIncrement")
         stopwatchObject.id = Int64(id)
         UserDefaults.standard.set(id + 1, forKey: "autoIncrement")
         
         stopwatchObject.title = "임시타이틀"
-        stopwatchObject.interval = Int64(5)
+        stopwatchObject.interval = Int64(30)
         stopwatchObject.savedLeftTime = 0
         stopwatchObject.status = ElapsedStopwatchStatus.idle.rawValue
         
         let stopwatch = ElapsedStopwatch(fetchedObject: stopwatchObject)
         self.stopwatches.append(stopwatch)
+        
+        // TODO:- viewWillAppear 에서 수행할 것이기 때문에 삭제해야함
         self.collectionView?.reloadData()
     }
 }

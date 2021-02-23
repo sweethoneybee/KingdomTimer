@@ -14,6 +14,7 @@ class ElapsedStopwatch {
     // MARK:- Properties
     private var entity: ElapsedStopwatchEntity
     private var REFRESH_INTERVAL = TimeInterval(1)
+    // self.leftTime과 같다는 것을 보장하지 않음
     private var savedLeftTime: TimeInterval {
         get {
             return TimeInterval(self.entity.savedLeftTime)
@@ -63,8 +64,23 @@ class ElapsedStopwatch {
     }
     
     var status: ElapsedStopwatchStatus {
-        didSet(oldStatus) {
-            self.delegate?.DidChangeStatus(self, originalStatus: oldStatus, newStatus: self.status)
+        get {
+            let status = self.entity.status
+            switch status {
+            case ElapsedStopwatchStatus.idle.rawValue:
+                return .idle
+            case ElapsedStopwatchStatus.going.rawValue:
+                return .going
+            case ElapsedStopwatchStatus.paused.rawValue:
+                return .paused
+            case ElapsedStopwatchStatus.finished.rawValue:
+                return .finished
+            default:
+                return .idle
+            }
+        }
+        set (value) {
+            self.entity.status = value.rawValue
         }
     }
     
@@ -96,6 +112,7 @@ class ElapsedStopwatch {
     // MARK:- Methods
     init(fetchedObject: ElapsedStopwatchEntity) {
         self.entity = fetchedObject
+        print(fetchedObject.savedLeftTime)
         let status = entity.status
         switch status {
         case ElapsedStopwatchStatus.idle.rawValue:
@@ -122,8 +139,13 @@ class ElapsedStopwatch {
         } else {
             self.finishDate = Date(timeIntervalSinceNow: self.savedLeftTime)
         }
-        self.status = .going
         
+        let oldStatus = self.status
+        self.status = .going
+        self.delegate?.DidChangeStatus(self, originalStatus: oldStatus, newStatus: self.status)
+        
+        // timer 블록에서는 finish()가 호출될 수 있는데 .going 상태에서만 호출 가능하기 때문에
+        // 상태를 먼저 변경하고 타이머를 설정하는 것.
         if self.leftTime > 0 {
             self.timer = scheduleTimer()
             timer?.fire()
@@ -142,7 +164,9 @@ class ElapsedStopwatch {
         self.timer = nil
         self.savedLeftTime = self.leftTime
         
+        let oldStatus = self.status
         self.status = .paused
+        self.delegate?.DidChangeStatus(self, originalStatus: oldStatus, newStatus: self.status)
     }
     
     func finish() {
@@ -151,7 +175,9 @@ class ElapsedStopwatch {
             return
         }
         
+        let oldStatus = self.status
         self.status = .finished
+        self.delegate?.DidChangeStatus(self, originalStatus: oldStatus, newStatus: self.status)
     }
     
     func reset() {
@@ -162,7 +188,9 @@ class ElapsedStopwatch {
         
         self.savedLeftTime = self.interval
         
+        let oldStatus = self.status
         self.status = .idle
+        self.delegate?.DidChangeStatus(self, originalStatus: oldStatus, newStatus: self.status)
     }
     
     func startWithOptimization() {
@@ -205,7 +233,7 @@ class ElapsedStopwatch {
     }
 }
 
-// TODO:- UI 로직을 위해서 구현해야하는 델리게이트
+// MARK:- UI 로직을 위해서 구현해야하는 델리게이트
 protocol ElapsedStopwatchDelegate {
     func TimerDidTick(leftTime: TimeInterval)
     func DidChangeStatus(_ elapsedStopwatch: ElapsedStopwatch, originalStatus from: ElapsedStopwatchStatus, newStatus to: ElapsedStopwatchStatus)

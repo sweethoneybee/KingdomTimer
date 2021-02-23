@@ -161,7 +161,13 @@
                             <constraint firstItem="uTG-hc-wvh" firstAttribute="top" secondItem="RW9-ND-g6t" secondAttribute="top" id="htX-K1-POe"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="타이머들" id="4mK-Sx-bkb"/>
+                    <navigationItem key="navigationItem" title="타이머들" id="4mK-Sx-bkb">
+                        <barButtonItem key="leftBarButtonItem" title="Item" id="0Yp-AZ-jxi">
+                            <connections>
+                                <segue destination="klJ-BP-9Te" kind="show" id="lYV-te-9ZT"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="uTG-hc-wvh" id="XBz-qk-pu8"/>
                     </connections>
@@ -169,6 +175,31 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MMs-Pd-Vpf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="250.40000000000001" y="-124.58770614692655"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="skO-Kt-ptw">
+            <objects>
+                <viewController id="klJ-BP-9Te" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="UiO-8b-5wL">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1CC-wR-NzC">
+                                <rect key="frame" x="166" y="132" width="42" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="5jx-Hb-HEX"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="dRC-Ae-cm5"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ezd-5q-gcn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1148" y="-125"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Ol8-Vm-Z5R">
