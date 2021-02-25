@@ -146,7 +146,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="몇글자까지적게할수있을지는나도모" borderStyle="roundedRect" textAlignment="justified" minimumFontSize="12" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="piH-7D-WlR">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="최대 25자" textAlignment="justified" adjustsFontSizeToFit="NO" minimumFontSize="12" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="piH-7D-WlR">
                                 <rect key="frame" x="90" y="199.5" width="250" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" smartDashesType="yes"/>
@@ -201,6 +201,7 @@
                     <connections>
                         <outlet property="countLabel" destination="hIw-4Q-wvt" id="rvo-8D-tzf"/>
                         <outlet property="timeTf" destination="Vml-3P-LWt" id="YMu-pr-qLi"/>
+                        <outlet property="titleTf" destination="piH-7D-WlR" id="ZuC-SG-ps0"/>
                         <outlet property="wholeTimeLabel" destination="gqA-l2-oRZ" id="QJ8-ml-cKi"/>
                     </connections>
                 </viewController>

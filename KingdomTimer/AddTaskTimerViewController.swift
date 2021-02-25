@@ -8,59 +8,23 @@
 import UIKit
 import CoreData
 
-struct TimerData {
-    var title: String = "새로운임시타이틀"
-    var count: Int = 1
-    var requiringHour: Int = 0
-    var requiringMin: Int = 0
-    var requiringSecond: Int = 0
-    var wholeMin: Int {
-        return self.requiringMin * self.count
-    }
-    var wholeSecond: Int {
-        return self.requiringSecond * self.count
-    }
-    private var wholeTime: Int {
-        return (self.wholeHour * 60 * 60
-                    + self.wholeMin * 60
-                    + self.wholeSecond)
-    }
-    var wholeHour: Int {
-        return self.requiringHour * self.count
-    }
-    var requiringTimeToString: String {
-        return "\(self.requiringHour)시간 \(self.requiringMin)분 \(self.requiringSecond)초"
-    }
-    var wholeTimeToString: String {
-        return "총 \(self.wholeHour)시간 \(self.wholeMin)분 \(self.wholeSecond)초"
-    }
-    
-    func makeTaskTimer(context: NSManagedObjectContext) -> TaskTimer {
-        let stopwatchObject = TaskTimerEntity(context: AppDelegate.viewContext)
-        
-        let id = UserDefaults.standard.integer(forKey: "autoIncrement")
-        stopwatchObject.id = Int64(id)
-        UserDefaults.standard.set(id + 1, forKey: "autoIncrement")
-        
-        stopwatchObject.title = self.title
-        stopwatchObject.interval = Int64(self.wholeTime)
-        
-        return TaskTimer(fetchedObject: stopwatchObject)
-    }
-}
+class AddTaskTimerViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate {
 
-class AddTaskTimerViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate {
-
+    private let MAX_TEXT_LENGTH = 25
     private var timerData = TimerData()
     private var timePickerData = [[Int]]()
     
     @IBOutlet weak var timeTf: UITextField?
     @IBOutlet weak var countLabel: UILabel?
     @IBOutlet weak var wholeTimeLabel: UILabel?
+    @IBOutlet weak var titleTf: UITextField?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setUpTimePickerData()
+        
+        self.timeTf?.delegate = self
+        self.titleTf?.delegate = self
         
         let timePicker = UIPickerView()
         timePicker.delegate = self
@@ -94,16 +58,37 @@ class AddTaskTimerViewController: UIViewController, UIPickerViewDataSource, UIPi
     
     @IBAction func addTaskTimer() {
         if let vc = self.navigationController?.viewControllers.first as? MainViewController {
-            let stopwatch = self.timerData.makeTaskTimer(context: AppDelegate.viewContext)
-            vc.stopwatches.append(stopwatch)
-            self.navigationController?.popViewController(animated: true)
+            guard self.timerData.title != "" else {
+                let alert = self.makeSimpleAlert(message: "이름을 적어주세요")
+                self.present(alert, animated: true)
+                return
+            }
+            guard self.timerData.wholeTime > 0 else {
+                let alert = self.makeSimpleAlert(message: "시간을 설정해주세요")
+                self.present(alert, animated: true)
+                return
+            }
+            if let stopwatch = self.timerData.makeTaskTimer(context: AppDelegate.viewContext) {
+                vc.stopwatches.append(stopwatch)
+                self.navigationController?.popViewController(animated: true)
+            }
         }
     }
-    
+
     @IBAction func countStepper(_ sender: UIStepper) {
         self.timerData.count = Int(sender.value)
         self.countLabel?.text = "\(self.timerData.count)개"
         self.wholeTimeLabel?.text = self.timerData.wholeTimeToString
+    }
+    
+    func makeSimpleAlert(message: String) -> UIAlertController {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default))
+        return alert
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
 }
 
@@ -135,5 +120,83 @@ extension AddTaskTimerViewController {
 
 // MARK:- UITextView Protocols
 extension AddTaskTimerViewController {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField === self.timeTf {
+            textField.backgroundColor = UIColor.fromRGB(rgbValue: 0x8595a1, alpha: 0.2)
+        }
+    }
     
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField === self.timeTf {
+            textField.backgroundColor = UIColor.clear
+        }
+        
+        if textField === self.titleTf, let text = textField.text {
+            self.timerData.title = text
+        }
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        print("string=\(string).")
+        if textField === self.titleTf, let text = textField.text {
+            guard text.count < MAX_TEXT_LENGTH else {
+                return false
+            }
+            
+            self.timerData.title = text
+            print("self.timerData.title=\(self.timerData.title)")
+            return true
+        }
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+}
+
+struct TimerData {
+    var title: String = ""
+    var count: Int = 1
+    var requiringHour: Int = 0
+    var requiringMin: Int = 0
+    var requiringSecond: Int = 0
+    var wholeMin: Int {
+        return self.requiringMin * self.count
+    }
+    var wholeSecond: Int {
+        return self.requiringSecond * self.count
+    }
+    var wholeTime: Int {
+        return (self.wholeHour * 60 * 60
+                    + self.wholeMin * 60
+                    + self.wholeSecond)
+    }
+    var wholeHour: Int {
+        return self.requiringHour * self.count
+    }
+    var requiringTimeToString: String {
+        return "\(self.requiringHour)시간 \(self.requiringMin)분 \(self.requiringSecond)초"
+    }
+    var wholeTimeToString: String {
+        return "총 \(self.wholeHour)시간 \(self.wholeMin)분 \(self.wholeSecond)초"
+    }
+    
+    func makeTaskTimer(context: NSManagedObjectContext) -> TaskTimer? {
+        guard self.title != "" else {
+            return nil
+        }
+        let stopwatchObject = TaskTimerEntity(context: AppDelegate.viewContext)
+        
+        let id = UserDefaults.standard.integer(forKey: "autoIncrement")
+        stopwatchObject.id = Int64(id)
+        UserDefaults.standard.set(id + 1, forKey: "autoIncrement")
+        
+        stopwatchObject.title = self.title
+        stopwatchObject.interval = Int64(self.wholeTime)
+        
+        return TaskTimer(fetchedObject: stopwatchObject)
+    }
 }
