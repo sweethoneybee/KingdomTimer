@@ -2,7 +2,7 @@ import UIKit
 
 class ElapsedStopwatchCell: UICollectionViewCell, ElapsedStopwatchDelegate {
     
-    @IBOutlet var statusLabel: UILabel?
+    @IBOutlet var stateLabel: UILabel?
     @IBOutlet var titleLabel: UILabel?
     @IBOutlet var timeLabel: UILabel?
     
@@ -10,11 +10,11 @@ class ElapsedStopwatchCell: UICollectionViewCell, ElapsedStopwatchDelegate {
         self.timeLabel?.text = ElapsedStopwatchCell.textLeftTime(left: leftTime)
     }
     
-    func DidChangeStatus(_ elasedStopwatch: ElapsedStopwatch, originalStatus from: ElapsedStopwatchStatus, newStatus to: ElapsedStopwatchStatus) {
+    func DidChangeState(_ elasedStopwatch: ElapsedStopwatch, originalState from: ElapsedStopwatch.State, newState to: ElapsedStopwatch.State) {
 
         print("DidChangeStatus from=.\(from) to=.\(to) ")
         
-        self.statusLabel?.text = ElapsedStopwatchCell.textStatus(status: to)
+        self.stateLabel?.text = ElapsedStopwatchCell.changeStateToString(state: to)
         switch (from, to) {
         case (.idle, .going):
             self.contentView.backgroundColor = CellBackgroundColor.going
@@ -34,8 +34,8 @@ class ElapsedStopwatchCell: UICollectionViewCell, ElapsedStopwatchDelegate {
         }
     }
     
-    static func textStatus(status: ElapsedStopwatchStatus) -> String {
-        switch status {
+    static func changeStateToString(state: ElapsedStopwatch.State) -> String {
+        switch state {
         case .idle:
             return "[대기]"
         case .going:
@@ -66,8 +66,8 @@ struct CellBackgroundColor {
     static let paused: UIColor = UIColor.fromRGB(rgbValue: 0xdad45e)
     static let finished: UIColor = UIColor.fromRGB(rgbValue: 0xd04648)
     
-    static func backgroundColor(withStatus status: ElapsedStopwatchStatus) -> UIColor {
-        switch status {
+    static func backgroundColor(withState state: ElapsedStopwatch.State) -> UIColor {
+        switch state {
         case .idle:
             return self.idle
         case .going:

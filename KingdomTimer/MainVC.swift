@@ -42,7 +42,7 @@ class MainVC: UIViewController {
         if let fetchedStopwatches = fetchedObjects {
             for fetchedStopwatch in fetchedStopwatches {
                 let stopwatch = ElapsedStopwatch(fetchedObject: fetchedStopwatch)
-                if stopwatch.status == .going {
+                if stopwatch.state == .going {
                     if stopwatch.leftTime <= 0 {
                         stopwatch.finish()
                     } else {
@@ -52,6 +52,11 @@ class MainVC: UIViewController {
                 self.stopwatches.append(stopwatch)
             }
         }
+        
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(editCell(_:)))
+        self.collectionView?.addGestureRecognizer(gesture)
+        
+        print("viewdidload")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -97,13 +102,13 @@ extension MainVC: UICollectionViewDataSource, UICollectionViewDelegate {
 //        cell.timeLabel?.text = "133시간 35분 34초"
         
         // 실제
-        cell.statusLabel?.text = ElapsedStopwatchCell.textStatus(status: stopwatch.status)
+        cell.stateLabel?.text = ElapsedStopwatchCell.changeStateToString(state: stopwatch.state)
         cell.titleLabel?.text = stopwatch.title
         cell.timeLabel?.text = ElapsedStopwatchCell.textLeftTime(left: stopwatch.leftTime)
          
         
         
-        cell.contentView.backgroundColor = CellBackgroundColor.backgroundColor(withStatus: stopwatch.status)
+        cell.contentView.backgroundColor = CellBackgroundColor.backgroundColor(withState: stopwatch.state)
         cell.contentView.layer.cornerRadius = CGFloat(20)
         
         return cell
@@ -111,7 +116,7 @@ extension MainVC: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let stopwatch = self.stopwatches[indexPath.item]
-        switch stopwatch.status {
+        switch stopwatch.state {
         case .idle:
             stopwatch.start()
         case .going:
@@ -146,12 +151,25 @@ extension MainVC: UICollectionViewDataSource, UICollectionViewDelegate {
         stopwatchObject.title = "임시타이틀"
         stopwatchObject.interval = Int64(30)
         stopwatchObject.savedLeftTime = 0
-        stopwatchObject.status = ElapsedStopwatchStatus.idle.rawValue
+        stopwatchObject.state = ElapsedStopwatch.State.idle.rawValue
         
         let stopwatch = ElapsedStopwatch(fetchedObject: stopwatchObject)
         self.stopwatches.append(stopwatch)
         
         // TODO:- viewWillAppear 에서 수행할 것이기 때문에 삭제해야함
         self.collectionView?.reloadData()
+    }
+    
+    @objc func editCell(_ sender: UILongPressGestureRecognizer) {
+        if sender.state == .began {
+            let touchedPoint = sender.location(in: self.collectionView)
+            if let indexpath = self.collectionView?.indexPathForItem(at: touchedPoint) {
+                let alert = UIAlertController(title: nil, message: "\(indexpath.item)번째", preferredStyle: .actionSheet)
+                alert.addAction(UIAlertAction(title: "수정", style: .default))
+                alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+                alert.addAction(UIAlertAction(title: "삭제", style: .destructive))
+                self.present(alert, animated: true)
+            }
+        }
     }
 }

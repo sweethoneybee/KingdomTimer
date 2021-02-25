@@ -1,16 +1,30 @@
-import UIKit
+import Foundation
 import CoreData
-
-// MARK:- ElapsedStopwatchStatus 열거형 정의
-enum ElapsedStopwatchStatus: String {
-    case idle = "idle"
-    case paused = "paused"
-    case going = "going"
-    case finished = "finished"
-}
 
 // MARK:- ElapsedStopwatch 클래스 정의
 class ElapsedStopwatch {
+    enum State: String {
+        case idle = "idle"
+        case paused = "paused"
+        case going = "going"
+        case finished = "finished"
+        
+        static func stateFrom(rawValue state: String?) -> State {
+            switch state {
+            case State.idle.rawValue:
+                return .idle
+            case State.going.rawValue:
+                return .going
+            case State.paused.rawValue:
+                return .paused
+            case State.finished.rawValue:
+                return .finished
+            default:
+                return .idle
+            }
+        }
+    }
+
     // MARK:- Properties
     private var entity: ElapsedStopwatchEntity
     private var REFRESH_INTERVAL = TimeInterval(1)
@@ -25,7 +39,7 @@ class ElapsedStopwatch {
     }
     
     var delegate: ElapsedStopwatchDelegate?
-    var id: Int {
+    private var id: Int {
         get {
             return Int(self.entity.id)
         }
@@ -44,7 +58,7 @@ class ElapsedStopwatch {
     }
     
     // TODO:- 타이머 분리하기
-    var timer: Timer?
+    private var timer: Timer?
     var interval: TimeInterval {
         get {
             TimeInterval(self.entity.interval)
@@ -63,40 +77,18 @@ class ElapsedStopwatch {
         }
     }
     
-    var status: ElapsedStopwatchStatus {
+    var state: State {
         get {
-            let status = self.entity.status
-            switch status {
-            case ElapsedStopwatchStatus.idle.rawValue:
-                return .idle
-            case ElapsedStopwatchStatus.going.rawValue:
-                return .going
-            case ElapsedStopwatchStatus.paused.rawValue:
-                return .paused
-            case ElapsedStopwatchStatus.finished.rawValue:
-                return .finished
-            default:
-                return .idle
-            }
+            let state = self.entity.state
+            return State.stateFrom(rawValue: state)
         }
         set (value) {
-            self.entity.status = value.rawValue
-        }
-    }
-    
-    var refreshInterval: TimeInterval {
-        get {
-            return self.REFRESH_INTERVAL
-        }
-        set (newRefreshInterval) {
-            if (newRefreshInterval > 0.1) {
-                self.REFRESH_INTERVAL = newRefreshInterval
-            }
+            self.entity.state = value.rawValue
         }
     }
     
     var leftTime: TimeInterval {
-        switch self.status {
+        switch self.state {
         case .idle:
             return self.interval
         case .going:
@@ -113,36 +105,25 @@ class ElapsedStopwatch {
     init(fetchedObject: ElapsedStopwatchEntity) {
         self.entity = fetchedObject
         print(fetchedObject.savedLeftTime)
-        let status = entity.status
-        switch status {
-        case ElapsedStopwatchStatus.idle.rawValue:
-            self.status = .idle
-        case ElapsedStopwatchStatus.going.rawValue:
-            self.status = .going
-        case ElapsedStopwatchStatus.paused.rawValue:
-            self.status = .paused
-        case ElapsedStopwatchStatus.finished.rawValue:
-            self.status = .finished
-        default:
-            self.status = .idle
-        }
+        let state = entity.state
+        self.state = State.stateFrom(rawValue: state)
     }
     
     func start() {
-        guard self.status == .idle || self.status == .paused else {
-            print("ElapsedStopwatch.start 실패. 현재상태=\(self.status)")
+        guard self.state == .idle || self.state == .paused else {
+            print("ElapsedStopwatch.start 실패. 현재상태=\(self.state)")
             return
         }
         
-        if self.status == .idle {
+        if self.state == .idle {
             self.finishDate = Date(timeIntervalSinceNow: self.interval)
         } else {
             self.finishDate = Date(timeIntervalSinceNow: self.savedLeftTime)
         }
         
-        let oldStatus = self.status
-        self.status = .going
-        self.delegate?.DidChangeStatus(self, originalStatus: oldStatus, newStatus: self.status)
+        let oldState = self.state
+        self.state = .going
+        self.delegate?.DidChangeState(self, originalState: oldState, newState: self.state)
         
         // timer 블록에서는 finish()가 호출될 수 있는데 .going 상태에서만 호출 가능하기 때문에
         // 상태를 먼저 변경하고 타이머를 설정하는 것.
@@ -155,8 +136,8 @@ class ElapsedStopwatch {
     }
     
     func pause() {
-        guard self.status == .going else {
-            print("ElapsedStopwatch.pause 실패. 현재상태=\(self.status)")
+        guard self.state == .going else {
+            print("ElapsedStopwatch.pause 실패. 현재상태=\(self.state)")
             return
         }
         
@@ -164,38 +145,38 @@ class ElapsedStopwatch {
         self.timer = nil
         self.savedLeftTime = self.leftTime
         
-        let oldStatus = self.status
-        self.status = .paused
-        self.delegate?.DidChangeStatus(self, originalStatus: oldStatus, newStatus: self.status)
+        let oldState = self.state
+        self.state = .paused
+        self.delegate?.DidChangeState(self, originalState: oldState, newState: self.state)
     }
     
     func finish() {
-        guard self.status == .going else {
-            print("ElapsedStopwatch.finish 실패. 현재상태=\(self.status)")
+        guard self.state == .going else {
+            print("ElapsedStopwatch.finish 실패. 현재상태=\(self.state)")
             return
         }
         
-        let oldStatus = self.status
-        self.status = .finished
-        self.delegate?.DidChangeStatus(self, originalStatus: oldStatus, newStatus: self.status)
+        let oldState = self.state
+        self.state = .finished
+        self.delegate?.DidChangeState(self, originalState: oldState, newState: self.state)
     }
     
     func reset() {
-        guard self.status == .finished else {
-            print("ElapsedStopwatch.reinit 실패. 현재상태=\(self.status)")
+        guard self.state == .finished else {
+            print("ElapsedStopwatch.reinit 실패. 현재상태=\(self.state)")
             return
         }
         
         self.savedLeftTime = self.interval
         
-        let oldStatus = self.status
-        self.status = .idle
-        self.delegate?.DidChangeStatus(self, originalStatus: oldStatus, newStatus: self.status)
+        let oldState = self.state
+        self.state = .idle
+        self.delegate?.DidChangeState(self, originalState: oldState, newState: self.state)
     }
     
     func startWithOptimization() {
-        guard self.status == .going && self.timer == nil else {
-            print("startWithOptimization 실패. 현재상태=\(self.status)")
+        guard self.state == .going && self.timer == nil else {
+            print("startWithOptimization 실패. 현재상태=\(self.state)")
             return
         }
         
@@ -209,8 +190,8 @@ class ElapsedStopwatch {
     }
     
     func pauseWithOptimization() {
-        guard self.status == .going else {
-            print("pauseWithOptimization 실패. 현재상태=\(self.status)")
+        guard self.state == .going else {
+            print("pauseWithOptimization 실패. 현재상태=\(self.state)")
             return
         }
         
@@ -236,5 +217,5 @@ class ElapsedStopwatch {
 // MARK:- UI 로직을 위해서 구현해야하는 델리게이트
 protocol ElapsedStopwatchDelegate {
     func TimerDidTick(leftTime: TimeInterval)
-    func DidChangeStatus(_ elapsedStopwatch: ElapsedStopwatch, originalStatus from: ElapsedStopwatchStatus, newStatus to: ElapsedStopwatchStatus)
+    func DidChangeState(_ elapsedStopwatch: ElapsedStopwatch, originalState from: ElapsedStopwatch.State, newState to: ElapsedStopwatch.State)
 }
