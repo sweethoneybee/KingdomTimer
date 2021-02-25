@@ -1,20 +1,20 @@
 import UIKit
 
-class ElapsedStopwatchCell: UICollectionViewCell, ElapsedStopwatchDelegate {
+class TaskTimerCell: UICollectionViewCell, TaskTimerDelegate {
     
     @IBOutlet var stateLabel: UILabel?
     @IBOutlet var titleLabel: UILabel?
     @IBOutlet var timeLabel: UILabel?
     
     func TimerDidTick(leftTime: TimeInterval) {
-        self.timeLabel?.text = ElapsedStopwatchCell.textLeftTime(left: leftTime)
+        self.timeLabel?.text = TaskTimerCell.textLeftTime(left: leftTime)
     }
     
-    func DidChangeState(_ elasedStopwatch: ElapsedStopwatch, originalState from: ElapsedStopwatch.State, newState to: ElapsedStopwatch.State) {
+    func DidChangeState(_ elasedStopwatch: TaskTimer, originalState from: TaskTimer.State, newState to: TaskTimer.State) {
 
         print("DidChangeStatus from=.\(from) to=.\(to) ")
         
-        self.stateLabel?.text = ElapsedStopwatchCell.changeStateToString(state: to)
+        self.stateLabel?.text = TaskTimerCell.changeStateToString(state: to)
         switch (from, to) {
         case (.idle, .going):
             self.contentView.backgroundColor = CellBackgroundColor.going
@@ -28,13 +28,13 @@ class ElapsedStopwatchCell: UICollectionViewCell, ElapsedStopwatchDelegate {
             self.contentView.backgroundColor = CellBackgroundColor.idle
 
             let defaultInterval = elasedStopwatch.interval
-            self.timeLabel?.text = ElapsedStopwatchCell.textLeftTime(left: defaultInterval)
+            self.timeLabel?.text = TaskTimerCell.textLeftTime(left: defaultInterval)
         default:
             ()
         }
     }
     
-    static func changeStateToString(state: ElapsedStopwatch.State) -> String {
+    static func changeStateToString(state: TaskTimer.State) -> String {
         switch state {
         case .idle:
             return "[대기]"
@@ -66,7 +66,7 @@ struct CellBackgroundColor {
     static let paused: UIColor = UIColor.fromRGB(rgbValue: 0xdad45e)
     static let finished: UIColor = UIColor.fromRGB(rgbValue: 0xd04648)
     
-    static func backgroundColor(withState state: ElapsedStopwatch.State) -> UIColor {
+    static func backgroundColor(withState state: TaskTimer.State) -> UIColor {
         switch state {
         case .idle:
             return self.idle

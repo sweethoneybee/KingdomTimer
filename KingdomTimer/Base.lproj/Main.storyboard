@@ -12,7 +12,7 @@
         <!--타이머들-->
         <scene sceneID="LoN-sU-FQH">
             <objects>
-                <viewController id="Tq2-bo-bBu" customClass="MainVC" customModule="KingdomTimer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Tq2-bo-bBu" customClass="MainViewController" customModule="KingdomTimer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="xOM-OT-pDO">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -27,7 +27,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ElapsedStopwatchCell" id="bN2-Yn-pji" customClass="ElapsedStopwatchCell" customModule="KingdomTimer" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="TaskTimerCell" id="bN2-Yn-pji" customClass="TaskTimerCell" customModule="KingdomTimer" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="82" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="LDJ-0e-Oob">
@@ -35,20 +35,20 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="진행상황" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gwu-ox-POF">
-                                                    <rect key="frame" x="10" y="10" width="62" height="12"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="10"/>
+                                                    <rect key="frame" x="10" y="10" width="62" height="13.5"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="11"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="nn시간 mm분 nn초" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JKG-pY-ye2">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="nn시간 mm분 nn초" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="JKG-pY-ye2">
                                                     <rect key="frame" x="0.0" y="111" width="82" height="12"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                     <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="이름" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w2X-aD-CcW">
-                                                    <rect key="frame" x="10" y="27" width="62" height="18"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="이름" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="w2X-aD-CcW">
+                                                    <rect key="frame" x="10" y="28.5" width="62" height="20.5"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -88,9 +88,9 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="타이머들" id="4mK-Sx-bkb">
-                        <barButtonItem key="leftBarButtonItem" title="Item" id="0Yp-AZ-jxi">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="LfP-VR-eEs">
                             <connections>
-                                <segue destination="klJ-BP-9Te" kind="show" id="lYV-te-9ZT"/>
+                                <segue destination="klJ-BP-9Te" kind="show" id="7rc-wL-H1X"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -102,30 +102,111 @@
             </objects>
             <point key="canvasLocation" x="250.40000000000001" y="-124.58770614692655"/>
         </scene>
-        <!--View Controller-->
+        <!--Add Task Timer View Controller-->
         <scene sceneID="skO-Kt-ptw">
             <objects>
-                <viewController id="klJ-BP-9Te" sceneMemberID="viewController">
+                <viewController id="klJ-BP-9Te" customClass="AddTaskTimerViewController" customModule="KingdomTimer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UiO-8b-5wL">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1CC-wR-NzC">
-                                <rect key="frame" x="166" y="132" width="42" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="소요시간" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N1c-2k-FLj">
+                                <rect key="frame" x="35" y="94" width="69.5" height="24"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="개수" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tjq-eT-gdT">
+                                <rect key="frame" x="35" y="148" width="35" height="24"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="이름" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iQh-nu-uES">
+                                <rect key="frame" x="35" y="201" width="35" height="24"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="총 0시간 0분 0초" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gqA-l2-oRZ">
+                                <rect key="frame" x="83.5" y="259.5" width="208" height="36"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minimumValue="1" maximumValue="30" translatesAutoresizingMaskIntoConstraints="NO" id="ykz-tW-7AR">
+                                <rect key="frame" x="181" y="147.5" width="94" height="32"/>
+                                <connections>
+                                    <action selector="countStepper:" destination="klJ-BP-9Te" eventType="valueChanged" id="6v7-ce-nIS"/>
+                                </connections>
+                            </stepper>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1개" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hIw-4Q-wvt">
+                                <rect key="frame" x="313" y="151.5" width="27" height="24"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="몇글자까지적게할수있을지는나도모" borderStyle="roundedRect" textAlignment="justified" minimumFontSize="12" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="piH-7D-WlR">
+                                <rect key="frame" x="90" y="199.5" width="250" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" smartDashesType="yes"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(소요시간 X 개수)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tNk-r2-dE2">
+                                <rect key="frame" x="144" y="296.5" width="87" height="15"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="0시간 0분 0초" borderStyle="roundedRect" textAlignment="right" adjustsFontSizeToFit="NO" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="Vml-3P-LWt">
+                                <rect key="frame" x="157" y="89" width="183" height="34"/>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="5jx-Hb-HEX"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Vml-3P-LWt" firstAttribute="leading" secondItem="N1c-2k-FLj" secondAttribute="trailing" constant="52.5" id="7eP-rQ-4yO"/>
+                            <constraint firstItem="iQh-nu-uES" firstAttribute="top" secondItem="Tjq-eT-gdT" secondAttribute="bottom" constant="29" id="A9e-5y-2X3"/>
+                            <constraint firstItem="tNk-r2-dE2" firstAttribute="centerX" secondItem="5jx-Hb-HEX" secondAttribute="centerX" id="G4i-QZ-8S8"/>
+                            <constraint firstItem="tNk-r2-dE2" firstAttribute="firstBaseline" secondItem="gqA-l2-oRZ" secondAttribute="baseline" constant="20" symbolType="layoutAnchor" id="KPK-Ta-sms"/>
+                            <constraint firstItem="piH-7D-WlR" firstAttribute="leading" secondItem="iQh-nu-uES" secondAttribute="trailing" constant="20" id="TXx-jA-VjX"/>
+                            <constraint firstItem="Vml-3P-LWt" firstAttribute="top" secondItem="5jx-Hb-HEX" secondAttribute="top" constant="45" id="UjZ-IY-vva"/>
+                            <constraint firstItem="hIw-4Q-wvt" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ykz-tW-7AR" secondAttribute="trailing" constant="22" id="XvC-mv-y5Z"/>
+                            <constraint firstItem="piH-7D-WlR" firstAttribute="top" secondItem="hIw-4Q-wvt" secondAttribute="bottom" constant="24" id="ZLd-mg-ISg"/>
+                            <constraint firstItem="5jx-Hb-HEX" firstAttribute="trailing" secondItem="piH-7D-WlR" secondAttribute="trailing" constant="35" id="b8K-eF-I6d"/>
+                            <constraint firstItem="gqA-l2-oRZ" firstAttribute="centerX" secondItem="5jx-Hb-HEX" secondAttribute="centerX" id="bey-E9-L3h"/>
+                            <constraint firstItem="5jx-Hb-HEX" firstAttribute="trailing" secondItem="hIw-4Q-wvt" secondAttribute="trailing" constant="35" id="cRl-T4-epK"/>
+                            <constraint firstItem="gqA-l2-oRZ" firstAttribute="top" secondItem="piH-7D-WlR" secondAttribute="bottom" constant="26" id="d1g-4x-wIK"/>
+                            <constraint firstItem="N1c-2k-FLj" firstAttribute="top" secondItem="5jx-Hb-HEX" secondAttribute="top" constant="50" id="eDH-3f-Ax3"/>
+                            <constraint firstItem="iQh-nu-uES" firstAttribute="leading" secondItem="5jx-Hb-HEX" secondAttribute="leading" constant="35" id="fk5-Pa-pAW"/>
+                            <constraint firstItem="5jx-Hb-HEX" firstAttribute="trailing" secondItem="Vml-3P-LWt" secondAttribute="trailing" constant="35" id="jGl-fp-xdt"/>
+                            <constraint firstItem="hIw-4Q-wvt" firstAttribute="top" secondItem="Vml-3P-LWt" secondAttribute="bottom" constant="28.5" id="kEh-ac-XYD"/>
+                            <constraint firstItem="Tjq-eT-gdT" firstAttribute="top" secondItem="N1c-2k-FLj" secondAttribute="bottom" constant="30" id="ma9-G1-qJr"/>
+                            <constraint firstItem="ykz-tW-7AR" firstAttribute="top" secondItem="Vml-3P-LWt" secondAttribute="bottom" constant="24.5" id="ocG-Fm-RdX"/>
+                            <constraint firstItem="N1c-2k-FLj" firstAttribute="leading" secondItem="5jx-Hb-HEX" secondAttribute="leading" constant="35" id="tCQ-V1-d2U"/>
+                            <constraint firstItem="Tjq-eT-gdT" firstAttribute="leading" secondItem="5jx-Hb-HEX" secondAttribute="leading" constant="35" id="tHH-AT-NfW"/>
+                            <constraint firstItem="ykz-tW-7AR" firstAttribute="leading" secondItem="Tjq-eT-gdT" secondAttribute="trailing" constant="111" id="xQr-EU-eYS"/>
+                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="dRC-Ae-cm5"/>
+                    <navigationItem key="navigationItem" id="dRC-Ae-cm5">
+                        <barButtonItem key="rightBarButtonItem" title="추가" style="done" id="vEm-d3-C50">
+                            <connections>
+                                <action selector="addTaskTimer" destination="klJ-BP-9Te" id="ltx-IR-sg7"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="countLabel" destination="hIw-4Q-wvt" id="rvo-8D-tzf"/>
+                        <outlet property="timeTf" destination="Vml-3P-LWt" id="YMu-pr-qLi"/>
+                        <outlet property="wholeTimeLabel" destination="gqA-l2-oRZ" id="QJ8-ml-cKi"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ezd-5q-gcn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1148" y="-125"/>
+            <point key="canvasLocation" x="1148" y="-125.4872563718141"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Ol8-Vm-Z5R">

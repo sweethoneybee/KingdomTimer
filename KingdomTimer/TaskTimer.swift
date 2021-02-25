@@ -1,8 +1,8 @@
 import Foundation
 import CoreData
 
-// MARK:- ElapsedStopwatch 클래스 정의
-class ElapsedStopwatch {
+// MARK:- TaskTimer 클래스 정의
+class TaskTimer {
     enum State: String {
         case idle = "idle"
         case paused = "paused"
@@ -25,8 +25,15 @@ class ElapsedStopwatch {
         }
     }
 
+    init(fetchedObject: TaskTimerEntity) {
+        self.entity = fetchedObject
+        print(fetchedObject.savedLeftTime)
+        let state = entity.state
+        self.state = State.stateFrom(rawValue: state)
+    }
+    
     // MARK:- Properties
-    private var entity: ElapsedStopwatchEntity
+    private var entity: TaskTimerEntity
     private var REFRESH_INTERVAL = TimeInterval(1)
     // self.leftTime과 같다는 것을 보장하지 않음
     private var savedLeftTime: TimeInterval {
@@ -38,7 +45,7 @@ class ElapsedStopwatch {
         }
     }
     
-    var delegate: ElapsedStopwatchDelegate?
+    var delegate: TaskTimerDelegate?
     private var id: Int {
         get {
             return Int(self.entity.id)
@@ -57,7 +64,6 @@ class ElapsedStopwatch {
         }
     }
     
-    // TODO:- 타이머 분리하기
     private var timer: Timer?
     var interval: TimeInterval {
         get {
@@ -102,13 +108,6 @@ class ElapsedStopwatch {
     }
     
     // MARK:- Methods
-    init(fetchedObject: ElapsedStopwatchEntity) {
-        self.entity = fetchedObject
-        print(fetchedObject.savedLeftTime)
-        let state = entity.state
-        self.state = State.stateFrom(rawValue: state)
-    }
-    
     func start() {
         guard self.state == .idle || self.state == .paused else {
             print("ElapsedStopwatch.start 실패. 현재상태=\(self.state)")
@@ -162,10 +161,10 @@ class ElapsedStopwatch {
     }
     
     func reset() {
-        guard self.state == .finished else {
-            print("ElapsedStopwatch.reinit 실패. 현재상태=\(self.state)")
-            return
-        }
+//        guard self.state == .finished else {
+//            print("ElapsedStopwatch.reinit 실패. 현재상태=\(self.state)")
+//            return
+//        }
         
         self.savedLeftTime = self.interval
         
@@ -176,11 +175,9 @@ class ElapsedStopwatch {
     
     func startWithOptimization() {
         guard self.state == .going && self.timer == nil else {
-            print("startWithOptimization 실패. 현재상태=\(self.state)")
             return
         }
         
-        print("최적화 타이머 시작")
         if self.leftTime > 0 {
             self.timer = scheduleTimer()
             timer?.fire()
@@ -191,11 +188,9 @@ class ElapsedStopwatch {
     
     func pauseWithOptimization() {
         guard self.state == .going else {
-            print("pauseWithOptimization 실패. 현재상태=\(self.state)")
             return
         }
         
-        print("최적화 타이머 종료")
         self.timer?.invalidate()
         self.timer = nil
     }
@@ -215,7 +210,7 @@ class ElapsedStopwatch {
 }
 
 // MARK:- UI 로직을 위해서 구현해야하는 델리게이트
-protocol ElapsedStopwatchDelegate {
+protocol TaskTimerDelegate {
     func TimerDidTick(leftTime: TimeInterval)
-    func DidChangeState(_ elapsedStopwatch: ElapsedStopwatch, originalState from: ElapsedStopwatch.State, newState to: ElapsedStopwatch.State)
+    func DidChangeState(_ elapsedStopwatch: TaskTimer, originalState from: TaskTimer.State, newState to: TaskTimer.State)
 }
