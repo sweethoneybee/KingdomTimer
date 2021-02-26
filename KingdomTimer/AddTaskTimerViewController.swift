@@ -10,10 +10,12 @@ import CoreData
 
 class AddTaskTimerViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate {
 
-    private lazy var taskTimerDao = TaskTimerDAO()
     private let MAX_TEXT_LENGTH = 25
-    private var timerData = TimerData()
+    private lazy var taskTimerDao = TaskTimerDAO()
     private var timePickerData = [[Int]]()
+    
+    var timePicker: UIPickerView?
+    lazy var inputContainer = TimerDataInputContainer()
     
     @IBOutlet weak var timeTf: UITextField?
     @IBOutlet weak var countLabel: UILabel?
@@ -27,8 +29,8 @@ class AddTaskTimerViewController: UIViewController, UIPickerViewDataSource, UIPi
         self.timeTf?.delegate = self
         self.titleTf?.delegate = self
         
-        let timePicker = UIPickerView()
-        timePicker.delegate = self
+        self.timePicker = UIPickerView()
+        self.timePicker?.delegate = self
         self.timeTf?.inputView = timePicker
         
         let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 0, height: 35))
@@ -58,26 +60,26 @@ class AddTaskTimerViewController: UIViewController, UIPickerViewDataSource, UIPi
     }
     
     @IBAction func addTaskTimer() {
-        guard self.timerData.title != "" else {
+        guard self.inputContainer.title != "" else {
             let alert = self.makeSimpleAlert(message: "이름을 적어주세요")
             self.present(alert, animated: true)
             return
         }
         
-        guard self.timerData.wholeTime > 0 else {
+        guard self.inputContainer.wholeTime > 0 else {
             let alert = self.makeSimpleAlert(message: "시간을 설정해주세요")
             self.present(alert, animated: true)
             return
         }
         
-        self.taskTimerDao.create(data: timerData)
+        self.taskTimerDao.create(data: inputContainer)
         self.navigationController?.popViewController(animated: true)
     }
 
-    @IBAction func countStepper(_ sender: UIStepper) {
-        self.timerData.count = Int(sender.value)
-        self.countLabel?.text = "\(self.timerData.count)개"
-        self.wholeTimeLabel?.text = self.timerData.wholeTimeToString
+    @IBAction func countStep(_ sender: UIStepper) {
+        self.inputContainer.count = Int(sender.value)
+        self.countLabel?.text = "\(self.inputContainer.count)개"
+        self.wholeTimeLabel?.text = self.inputContainer.wholeTimeToString
     }
     
     func makeSimpleAlert(message: String) -> UIAlertController {
@@ -107,13 +109,13 @@ extension AddTaskTimerViewController {
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         switch component {
-        case 0: self.timerData.requiringHour = self.timePickerData[component][row]
-        case 1: self.timerData.requiringMin = self.timePickerData[component][row]
-        case 2: self.timerData.requiringSecond = self.timePickerData[component][row]
+        case 0: self.inputContainer.requiringHour = self.timePickerData[component][row]
+        case 1: self.inputContainer.requiringMin = self.timePickerData[component][row]
+        case 2: self.inputContainer.requiringSecond = self.timePickerData[component][row]
         default: ()
         }
-        self.timeTf?.text = self.timerData.requiringTimeToString
-        self.wholeTimeLabel?.text = self.timerData.wholeTimeToString
+        self.timeTf?.text = self.inputContainer.requiringTimeToString
+        self.wholeTimeLabel?.text = self.inputContainer.wholeTimeToString
     }
 }
 
@@ -131,7 +133,7 @@ extension AddTaskTimerViewController {
         }
         
         if textField === self.titleTf, let text = textField.text {
-            self.timerData.title = text
+            self.inputContainer.title = text
         }
     }
     
@@ -142,8 +144,8 @@ extension AddTaskTimerViewController {
                 return false
             }
             
-            self.timerData.title = text
-            print("self.timerData.title=\(self.timerData.title)")
+            self.inputContainer.title = text
+            print("self.timerData.title=\(self.inputContainer.title)")
             return true
         }
         return true
@@ -156,30 +158,42 @@ extension AddTaskTimerViewController {
     
 }
 
-struct TimerData {
+struct TimerDataInputContainer {
     var title: String = ""
     var count: Int = 1
     var requiringHour: Int = 0
     var requiringMin: Int = 0
     var requiringSecond: Int = 0
-    var wholeMin: Int {
-        return self.requiringMin * self.count
+    var wholeTime: Int {
+        return (self.requiringSecond
+                    + self.requiringMin * 60
+                    + self.requiringHour * 60 * 60) * self.count
+        
     }
     var wholeSecond: Int {
-        return self.requiringSecond * self.count
+        return self.wholeTime % 60
     }
-    var wholeTime: Int {
-        return (self.wholeHour * 60 * 60
-                    + self.wholeMin * 60
-                    + self.wholeSecond)
+    var wholeMin: Int {
+        return (self.wholeTime - self.wholeSecond) / 60 % 60
     }
     var wholeHour: Int {
-        return self.requiringHour * self.count
+        return (self.wholeTime - self.wholeSecond) / (60 * 60)
     }
     var requiringTimeToString: String {
         return "\(self.requiringHour)시간 \(self.requiringMin)분 \(self.requiringSecond)초"
     }
     var wholeTimeToString: String {
         return "총 \(self.wholeHour)시간 \(self.wholeMin)분 \(self.wholeSecond)초"
+    }
+    
+    init() {}
+    init(timerData data: TimerData) {
+        self.title = data.title
+        self.count = data.count
+        
+        let seconds = Int(data.interval) / count
+        self.requiringSecond = seconds % 60
+        self.requiringMin = (seconds - self.requiringSecond) / 60 % 60
+        self.requiringHour = (seconds - self.requiringSecond) / (60 * 60)
     }
 }

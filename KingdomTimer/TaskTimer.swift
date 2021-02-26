@@ -1,6 +1,16 @@
 import Foundation
 import CoreData
 
+struct TimerData {
+    var id = 0
+    var title = ""
+    var state = TaskTimer.State.idle
+    var count = 1
+    var savedLeftTime = TimeInterval.zero
+    var interval = TimeInterval.zero
+    lazy var finishDate = Date()
+}
+
 // MARK:- TaskTimer 클래스 정의
 class TaskTimer {
     enum State: String {
@@ -24,11 +34,17 @@ class TaskTimer {
             }
         }
     }
-
+    
     init(fetchedObject: TaskTimerEntity) {
         self.entity = fetchedObject
-        let state = entity.state
-        self.state = State.stateFrom(rawValue: state)
+        
+        self.timerData.id = Int(entity.id)
+        self.timerData.title = entity.title ?? "이름불러오기실패"
+        self.timerData.state = State.stateFrom(rawValue: entity.state)
+        self.timerData.count = Int(entity.count)
+        self.timerData.savedLeftTime = TimeInterval(entity.savedLeftTime)
+        self.timerData.interval = TimeInterval(entity.interval)
+        self.timerData.finishDate = entity.finishDate ?? Date()
     }
     
     deinit {
@@ -37,78 +53,26 @@ class TaskTimer {
     }
     
     // MARK:- Properties
-    private var entity: TaskTimerEntity
+    var entity: TaskTimerEntity
     private var REFRESH_INTERVAL = TimeInterval(1)
-    // self.leftTime과 같다는 것을 보장하지 않음
-    private var savedLeftTime: TimeInterval {
-        get {
-            return TimeInterval(self.entity.savedLeftTime)
-        }
-        set(value) {
-            self.entity.savedLeftTime = Int64(value)
-        }
-    }
+    var timerData = TimerData()
     
     var delegate: TaskTimerDelegate?
     var objectId: NSManagedObjectID {
         return self.entity.objectID
     }
-    private var id: Int {
-        get {
-            return Int(self.entity.id)
-        }
-        set(value) {
-            self.entity.id = Int64(value)
-        }
-    }
-    
-    var title: String {
-        get {
-            return self.entity.title ?? "이름불러오기실패"
-        }
-        set(value) {
-            self.entity.title = value
-        }
-    }
-    
+
     private var timer: Timer?
-    var interval: TimeInterval {
-        get {
-            TimeInterval(self.entity.interval)
-        }
-        set(value) {
-            self.entity.interval = Int64(value)
-        }
-    }
-    
-    var finishDate: Date {
-        get {
-            return self.entity.finishDate ?? Date(timeIntervalSinceNow: self.savedLeftTime)
-        }
-        set (value) {
-            self.entity.finishDate = value
-        }
-    }
-    
-    var state: State {
-        get {
-            let state = self.entity.state
-            return State.stateFrom(rawValue: state)
-        }
-        set (value) {
-            self.entity.state = value.rawValue
-        }
-    }
     
     var leftTime: TimeInterval {
-        switch self.state {
+        switch self.timerData.state {
         case .idle:
-            return self.interval
+            return self.timerData.interval
         case .going:
             let NOW = Date()
-            return self.finishDate.timeIntervalSince(NOW)
+            return self.timerData.finishDate.timeIntervalSince(NOW)
         case .paused:
-            return self.savedLeftTime
+            return self.timerData.savedLeftTime
         case .finished:
             return TimeInterval.zero
         }
@@ -116,20 +80,22 @@ class TaskTimer {
     
     // MARK:- Methods
     func start() {
-        guard self.state == .idle || self.state == .paused else {
-            print("ElapsedStopwatch.start 실패. 현재상태=\(self.state)")
+        guard self.timerData.state == .idle || self.timerData.state == .paused else {
+            print("ElapsedStopwatch.start 실패. 현재상태=\(self.timerData.state)")
             return
         }
         
-        if self.state == .idle {
-            self.finishDate = Date(timeIntervalSinceNow: self.interval)
+        if self.timerData.state == .idle {
+            self.timerData.finishDate = Date(timeIntervalSinceNow: self.timerData.interval)
         } else {
-            self.finishDate = Date(timeIntervalSinceNow: self.savedLeftTime)
+            self.timerData.finishDate = Date(timeIntervalSinceNow: self.timerData.savedLeftTime)
         }
+        self.entity.finishDate = self.timerData.finishDate
         
-        let oldState = self.state
-        self.state = .going
-        self.delegate?.DidChangeState(self, originalState: oldState, newState: self.state)
+        let oldState = self.timerData.state
+        self.timerData.state = .going
+        self.delegate?.DidChangeState(self, originalState: oldState, newState: self.timerData.state)
+        self.entity.state = self.timerData.state.rawValue
         
         // timer 블록에서는 finish()가 호출될 수 있는데 .going 상태에서만 호출 가능하기 때문에
         // 상태를 먼저 변경하고 타이머를 설정하는 것.
@@ -142,43 +108,49 @@ class TaskTimer {
     }
     
     func pause() {
-        guard self.state == .going else {
-            print("ElapsedStopwatch.pause 실패. 현재상태=\(self.state)")
+        guard self.timerData.state == .going else {
+            print("ElapsedStopwatch.pause 실패. 현재상태=\(self.timerData.state)")
             return
         }
         
         self.timer?.invalidate()
         self.timer = nil
-        self.savedLeftTime = self.leftTime
+        self.timerData.savedLeftTime = self.leftTime
+        self.entity.savedLeftTime = Int64(self.timerData.savedLeftTime)
         
-        let oldState = self.state
-        self.state = .paused
-        self.delegate?.DidChangeState(self, originalState: oldState, newState: self.state)
+        let oldState = self.timerData.state
+        self.timerData.state = .paused
+        self.delegate?.DidChangeState(self, originalState: oldState, newState: self.timerData.state)
+        self.entity.state = self.timerData.state.rawValue
     }
     
     func finish() {
-        guard self.state == .going else {
-            print("ElapsedStopwatch.finish 실패. 현재상태=\(self.state)")
+        guard self.timerData.state == .going else {
+            print("ElapsedStopwatch.finish 실패. 현재상태=\(self.timerData.state)")
             return
         }
         
-        let oldState = self.state
-        self.state = .finished
-        self.delegate?.DidChangeState(self, originalState: oldState, newState: self.state)
+        let oldState = self.timerData.state
+        self.timerData.state = .finished
+        self.delegate?.DidChangeState(self, originalState: oldState, newState: self.timerData.state)
+        self.entity.state = self.timerData.state.rawValue
     }
     
     func reset() {
-        self.savedLeftTime = self.interval
+        self.timerData.savedLeftTime = self.timerData.interval
+        self.entity.savedLeftTime = Int64(self.timerData.interval)
+        
         self.timer?.invalidate()
         self.timer = nil
         
-        let oldState = self.state
-        self.state = .idle
-        self.delegate?.DidChangeState(self, originalState: oldState, newState: self.state)
+        let oldState = self.timerData.state
+        self.timerData.state = .idle
+        self.delegate?.DidChangeState(self, originalState: oldState, newState: self.timerData.state)
+        self.entity.state = self.timerData.state.rawValue
     }
     
     func startWithOptimization() {
-        guard self.state == .going && self.timer == nil else {
+        guard self.timerData.state == .going && self.timer == nil else {
             return
         }
         
@@ -191,7 +163,7 @@ class TaskTimer {
     }
     
     func pauseWithOptimization() {
-        guard self.state == .going else {
+        guard self.timerData.state == .going else {
             return
         }
         
@@ -212,10 +184,16 @@ class TaskTimer {
         timer.tolerance = self.REFRESH_INTERVAL * 0.1
         return timer
     }
+    
+    func reflectEditedChangesOnEntity() {
+        self.entity.title = self.timerData.title
+        self.entity.count = Int64(self.timerData.count)
+        self.entity.interval = Int64(self.timerData.interval)
+    }
 }
 
 // MARK:- UI 로직을 위해서 구현해야하는 델리게이트
 protocol TaskTimerDelegate {
     func TimerDidTick(leftTime: TimeInterval)
-    func DidChangeState(_ elapsedStopwatch: TaskTimer, originalState from: TaskTimer.State, newState to: TaskTimer.State)
+    func DidChangeState(_ taskTimer: TaskTimer, originalState from: TaskTimer.State, newState to: TaskTimer.State)
 }

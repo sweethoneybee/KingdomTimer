@@ -11,7 +11,6 @@ import CoreData
 class TaskTimerDAO {
     
     func fetch() -> [TaskTimer] {
-        print("fetching 시작")
         let viewContext = AppDelegate.viewContext
         var taskTimers = [TaskTimer]()
         
@@ -34,7 +33,6 @@ class TaskTimerDAO {
     }
     
     func save() {
-        print("TaskTimerDAO.save() 호출")
         let context = AppDelegate.viewContext
         
         if context.hasChanges {
@@ -46,7 +44,7 @@ class TaskTimerDAO {
         }
     }
     
-    func create(data: TimerData) {
+    func create(data: TimerDataInputContainer) {
         guard data.title != "" else {
             return
         }
@@ -58,8 +56,15 @@ class TaskTimerDAO {
         
         taskTimerMO.title = data.title
         taskTimerMO.interval = Int64(data.wholeTime)
+        taskTimerMO.count = Int64(data.count)
         
         self.save()
+    }
+    
+    func update(target: TaskTimerEntity, data: TimerDataInputContainer) {
+        target.title = data.title
+        target.count = Int64(data.count)
+        target.interval = Int64(data.wholeTime)
     }
     
     func delete(objectId: NSManagedObjectID) -> Bool {
@@ -77,4 +82,3 @@ class TaskTimerDAO {
         }
     }
 }
-

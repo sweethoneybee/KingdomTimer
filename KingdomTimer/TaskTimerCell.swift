@@ -10,7 +10,7 @@ class TaskTimerCell: UICollectionViewCell, TaskTimerDelegate {
         self.timeLabel?.text = TaskTimerCell.textLeftTime(left: leftTime)
     }
     
-    func DidChangeState(_ elasedStopwatch: TaskTimer, originalState from: TaskTimer.State, newState to: TaskTimer.State) {
+    func DidChangeState(_ taskTimer: TaskTimer, originalState from: TaskTimer.State, newState to: TaskTimer.State) {
 
         print("DidChangeStatus from=.\(from) to=.\(to) ")
         
@@ -26,11 +26,11 @@ class TaskTimerCell: UICollectionViewCell, TaskTimerDelegate {
             self.contentView.backgroundColor = CellBackgroundColor.finished
         case (.finished, .idle):
             self.contentView.backgroundColor = CellBackgroundColor.idle
-            let defaultInterval = elasedStopwatch.interval
+            let defaultInterval = taskTimer.timerData.interval
             self.timeLabel?.text = TaskTimerCell.textLeftTime(left: defaultInterval)
         default: // when reset
             self.contentView.backgroundColor = CellBackgroundColor.idle
-            let defaultInterval = elasedStopwatch.interval
+            let defaultInterval = taskTimer.timerData.interval
             self.timeLabel?.text = TaskTimerCell.textLeftTime(left: defaultInterval)
         }
     }

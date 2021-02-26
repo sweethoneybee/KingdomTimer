@@ -4,7 +4,7 @@ import CoreData
 class MainViewController: UIViewController {
     
     @IBOutlet var collectionView: UICollectionView?
-    lazy var taskTimerDao = TaskTimerDAO()
+    private lazy var taskTimerDao = TaskTimerDAO()
     lazy var taskTimers: [TaskTimer] = self.taskTimerDao.fetch()
     
     override func viewDidLoad() {
@@ -40,6 +40,7 @@ class MainViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        print("viewWillDisappear")
         for taskTimer in self.taskTimers {
             taskTimer.pauseWithOptimization()
         }
@@ -51,15 +52,25 @@ class MainViewController: UIViewController {
             let touchedPoint = sender.location(in: self.collectionView)
             if let indexpath = self.collectionView?.indexPathForItem(at: touchedPoint) {
                 let item = self.taskTimers[indexpath.item]
-                let alert = UIAlertController(title: nil, message: item.title, preferredStyle: .actionSheet)
+                
+                let alert = UIAlertController(title: nil, message: item.timerData.title, preferredStyle: .actionSheet)
+                
                 alert.addAction(UIAlertAction(title: "리셋", style: .default){ action in
                     item.reset()
                 })
                 
-                alert.addAction(UIAlertAction(title: "수정", style: .default))
+                alert.addAction(UIAlertAction(title: "수정", style: .default){ action in
+                    guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "EditTaskTimer")
+                            as? EditTaskTimerController else {
+                        return
+                    }
+                    
+                    vc.taskTimer = item
+                    self.navigationController?.pushViewController(vc, animated: true)
+                })
                 
                 alert.addAction(UIAlertAction(title: "삭제", style: .destructive){ action in
-                    let askAgain = UIAlertController(title: "정말 삭제할 건가요?", message: item.title, preferredStyle: .actionSheet)
+                    let askAgain = UIAlertController(title: "정말 삭제할 건가요?", message: item.timerData.title, preferredStyle: .actionSheet)
                     askAgain.addAction(UIAlertAction(title: "취소", style: .cancel))
                     askAgain.addAction(UIAlertAction(title: "삭제", style: .destructive){ action in
                         if self.taskTimerDao.delete(objectId: item.objectId) {
@@ -92,10 +103,10 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         let taskTimer = self.taskTimers[indexPath.item]
         taskTimer.delegate = cell
                 
-        cell.stateLabel?.text = TaskTimerCell.changeStateToString(state: taskTimer.state)
-        cell.titleLabel?.text = taskTimer.title
+        cell.stateLabel?.text = TaskTimerCell.changeStateToString(state: taskTimer.timerData.state)
+        cell.titleLabel?.text = taskTimer.timerData.title
         cell.timeLabel?.text = TaskTimerCell.textLeftTime(left: taskTimer.leftTime)
-        cell.contentView.backgroundColor = CellBackgroundColor.backgroundColor(withState: taskTimer.state)
+        cell.contentView.backgroundColor = CellBackgroundColor.backgroundColor(withState: taskTimer.timerData.state)
         cell.contentView.layer.cornerRadius = CGFloat(20)
         
         return cell
@@ -103,7 +114,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let taskTimer = self.taskTimers[indexPath.item]
-        switch taskTimer.state {
+        switch taskTimer.timerData.state {
         case .idle:
             taskTimer.start()
         case .going:
