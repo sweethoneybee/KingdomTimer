@@ -27,9 +27,13 @@ class TaskTimer {
 
     init(fetchedObject: TaskTimerEntity) {
         self.entity = fetchedObject
-        print(fetchedObject.savedLeftTime)
         let state = entity.state
         self.state = State.stateFrom(rawValue: state)
+    }
+    
+    deinit {
+        self.timer?.invalidate()
+        self.timer = nil
     }
     
     // MARK:- Properties
@@ -46,6 +50,9 @@ class TaskTimer {
     }
     
     var delegate: TaskTimerDelegate?
+    var objectId: NSManagedObjectID {
+        return self.entity.objectID
+    }
     private var id: Int {
         get {
             return Int(self.entity.id)
@@ -161,12 +168,9 @@ class TaskTimer {
     }
     
     func reset() {
-//        guard self.state == .finished else {
-//            print("ElapsedStopwatch.reinit 실패. 현재상태=\(self.state)")
-//            return
-//        }
-        
         self.savedLeftTime = self.interval
+        self.timer?.invalidate()
+        self.timer = nil
         
         let oldState = self.state
         self.state = .idle
@@ -197,6 +201,7 @@ class TaskTimer {
     
     private func scheduleTimer() -> Timer {
         let timer = Timer.scheduledTimer(withTimeInterval: self.REFRESH_INTERVAL, repeats: true) { timer in
+            print("타이머작동중")
             if self.leftTime <= 0 {
                 self.finish()
                 timer.invalidate()

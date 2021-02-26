@@ -26,11 +26,12 @@ class TaskTimerCell: UICollectionViewCell, TaskTimerDelegate {
             self.contentView.backgroundColor = CellBackgroundColor.finished
         case (.finished, .idle):
             self.contentView.backgroundColor = CellBackgroundColor.idle
-
             let defaultInterval = elasedStopwatch.interval
             self.timeLabel?.text = TaskTimerCell.textLeftTime(left: defaultInterval)
-        default:
-            ()
+        default: // when reset
+            self.contentView.backgroundColor = CellBackgroundColor.idle
+            let defaultInterval = elasedStopwatch.interval
+            self.timeLabel?.text = TaskTimerCell.textLeftTime(left: defaultInterval)
         }
     }
     

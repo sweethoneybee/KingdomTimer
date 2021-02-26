@@ -15,6 +15,7 @@
 		401254E825DAB30A006931AE /* TaskTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401254E725DAB30A006931AE /* TaskTimer.swift */; };
 		401254EB25DABC4C006931AE /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401254EA25DABC4C006931AE /* MainViewController.swift */; };
 		4012550225DF8A43006931AE /* TaskTimerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4012550125DF8A43006931AE /* TaskTimerCell.swift */; };
+		40A8B1D225E8EFE10021ECF7 /* TaskTimerDAO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A8B1D125E8EFE10021ECF7 /* TaskTimerDAO.swift */; };
 		40F8592A25E25F3000906F8A /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F8592925E25F3000906F8A /* Utils.swift */; };
 		40F8593325E3D4F200906F8A /* KingdomTimer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 40F8593125E3D4F200906F8A /* KingdomTimer.xcdatamodeld */; };
 		40F8593925E7CCF800906F8A /* AddTaskTimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F8593825E7CCF800906F8A /* AddTaskTimerViewController.swift */; };
@@ -31,6 +32,7 @@
 		401254E725DAB30A006931AE /* TaskTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTimer.swift; sourceTree = "<group>"; };
 		401254EA25DABC4C006931AE /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		4012550125DF8A43006931AE /* TaskTimerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTimerCell.swift; sourceTree = "<group>"; };
+		40A8B1D125E8EFE10021ECF7 /* TaskTimerDAO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTimerDAO.swift; sourceTree = "<group>"; };
 		40F8592925E25F3000906F8A /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		40F8593225E3D4F200906F8A /* KingdomTimer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = KingdomTimer.xcdatamodel; sourceTree = "<group>"; };
 		40F8593825E7CCF800906F8A /* AddTaskTimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskTimerViewController.swift; sourceTree = "<group>"; };
@@ -72,6 +74,7 @@
 				4012550125DF8A43006931AE /* TaskTimerCell.swift */,
 				401254EA25DABC4C006931AE /* MainViewController.swift */,
 				40F8593825E7CCF800906F8A /* AddTaskTimerViewController.swift */,
+				40A8B1D125E8EFE10021ECF7 /* TaskTimerDAO.swift */,
 				40F8592925E25F3000906F8A /* Utils.swift */,
 				401254E725DAB30A006931AE /* TaskTimer.swift */,
 				40F8593125E3D4F200906F8A /* KingdomTimer.xcdatamodeld */,
@@ -155,6 +158,7 @@
 				4012550225DF8A43006931AE /* TaskTimerCell.swift in Sources */,
 				401254E825DAB30A006931AE /* TaskTimer.swift in Sources */,
 				401254EB25DABC4C006931AE /* MainViewController.swift in Sources */,
+				40A8B1D225E8EFE10021ECF7 /* TaskTimerDAO.swift in Sources */,
 				40F8593325E3D4F200906F8A /* KingdomTimer.xcdatamodeld in Sources */,
 				401254CD25D9526C006931AE /* AppDelegate.swift in Sources */,
 				401254CF25D9526C006931AE /* SceneDelegate.swift in Sources */,

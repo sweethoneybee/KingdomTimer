@@ -10,6 +10,7 @@ import CoreData
 
 class AddTaskTimerViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate {
 
+    private lazy var taskTimerDao = TaskTimerDAO()
     private let MAX_TEXT_LENGTH = 25
     private var timerData = TimerData()
     private var timePickerData = [[Int]]()
@@ -57,22 +58,20 @@ class AddTaskTimerViewController: UIViewController, UIPickerViewDataSource, UIPi
     }
     
     @IBAction func addTaskTimer() {
-        if let vc = self.navigationController?.viewControllers.first as? MainViewController {
-            guard self.timerData.title != "" else {
-                let alert = self.makeSimpleAlert(message: "이름을 적어주세요")
-                self.present(alert, animated: true)
-                return
-            }
-            guard self.timerData.wholeTime > 0 else {
-                let alert = self.makeSimpleAlert(message: "시간을 설정해주세요")
-                self.present(alert, animated: true)
-                return
-            }
-            if let stopwatch = self.timerData.makeTaskTimer(context: AppDelegate.viewContext) {
-                vc.stopwatches.append(stopwatch)
-                self.navigationController?.popViewController(animated: true)
-            }
+        guard self.timerData.title != "" else {
+            let alert = self.makeSimpleAlert(message: "이름을 적어주세요")
+            self.present(alert, animated: true)
+            return
         }
+        
+        guard self.timerData.wholeTime > 0 else {
+            let alert = self.makeSimpleAlert(message: "시간을 설정해주세요")
+            self.present(alert, animated: true)
+            return
+        }
+        
+        self.taskTimerDao.create(data: timerData)
+        self.navigationController?.popViewController(animated: true)
     }
 
     @IBAction func countStepper(_ sender: UIStepper) {
@@ -182,21 +181,5 @@ struct TimerData {
     }
     var wholeTimeToString: String {
         return "총 \(self.wholeHour)시간 \(self.wholeMin)분 \(self.wholeSecond)초"
-    }
-    
-    func makeTaskTimer(context: NSManagedObjectContext) -> TaskTimer? {
-        guard self.title != "" else {
-            return nil
-        }
-        let stopwatchObject = TaskTimerEntity(context: AppDelegate.viewContext)
-        
-        let id = UserDefaults.standard.integer(forKey: "autoIncrement")
-        stopwatchObject.id = Int64(id)
-        UserDefaults.standard.set(id + 1, forKey: "autoIncrement")
-        
-        stopwatchObject.title = self.title
-        stopwatchObject.interval = Int64(self.wholeTime)
-        
-        return TaskTimer(fetchedObject: stopwatchObject)
     }
 }
