@@ -117,10 +117,16 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         switch taskTimer.timerData.state {
         case .idle:
             taskTimer.start()
+            let center = UNUserNotificationCenter.current()
+            center.createLocalPush(data: taskTimer.timerData)
         case .going:
             taskTimer.pause()
+            let center = UNUserNotificationCenter.current()
+            center.deleteLocalPush(id: String(taskTimer.timerData.id))
         case .paused:
             taskTimer.start()
+            let center = UNUserNotificationCenter.current()
+            center.createLocalPush(data: taskTimer.timerData)
         case .finished:
             taskTimer.reset()
         }

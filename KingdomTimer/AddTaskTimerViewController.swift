@@ -73,6 +73,18 @@ class AddTaskTimerViewController: UIViewController, UIPickerViewDataSource, UIPi
         }
         
         self.taskTimerDao.create(data: inputContainer)
+        let center = UNUserNotificationCenter.current()
+        center.getNotificationSettings { settings in
+            guard (settings.authorizationStatus == .notDetermined) else {
+                return
+            }
+            
+            center.requestAuthorization(options: [.alert, .sound]){ granted, error in
+                if let error = error {
+                    NSLog("user noti request auth error: %s", error.localizedDescription)
+                }
+            }
+        }
         self.navigationController?.popViewController(animated: true)
     }
 
@@ -103,8 +115,17 @@ extension AddTaskTimerViewController {
         return self.timePickerData[component].count
     }
     
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return "\(self.timePickerData[component][row])"
+func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    switch component {
+    case 0:
+        return "\(self.timePickerData[component][row]) 시간"
+    case 1:
+        return "\(self.timePickerData[component][row]) 분"
+    case 2:
+        return "\(self.timePickerData[component][row]) 초"
+    default:
+        return "오류"
+    }
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -138,15 +159,11 @@ extension AddTaskTimerViewController {
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        print("string=\(string).")
         if textField === self.titleTf, let text = textField.text {
             guard text.count < MAX_TEXT_LENGTH else {
                 return false
             }
-            
             self.inputContainer.title = text
-            print("self.timerData.title=\(self.inputContainer.title)")
-            return true
         }
         return true
     }
@@ -155,7 +172,6 @@ extension AddTaskTimerViewController {
         textField.resignFirstResponder()
         return true
     }
-    
 }
 
 struct TimerDataInputContainer {
@@ -168,7 +184,6 @@ struct TimerDataInputContainer {
         return (self.requiringSecond
                     + self.requiringMin * 60
                     + self.requiringHour * 60 * 60) * self.count
-        
     }
     var wholeSecond: Int {
         return self.wholeTime % 60
