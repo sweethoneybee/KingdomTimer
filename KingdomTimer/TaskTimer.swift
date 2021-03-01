@@ -173,7 +173,6 @@ class TaskTimer {
     
     private func scheduleTimer() -> Timer {
         let timer = Timer.scheduledTimer(withTimeInterval: self.REFRESH_INTERVAL, repeats: true) { timer in
-            print("타이머작동중")
             if self.leftTime <= 0 {
                 self.finish()
                 timer.invalidate()
