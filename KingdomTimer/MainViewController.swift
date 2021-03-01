@@ -59,7 +59,7 @@ class MainViewController: UIViewController {
                     item.reset()
                 })
                 
-                alert.addAction(UIAlertAction(title: "수정", style: .default){ action in
+                alert.addAction(UIAlertAction(title: "편집", style: .default){ action in
                     guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "EditTaskTimer")
                             as? EditTaskTimerController else {
                         return

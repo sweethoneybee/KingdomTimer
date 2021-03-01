@@ -10,14 +10,13 @@ import UIKit
 class EditTaskTimerController: AddTaskTimerViewController {
     private lazy var taskTimerDao = TaskTimerDAO()
     var taskTimer: TaskTimer?
-    
     @IBOutlet weak var countStepper: UIStepper?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if taskTimer != nil {
-            self.inputContainer = TimerDataInputContainer(timerData: taskTimer!.timerData)
+        if let tT = taskTimer {
+            self.inputContainer = TimerDataInputContainer(timerData: tT.timerData)
             self.timePicker?.selectRow(self.inputContainer.requiringHour, inComponent: 0, animated: true)
             self.timePicker?.selectRow(self.inputContainer.requiringMin, inComponent: 1, animated: true)
             self.timePicker?.selectRow(self.inputContainer.requiringSecond, inComponent: 2, animated: true)
@@ -59,7 +58,18 @@ class EditTaskTimerController: AddTaskTimerViewController {
         if let tT = taskTimer {
             self.taskTimerDao.update(target: tT.entity, data: self.inputContainer)
             tT.reset()
+            
+            let id = tT.timerData.id
+            UNUserNotificationCenter.current().deleteLocalPush(id: String(id))
+            
             self.navigationController?.popViewController(animated: true)
+        } else {
+            // TODO:- update fail alert 게시하기
+            let alert = UIAlertController(title: "편집 실패", message: "변경 사항을 저장하지 못했습니다", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "확인", style: .default){ action in
+                self.navigationController?.popViewController(animated: true)
+            })
+            self.present(alert, animated: true)
         }
     }
 }
