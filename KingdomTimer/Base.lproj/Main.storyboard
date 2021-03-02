@@ -87,13 +87,7 @@
                             <constraint firstItem="uTG-hc-wvh" firstAttribute="top" secondItem="RW9-ND-g6t" secondAttribute="top" id="htX-K1-POe"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="타이머들" id="4mK-Sx-bkb">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="LfP-VR-eEs">
-                            <connections>
-                                <segue destination="klJ-BP-9Te" kind="show" id="7rc-wL-H1X"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="타이머들" id="4mK-Sx-bkb"/>
                     <connections>
                         <outlet property="collectionView" destination="uTG-hc-wvh" id="XBz-qk-pu8"/>
                     </connections>
@@ -105,60 +99,60 @@
         <!--Add Task Timer View Controller-->
         <scene sceneID="skO-Kt-ptw">
             <objects>
-                <viewController id="klJ-BP-9Te" customClass="AddTaskTimerViewController" customModule="KingdomTimer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AddTaskTimer" id="klJ-BP-9Te" customClass="AddTaskTimerViewController" customModule="KingdomTimer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UiO-8b-5wL">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="소요시간" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N1c-2k-FLj">
-                                <rect key="frame" x="35" y="148" width="69.5" height="24"/>
+                                <rect key="frame" x="35" y="104" width="69.5" height="24"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="개수" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tjq-eT-gdT">
-                                <rect key="frame" x="35" y="204" width="35" height="24"/>
+                                <rect key="frame" x="35" y="160" width="35" height="24"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="이름" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iQh-nu-uES">
-                                <rect key="frame" x="35" y="94" width="35" height="24"/>
+                                <rect key="frame" x="35" y="50" width="35" height="24"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="총 0시간 0분 0초" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gqA-l2-oRZ">
-                                <rect key="frame" x="83.5" y="259.5" width="208" height="36"/>
+                                <rect key="frame" x="83.5" y="215.5" width="208" height="36"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minimumValue="1" maximumValue="30" translatesAutoresizingMaskIntoConstraints="NO" id="ykz-tW-7AR">
-                                <rect key="frame" x="181" y="201" width="94" height="32"/>
+                                <rect key="frame" x="181" y="157" width="94" height="32"/>
                                 <connections>
                                     <action selector="countStep:" destination="klJ-BP-9Te" eventType="valueChanged" id="6v7-ce-nIS"/>
                                 </connections>
                             </stepper>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="1개" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hIw-4Q-wvt">
-                                <rect key="frame" x="283" y="205" width="57" height="24"/>
+                                <rect key="frame" x="283" y="161" width="57" height="24"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="최대 25자" textAlignment="justified" adjustsFontSizeToFit="NO" minimumFontSize="12" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="piH-7D-WlR">
-                                <rect key="frame" x="90" y="89" width="250" height="34"/>
+                                <rect key="frame" x="90" y="45" width="250" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" smartDashesType="yes"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(소요시간 X 개수)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tNk-r2-dE2">
-                                <rect key="frame" x="144" y="296.5" width="87" height="15"/>
+                                <rect key="frame" x="144" y="252.5" width="87" height="15"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="0시간 0분 0초" borderStyle="roundedRect" textAlignment="right" adjustsFontSizeToFit="NO" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="Vml-3P-LWt">
-                                <rect key="frame" x="157" y="143" width="183" height="34"/>
+                                <rect key="frame" x="157" y="99" width="183" height="34"/>
                                 <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>

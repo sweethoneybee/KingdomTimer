@@ -9,7 +9,7 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         let flowLayout: UICollectionViewFlowLayout
         flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumInteritemSpacing = CGFloat(10)
@@ -19,7 +19,7 @@ class MainViewController: UIViewController {
         flowLayout.itemSize = CGSize(width: width * 0.28, height: width * 0.28)
         
         let inset = width * 0.02
-        flowLayout.sectionInset = UIEdgeInsets(top: CGFloat(inset), left: CGFloat(inset), bottom: CGFloat(inset), right: CGFloat(inset))
+        flowLayout.sectionInset = UIEdgeInsets(top: CGFloat(inset * 4), left: CGFloat(inset), bottom: CGFloat(inset), right: CGFloat(inset))
         
         self.collectionView?.collectionViewLayout = flowLayout
         self.collectionView?.delaysContentTouches = false // for natural content shrinking animation
@@ -28,7 +28,42 @@ class MainViewController: UIViewController {
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(askEditing(_:)))
         self.collectionView?.addGestureRecognizer(gesture)
         
+        // navigationBar Custom
+        self.navigationController?.navigationBar.tintColor = .systemOrange
+        let tv = UILabel(frame: CGRect(x: 0, y: 0, width: 50, height: 30))
+        
+        tv.font = .boldSystemFont(ofSize: 24)
+        tv.textColor = .systemOrange
+        tv.text = "타이머들"
+        tv.textAlignment = .center
+        tv.autoresizesSubviews = false
+        self.navigationItem.titleView = tv
+        
+        let tvWidthConstraint = NSLayoutConstraint(item: tv, attribute: .width, relatedBy: .equal, toItem: .none, attribute: .notAnAttribute, multiplier: CGFloat(1.0), constant: CGFloat(100))
+        tvWidthConstraint.isActive = true
+        
+        let rightButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(movePageToAdd(_:)))
+        self.navigationItem.rightBarButtonItem = rightButton
+
+        // remove bottom 1pt line
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.clipsToBounds = true
+        
         print("viewdidload")
+    }
+    
+    @objc func movePageToAdd(_ sender: Any) {
+        let MAX_TIMER_COUNT = 50
+        guard self.taskTimers.count < MAX_TIMER_COUNT else {
+            let alertToMany = UIAlertController(title: "타이머 개수 초과", message: "타이머는 최대까지 \(MAX_TIMER_COUNT)개까지 설정할 수 있습니다", preferredStyle: .alert)
+            alertToMany.addAction(UIAlertAction(title: "확인", style: .default))
+            self.present(alertToMany, animated: true)
+            return
+        }
+        guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "AddTaskTimer") as? AddTaskTimerViewController else {
+            return
+        }
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -114,21 +149,20 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let taskTimer = self.taskTimers[indexPath.item]
+        let center = UNUserNotificationCenter.current()
         switch taskTimer.timerData.state {
         case .idle:
             taskTimer.start()
-            let center = UNUserNotificationCenter.current()
             center.createLocalPush(data: taskTimer.timerData)
         case .going:
             taskTimer.pause()
-            let center = UNUserNotificationCenter.current()
             center.deleteLocalPush(data: taskTimer.timerData)
         case .paused:
             taskTimer.start()
-            let center = UNUserNotificationCenter.current()
             center.createLocalPush(data: taskTimer.timerData)
         case .finished:
             taskTimer.reset()
+            center.deleteLocalPush(data: taskTimer.timerData)
         }
     }
     
