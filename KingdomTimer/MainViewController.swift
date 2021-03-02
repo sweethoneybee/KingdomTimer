@@ -122,7 +122,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         case .going:
             taskTimer.pause()
             let center = UNUserNotificationCenter.current()
-            center.deleteLocalPush(id: String(taskTimer.timerData.id))
+            center.deleteLocalPush(data: taskTimer.timerData)
         case .paused:
             taskTimer.start()
             let center = UNUserNotificationCenter.current()

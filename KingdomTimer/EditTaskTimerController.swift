@@ -43,6 +43,7 @@ class EditTaskTimerController: AddTaskTimerViewController {
     }
     
     @objc func finishEditing() {
+        self.view.endEditing(true)
         guard self.inputContainer.title != "" else {
             let alert = self.makeSimpleAlert(message: "이름을 적어주세요")
             self.present(alert, animated: true)
@@ -59,12 +60,10 @@ class EditTaskTimerController: AddTaskTimerViewController {
             self.taskTimerDao.update(target: tT.entity, data: self.inputContainer)
             tT.reset()
             
-            let id = tT.timerData.id
-            UNUserNotificationCenter.current().deleteLocalPush(id: String(id))
+            UNUserNotificationCenter.current().deleteLocalPush(data: tT.timerData)
             
             self.navigationController?.popViewController(animated: true)
         } else {
-            // TODO:- update fail alert 게시하기
             let alert = UIAlertController(title: "편집 실패", message: "변경 사항을 저장하지 못했습니다", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "확인", style: .default){ action in
                 self.navigationController?.popViewController(animated: true)

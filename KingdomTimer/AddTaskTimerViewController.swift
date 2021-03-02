@@ -60,6 +60,7 @@ class AddTaskTimerViewController: UIViewController, UIPickerViewDataSource, UIPi
     }
     
     @IBAction func addTaskTimer() {
+        self.view.endEditing(true)
         guard self.inputContainer.title != "" else {
             let alert = self.makeSimpleAlert(message: "이름을 적어주세요")
             self.present(alert, animated: true)
@@ -156,6 +157,7 @@ extension AddTaskTimerViewController {
         if textField === self.titleTf, let text = textField.text {
             self.inputContainer.title = text
         }
+        
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
