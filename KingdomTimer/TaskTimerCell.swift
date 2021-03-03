@@ -15,23 +15,18 @@ class TaskTimerCell: UICollectionViewCell, TaskTimerDelegate {
         print("DidChangeStatus from=.\(from) to=.\(to) ")
         
         self.stateLabel?.text = TaskTimerCell.changeStateToString(state: to)
-        switch (from, to) {
-        case (.idle, .going):
+        
+        switch to {
+        case .idle:
+            self.contentView.backgroundColor = CellBackgroundColor.idle
+            let defaultInterval = taskTimer.timerData.interval
+            self.timeLabel?.text = TaskTimerCell.textLeftTime(left: defaultInterval)
+        case .going:
             self.contentView.backgroundColor = CellBackgroundColor.going
-        case (.going, .paused):
+        case .paused:
             self.contentView.backgroundColor = CellBackgroundColor.paused
-        case (.paused, .going):
-            self.contentView.backgroundColor = CellBackgroundColor.going
-        case (.going, .finished):
+        case .finished:
             self.contentView.backgroundColor = CellBackgroundColor.finished
-        case (.finished, .idle):
-            self.contentView.backgroundColor = CellBackgroundColor.idle
-            let defaultInterval = taskTimer.timerData.interval
-            self.timeLabel?.text = TaskTimerCell.textLeftTime(left: defaultInterval)
-        default: // when reset
-            self.contentView.backgroundColor = CellBackgroundColor.idle
-            let defaultInterval = taskTimer.timerData.interval
-            self.timeLabel?.text = TaskTimerCell.textLeftTime(left: defaultInterval)
         }
     }
     

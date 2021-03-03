@@ -7,9 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		400D0EA325EE5F9A003310E4 /* BMDOHYEON_otf.otf in Resources */ = {isa = PBXBuildFile; fileRef = 400D0EA225EE5F9A003310E4 /* BMDOHYEON_otf.otf */; };
+		400D0EA825EE634F003310E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 400D0EA625EE634F003310E4 /* Main.storyboard */; };
+		400D0EAB25EF2611003310E4 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400D0EAA25EF2611003310E4 /* SettingViewController.swift */; };
 		401254CD25D9526C006931AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401254CC25D9526C006931AE /* AppDelegate.swift */; };
 		401254CF25D9526C006931AE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401254CE25D9526C006931AE /* SceneDelegate.swift */; };
-		401254D425D9526C006931AE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 401254D225D9526C006931AE /* Main.storyboard */; };
 		401254D625D9526F006931AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 401254D525D9526F006931AE /* Assets.xcassets */; };
 		401254D925D9526F006931AE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 401254D725D9526F006931AE /* LaunchScreen.storyboard */; };
 		401254E825DAB30A006931AE /* TaskTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401254E725DAB30A006931AE /* TaskTimer.swift */; };
@@ -20,13 +22,16 @@
 		40F8592A25E25F3000906F8A /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F8592925E25F3000906F8A /* Utils.swift */; };
 		40F8593325E3D4F200906F8A /* KingdomTimer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 40F8593125E3D4F200906F8A /* KingdomTimer.xcdatamodeld */; };
 		40F8593925E7CCF800906F8A /* AddTaskTimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F8593825E7CCF800906F8A /* AddTaskTimerViewController.swift */; };
+		40FF3FAE25EF5CBF002845C4 /* GitHubViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FF3FAD25EF5CBF002845C4 /* GitHubViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		400D0EA225EE5F9A003310E4 /* BMDOHYEON_otf.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = BMDOHYEON_otf.otf; sourceTree = "<group>"; };
+		400D0EA725EE634F003310E4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		400D0EAA25EF2611003310E4 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		401254C925D9526C006931AE /* KingdomTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KingdomTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		401254CC25D9526C006931AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		401254CE25D9526C006931AE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		401254D325D9526C006931AE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		401254D525D9526F006931AE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		401254D825D9526F006931AE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		401254DA25D9526F006931AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -38,6 +43,7 @@
 		40F8592925E25F3000906F8A /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		40F8593225E3D4F200906F8A /* KingdomTimer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = KingdomTimer.xcdatamodel; sourceTree = "<group>"; };
 		40F8593825E7CCF800906F8A /* AddTaskTimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskTimerViewController.swift; sourceTree = "<group>"; };
+		40FF3FAD25EF5CBF002845C4 /* GitHubViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,13 +76,16 @@
 		401254CB25D9526C006931AE /* KingdomTimer */ = {
 			isa = PBXGroup;
 			children = (
+				400D0EA225EE5F9A003310E4 /* BMDOHYEON_otf.otf */,
 				401254CC25D9526C006931AE /* AppDelegate.swift */,
 				401254CE25D9526C006931AE /* SceneDelegate.swift */,
-				401254D225D9526C006931AE /* Main.storyboard */,
 				40A8B1D425E9492F0021ECF7 /* EditTaskTimerController.swift */,
 				4012550125DF8A43006931AE /* TaskTimerCell.swift */,
+				400D0EA625EE634F003310E4 /* Main.storyboard */,
+				400D0EAA25EF2611003310E4 /* SettingViewController.swift */,
 				401254EA25DABC4C006931AE /* MainViewController.swift */,
 				40F8593825E7CCF800906F8A /* AddTaskTimerViewController.swift */,
+				40FF3FAD25EF5CBF002845C4 /* GitHubViewController.swift */,
 				40A8B1D125E8EFE10021ECF7 /* TaskTimerDAO.swift */,
 				40F8592925E25F3000906F8A /* Utils.swift */,
 				401254E725DAB30A006931AE /* TaskTimer.swift */,
@@ -146,8 +155,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				401254D925D9526F006931AE /* LaunchScreen.storyboard in Resources */,
+				400D0EA325EE5F9A003310E4 /* BMDOHYEON_otf.otf in Resources */,
 				401254D625D9526F006931AE /* Assets.xcassets in Resources */,
-				401254D425D9526C006931AE /* Main.storyboard in Resources */,
+				400D0EA825EE634F003310E4 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -159,7 +169,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4012550225DF8A43006931AE /* TaskTimerCell.swift in Sources */,
+				400D0EAB25EF2611003310E4 /* SettingViewController.swift in Sources */,
 				401254E825DAB30A006931AE /* TaskTimer.swift in Sources */,
+				40FF3FAE25EF5CBF002845C4 /* GitHubViewController.swift in Sources */,
 				401254EB25DABC4C006931AE /* MainViewController.swift in Sources */,
 				40A8B1D225E8EFE10021ECF7 /* TaskTimerDAO.swift in Sources */,
 				40F8593325E3D4F200906F8A /* KingdomTimer.xcdatamodeld in Sources */,
@@ -174,10 +186,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		401254D225D9526C006931AE /* Main.storyboard */ = {
+		400D0EA625EE634F003310E4 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				401254D325D9526C006931AE /* Base */,
+				400D0EA725EE634F003310E4 /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -249,6 +261,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -304,6 +317,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = "";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";

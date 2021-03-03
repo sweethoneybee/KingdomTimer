@@ -155,7 +155,8 @@ extension AddTaskTimerViewController {
         }
         
         if textField === self.titleTf, let text = textField.text {
-            self.inputContainer.title = text
+            self.inputContainer.title = text.trimmingCharacters(in: .whitespacesAndNewlines)
+            textField.text = inputContainer.title
         }
         
     }

@@ -9,7 +9,7 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         let flowLayout: UICollectionViewFlowLayout
         flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumInteritemSpacing = CGFloat(10)
@@ -29,25 +29,14 @@ class MainViewController: UIViewController {
         self.collectionView?.addGestureRecognizer(gesture)
         
         // navigationBar Custom
-        self.navigationController?.navigationBar.tintColor = .systemOrange
-        let tv = UILabel(frame: CGRect(x: 0, y: 0, width: 50, height: 30))
+        self.navigationController?.navigationBar.barTintColor = .systemOrange
+        self.navigationController?.navigationBar.shadowImage = UIImage() // remove bottom 1pt line
+        self.navigationController?.navigationBar.tintColor = .white
+        self.navigationController?.navigationBar.titleTextAttributes = [.font: UIFont(name: "BMDoHyeon-OTF", size: 27) ?? UIFont.boldSystemFont(ofSize: 24), .foregroundColor: UIColor.white]
         
-        tv.font = .boldSystemFont(ofSize: 24)
-        tv.textColor = .systemOrange
-        tv.text = "타이머들"
-        tv.textAlignment = .center
-        tv.autoresizesSubviews = false
-        self.navigationItem.titleView = tv
-        
-        let tvWidthConstraint = NSLayoutConstraint(item: tv, attribute: .width, relatedBy: .equal, toItem: .none, attribute: .notAnAttribute, multiplier: CGFloat(1.0), constant: CGFloat(100))
-        tvWidthConstraint.isActive = true
-        
-        let rightButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(movePageToAdd(_:)))
-        self.navigationItem.rightBarButtonItem = rightButton
-
-        // remove bottom 1pt line
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController?.navigationBar.clipsToBounds = true
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(movePageToAdd(_:)))
+        let settingButton = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(startAllTimers(_:)))
+        self.navigationItem.rightBarButtonItems = [addButton, settingButton]
         
         print("viewdidload")
     }
@@ -64,6 +53,13 @@ class MainViewController: UIViewController {
             return
         }
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc func startAllTimers(_ sender: Any) {
+        print("startAllTimers")
+        for taskTimer in self.taskTimers {
+            taskTimer.start()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

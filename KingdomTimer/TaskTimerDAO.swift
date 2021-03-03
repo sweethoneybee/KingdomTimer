@@ -81,4 +81,24 @@ class TaskTimerDAO {
             return false
         }
     }
+    
+    func deleteAll() -> Bool {
+        let context = AppDelegate.viewContext
+        let request: NSFetchRequest<TaskTimerEntity> = NSFetchRequest(entityName: "TaskTimerEntity")
+        let sortDescriptor = NSSortDescriptor(key: "id", ascending: true)
+        request.sortDescriptors = [sortDescriptor]
+        
+        do {
+            let fetchedTaskTimers = try context.fetch(request)
+            for fetchedTaskTimer in fetchedTaskTimers {
+                context.delete(fetchedTaskTimer)
+            }
+            
+            try context.save()
+            return true
+        } catch let e as NSError {
+            NSLog("DAO fetching failed. error: %s", e)
+            return false
+        }
+    }
 }
