@@ -27,6 +27,12 @@ class SettingViewController: UITableViewController {
                 print("사용법 클릭")
             } else if indexPath.row == 1 {
                 print("개발자 깃허브 클릭")
+                
+                guard let githubVC = self.storyboard?.instantiateViewController(withIdentifier: "Github") as? GithubViewController else {
+                    return
+                }
+                
+                self.navigationController?.pushViewController(githubVC, animated: true)
             }
         }
         

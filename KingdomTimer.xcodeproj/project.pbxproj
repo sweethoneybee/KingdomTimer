@@ -22,7 +22,7 @@
 		40F8592A25E25F3000906F8A /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F8592925E25F3000906F8A /* Utils.swift */; };
 		40F8593325E3D4F200906F8A /* KingdomTimer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 40F8593125E3D4F200906F8A /* KingdomTimer.xcdatamodeld */; };
 		40F8593925E7CCF800906F8A /* AddTaskTimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F8593825E7CCF800906F8A /* AddTaskTimerViewController.swift */; };
-		40FF3FAE25EF5CBF002845C4 /* GitHubViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FF3FAD25EF5CBF002845C4 /* GitHubViewController.swift */; };
+		40FF3FAE25EF5CBF002845C4 /* GithubViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FF3FAD25EF5CBF002845C4 /* GithubViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,7 +43,7 @@
 		40F8592925E25F3000906F8A /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		40F8593225E3D4F200906F8A /* KingdomTimer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = KingdomTimer.xcdatamodel; sourceTree = "<group>"; };
 		40F8593825E7CCF800906F8A /* AddTaskTimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskTimerViewController.swift; sourceTree = "<group>"; };
-		40FF3FAD25EF5CBF002845C4 /* GitHubViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubViewController.swift; sourceTree = "<group>"; };
+		40FF3FAD25EF5CBF002845C4 /* GithubViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,7 +85,7 @@
 				400D0EAA25EF2611003310E4 /* SettingViewController.swift */,
 				401254EA25DABC4C006931AE /* MainViewController.swift */,
 				40F8593825E7CCF800906F8A /* AddTaskTimerViewController.swift */,
-				40FF3FAD25EF5CBF002845C4 /* GitHubViewController.swift */,
+				40FF3FAD25EF5CBF002845C4 /* GithubViewController.swift */,
 				40A8B1D125E8EFE10021ECF7 /* TaskTimerDAO.swift */,
 				40F8592925E25F3000906F8A /* Utils.swift */,
 				401254E725DAB30A006931AE /* TaskTimer.swift */,
@@ -171,7 +171,7 @@
 				4012550225DF8A43006931AE /* TaskTimerCell.swift in Sources */,
 				400D0EAB25EF2611003310E4 /* SettingViewController.swift in Sources */,
 				401254E825DAB30A006931AE /* TaskTimer.swift in Sources */,
-				40FF3FAE25EF5CBF002845C4 /* GitHubViewController.swift in Sources */,
+				40FF3FAE25EF5CBF002845C4 /* GithubViewController.swift in Sources */,
 				401254EB25DABC4C006931AE /* MainViewController.swift in Sources */,
 				40A8B1D225E8EFE10021ECF7 /* TaskTimerDAO.swift in Sources */,
 				40F8593325E3D4F200906F8A /* KingdomTimer.xcdatamodeld in Sources */,
