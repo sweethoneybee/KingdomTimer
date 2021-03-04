@@ -19,15 +19,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let _ = (scene as? UIWindowScene) else { return }
         
         if let tbc = self.window?.rootViewController as? UITabBarController {
-            if let tbcItems = tbc.tabBar.items {
-                
-                let tabBarAppearance = UITabBarItem.appearance()
-                tabBarAppearance.setTitleTextAttributes([.font: UIFont(name: "BMDoHyeon-OTF", size: 8) ?? UIFont.systemFont(ofSize: 8)], for: .normal)
-                tbc.tabBar.tintColor = .black
-                tbc.tabBar.unselectedItemTintColor = .gray
-                
-
-            }
+            let tabBarAppearance = UITabBarItem.appearance()
+            tabBarAppearance.setTitleTextAttributes([.font: UIFont(name: "BMDoHyeon-OTF", size: 8) ?? UIFont.systemFont(ofSize: 8)], for: .normal)
+            tbc.tabBar.tintColor = .black
+            tbc.tabBar.unselectedItemTintColor = .gray
         }
     }
 

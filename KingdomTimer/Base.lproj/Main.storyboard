@@ -14,7 +14,7 @@
         </array>
     </customFonts>
     <scenes>
-        <!--타이머들-->
+        <!--킹덤타이머-->
         <scene sceneID="LoN-sU-FQH">
             <objects>
                 <viewController id="Tq2-bo-bBu" customClass="MainViewController" customModule="KingdomTimer" customModuleProvider="target" sceneMemberID="viewController">
@@ -92,7 +92,7 @@
                             <constraint firstItem="uTG-hc-wvh" firstAttribute="top" secondItem="RW9-ND-g6t" secondAttribute="top" id="htX-K1-POe"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="타이머들" id="4mK-Sx-bkb"/>
+                    <navigationItem key="navigationItem" title="킹덤타이머" id="4mK-Sx-bkb"/>
                     <connections>
                         <outlet property="collectionView" destination="uTG-hc-wvh" id="XBz-qk-pu8"/>
                     </connections>
@@ -145,7 +145,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="최대 25자" textAlignment="justified" adjustsFontSizeToFit="NO" minimumFontSize="12" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="piH-7D-WlR">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="최대 20자" textAlignment="justified" adjustsFontSizeToFit="NO" minimumFontSize="12" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="piH-7D-WlR">
                                 <rect key="frame" x="90" y="45" width="250" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" smartDashesType="yes"/>
@@ -328,6 +328,9 @@
                                         <rect key="frame" x="0.0" y="28.5" width="313" height="27"/>
                                         <fontDescription key="fontDescription" name="BMDoHyeon-OTF" family="BM DoHyeon OTF" pointSize="12"/>
                                         <state key="normal" title="https://github.com/sweethoneybee/KingdomTimer"/>
+                                        <connections>
+                                            <action selector="moveToGithubPage:" destination="eUh-Vn-gFt" eventType="touchUpInside" id="uOE-c7-wdv"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
@@ -339,9 +342,6 @@
                             <constraint firstItem="xbK-7d-Goe" firstAttribute="centerY" secondItem="vgV-7x-XiL" secondAttribute="centerY" id="WT5-yI-bK3"/>
                         </constraints>
                     </view>
-                    <connections>
-                        <outlet property="githubLink" destination="PPv-I6-aJx" id="JJq-16-0yP"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bFf-xv-z5F" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -391,7 +391,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="최대 25자" textAlignment="justified" adjustsFontSizeToFit="NO" minimumFontSize="12" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="v1f-Rk-J6z">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="최대 20자" textAlignment="justified" adjustsFontSizeToFit="NO" minimumFontSize="12" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="v1f-Rk-J6z">
                                 <rect key="frame" x="90" y="45" width="250" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" smartDashesType="yes"/>
@@ -446,7 +446,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="niY-9p-HX1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2128.8000000000002" y="602.24887556221893"/>
+            <point key="canvasLocation" x="2087" y="618"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="dYu-YU-1ov">

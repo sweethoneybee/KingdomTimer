@@ -52,13 +52,16 @@ class MainViewController: UIViewController {
         guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "AddTaskTimer") as? AddTaskTimerViewController else {
             return
         }
+        vc.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc func startAllTimers(_ sender: Any) {
         print("startAllTimers")
+        let center = UNUserNotificationCenter.current()
         for taskTimer in self.taskTimers {
             taskTimer.start()
+            center.createLocalPush(data: taskTimer.timerData)
         }
     }
     
@@ -105,6 +108,7 @@ class MainViewController: UIViewController {
                     askAgain.addAction(UIAlertAction(title: "취소", style: .cancel))
                     askAgain.addAction(UIAlertAction(title: "삭제", style: .destructive){ action in
                         if self.taskTimerDao.delete(objectId: item.objectId) {
+                            UNUserNotificationCenter.current().deleteLocalPush(data: item.timerData)
                             self.taskTimers.remove(at: indexpath.item)
                             self.collectionView?.reloadData()
                         }

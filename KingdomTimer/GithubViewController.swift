@@ -9,17 +9,13 @@ import UIKit
 import SafariServices
 
 class GithubViewController: UIViewController {
-    @IBOutlet weak var githubLink: UIButton?
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.githubLink?.addTarget(self, action: #selector(moveToGithubPage(_:)), for: .touchUpInside)
     }
     
-    @objc func moveToGithubPage(_ sender: Any) {
+    @IBAction func moveToGithubPage(_ sender: UIButton) {
         print("클릭")
-        guard let url = URL(string: githubLink?.title(for: .normal)
-                                ?? "https://github.com/sweethoneybee") else {
+        guard let url = URL(string: "https://github.com/sweethoneybee/KingdomTimer") else {
             return
         }
         

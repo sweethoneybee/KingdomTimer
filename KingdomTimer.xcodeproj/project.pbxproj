@@ -23,6 +23,9 @@
 		40F8593325E3D4F200906F8A /* KingdomTimer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 40F8593125E3D4F200906F8A /* KingdomTimer.xcdatamodeld */; };
 		40F8593925E7CCF800906F8A /* AddTaskTimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F8593825E7CCF800906F8A /* AddTaskTimerViewController.swift */; };
 		40FF3FAE25EF5CBF002845C4 /* GithubViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FF3FAD25EF5CBF002845C4 /* GithubViewController.swift */; };
+		40FF3FB325EF783B002845C4 /* Tutorial.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40FF3FB225EF783B002845C4 /* Tutorial.storyboard */; };
+		40FF3FB625EF78A5002845C4 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FF3FB525EF78A5002845C4 /* MasterViewController.swift */; };
+		40FF3FB925EF78AB002845C4 /* ContentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FF3FB825EF78AB002845C4 /* ContentsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +47,9 @@
 		40F8593225E3D4F200906F8A /* KingdomTimer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = KingdomTimer.xcdatamodel; sourceTree = "<group>"; };
 		40F8593825E7CCF800906F8A /* AddTaskTimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskTimerViewController.swift; sourceTree = "<group>"; };
 		40FF3FAD25EF5CBF002845C4 /* GithubViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubViewController.swift; sourceTree = "<group>"; };
+		40FF3FB225EF783B002845C4 /* Tutorial.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Tutorial.storyboard; sourceTree = "<group>"; };
+		40FF3FB525EF78A5002845C4 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
+		40FF3FB825EF78AB002845C4 /* ContentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +82,7 @@
 		401254CB25D9526C006931AE /* KingdomTimer */ = {
 			isa = PBXGroup;
 			children = (
+				40FF3FB125EF7827002845C4 /* Tutorial */,
 				400D0EA225EE5F9A003310E4 /* BMDOHYEON_otf.otf */,
 				401254CC25D9526C006931AE /* AppDelegate.swift */,
 				401254CE25D9526C006931AE /* SceneDelegate.swift */,
@@ -95,6 +102,16 @@
 				401254DA25D9526F006931AE /* Info.plist */,
 			);
 			path = KingdomTimer;
+			sourceTree = "<group>";
+		};
+		40FF3FB125EF7827002845C4 /* Tutorial */ = {
+			isa = PBXGroup;
+			children = (
+				40FF3FB225EF783B002845C4 /* Tutorial.storyboard */,
+				40FF3FB525EF78A5002845C4 /* MasterViewController.swift */,
+				40FF3FB825EF78AB002845C4 /* ContentsViewController.swift */,
+			);
+			path = Tutorial;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -154,6 +171,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40FF3FB325EF783B002845C4 /* Tutorial.storyboard in Resources */,
 				401254D925D9526F006931AE /* LaunchScreen.storyboard in Resources */,
 				400D0EA325EE5F9A003310E4 /* BMDOHYEON_otf.otf in Resources */,
 				401254D625D9526F006931AE /* Assets.xcassets in Resources */,
@@ -176,10 +194,12 @@
 				40A8B1D225E8EFE10021ECF7 /* TaskTimerDAO.swift in Sources */,
 				40F8593325E3D4F200906F8A /* KingdomTimer.xcdatamodeld in Sources */,
 				401254CD25D9526C006931AE /* AppDelegate.swift in Sources */,
+				40FF3FB925EF78AB002845C4 /* ContentsViewController.swift in Sources */,
 				401254CF25D9526C006931AE /* SceneDelegate.swift in Sources */,
 				40F8593925E7CCF800906F8A /* AddTaskTimerViewController.swift in Sources */,
 				40A8B1D525E9492F0021ECF7 /* EditTaskTimerController.swift in Sources */,
 				40F8592A25E25F3000906F8A /* Utils.swift in Sources */,
+				40FF3FB625EF78A5002845C4 /* MasterViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

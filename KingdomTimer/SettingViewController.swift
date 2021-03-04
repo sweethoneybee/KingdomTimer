@@ -32,6 +32,7 @@ class SettingViewController: UITableViewController {
                     return
                 }
                 
+                githubVC.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(githubVC, animated: true)
             }
         }
@@ -44,11 +45,11 @@ class SettingViewController: UITableViewController {
                     let taskTimerDao = TaskTimerDAO()
                     if taskTimerDao.deleteAll() {
                         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-                        let finishAlert = UIAlertController(title: nil, message: "삭제완료", preferredStyle: .alert)
+                        let finishAlert = UIAlertController(title: nil, message: "모든 타이머 삭제 완료", preferredStyle: .alert)
                         finishAlert.addAction(UIAlertAction(title: "확인", style: .default))
                         self.present(finishAlert, animated: true)
                     } else {
-                        let finishAlert = UIAlertController(title: nil, message: "삭제실패", preferredStyle: .alert)
+                        let finishAlert = UIAlertController(title: nil, message: "삭제를 실패하였습니다", preferredStyle: .alert)
                         finishAlert.addAction(UIAlertAction(title: "확인", style: .default))
                         self.present(finishAlert, animated: true)
                     }

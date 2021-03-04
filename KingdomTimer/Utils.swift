@@ -17,7 +17,6 @@ extension UNUserNotificationCenter {
         center.getNotificationSettings { settings in
             if settings.authorizationStatus == .authorized {
                 var data = data
-                print("알람 추가할 id=\(data.id)")
                 
                 let content = UNMutableNotificationContent()
                 content.title = "[완료] - \(data.title)"

@@ -10,7 +10,7 @@ import CoreData
 
 class AddTaskTimerViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate {
 
-    private let MAX_TEXT_LENGTH = 25
+    private let MAX_TEXT_LENGTH = 20
     private lazy var taskTimerDao = TaskTimerDAO()
     private var timePickerData = [[Int]]()
     
@@ -162,12 +162,20 @@ extension AddTaskTimerViewController {
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if textField === self.titleTf, let text = textField.text {
-            guard text.count < MAX_TEXT_LENGTH else {
+        if textField === self.titleTf, var text = textField.text {
+            // TODO:- guard로 날리지말고, 글자수가 초과한 경우 textField.text를
+            // 직접 수정하는 방식으로 구현해보자
+            print("입력된 문자=\(string)")
+            guard text.count + string.count <= MAX_TEXT_LENGTH else {
                 return false
             }
-            self.inputContainer.title = text
+            
+            text += string
+            print("미리 완성된 문자열=\(text)")
+            
+            return true
         }
+        
         return true
     }
     
