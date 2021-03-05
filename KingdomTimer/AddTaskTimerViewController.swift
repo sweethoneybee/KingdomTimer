@@ -42,6 +42,8 @@ class AddTaskTimerViewController: UIViewController, UIPickerViewDataSource, UIPi
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         toolBar.setItems([flexibleSpace, done], animated: true)
         self.timeTf?.inputAccessoryView = toolBar
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(textFieldDidChange(_:)), name: UITextField.textDidChangeNotification, object: nil)
     }
     
     @objc func timePickerDone(_ sender: Any) {
@@ -162,18 +164,8 @@ extension AddTaskTimerViewController {
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if textField === self.titleTf, var text = textField.text {
-            // TODO:- guard로 날리지말고, 글자수가 초과한 경우 textField.text를
-            // 직접 수정하는 방식으로 구현해보자
-            print("입력된 문자=\(string)")
-            guard text.count + string.count <= MAX_TEXT_LENGTH else {
-                return false
-            }
-            
-            text += string
-            print("미리 완성된 문자열=\(text)")
-            
-            return true
+        if textField === self.timeTf {
+            return false
         }
         
         return true
@@ -182,6 +174,17 @@ extension AddTaskTimerViewController {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    @objc private func textFieldDidChange(_ notification: Notification) {
+        guard let textField = notification.object as? UITextField else {
+            return
+        }
+        if var text = textField.text, text.count > self.MAX_TEXT_LENGTH {
+            text.removeLast(text.count - self.MAX_TEXT_LENGTH)
+            textField.text = text
+        }
+        
     }
 }
 
