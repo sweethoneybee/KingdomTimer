@@ -45,3 +45,13 @@ extension UNUserNotificationCenter {
         center.removePendingNotificationRequests(withIdentifiers: [String(id)])
     }
 }
+
+extension UIViewController {
+    var tutorialStoryboard: UIStoryboard {
+        return UIStoryboard(name: "Tutorial", bundle: Bundle.main)
+    }
+    
+    func tutorialVC(withIdentifier id: String) -> UIViewController {
+        return self.tutorialStoryboard.instantiateViewController(withIdentifier: id)
+    }
+}

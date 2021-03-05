@@ -18,12 +18,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
         
+        let tabBarAppearance = UITabBarItem.appearance()
+        tabBarAppearance.setTitleTextAttributes([.font: UIFont(name: "BMDoHyeon-OTF", size: 8) ?? UIFont.systemFont(ofSize: 8)], for: .normal)
+        
         if let tbc = self.window?.rootViewController as? UITabBarController {
-            let tabBarAppearance = UITabBarItem.appearance()
-            tabBarAppearance.setTitleTextAttributes([.font: UIFont(name: "BMDoHyeon-OTF", size: 8) ?? UIFont.systemFont(ofSize: 8)], for: .normal)
             tbc.tabBar.tintColor = .black
             tbc.tabBar.unselectedItemTintColor = .gray
         }
+
+        // 페이지 인디케이터 설정을 위한 외형 템플릿 구문
+        let pageControl = UIPageControl.appearance()
+        pageControl.pageIndicatorTintColor = .lightGray
+        pageControl.currentPageIndicatorTintColor = .black
+        pageControl.backgroundColor = .white
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

@@ -66,6 +66,15 @@ class MainViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        let ud = UserDefaults.standard
+        if ud.bool(forKey: "tutorial") == false {
+            if let tutorialVC = self.tutorialVC(withIdentifier: "Master") as? MasterViewController {
+                tutorialVC.modalPresentationStyle = .fullScreen
+                self.present(tutorialVC, animated: true)
+                return
+            }
+        }
+        
         self.taskTimers = self.taskTimerDao.fetch()
         for taskTimer in self.taskTimers {
             taskTimer.startWithOptimization()
