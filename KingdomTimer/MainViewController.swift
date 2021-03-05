@@ -24,19 +24,14 @@ class MainViewController: UIViewController {
         self.collectionView?.collectionViewLayout = flowLayout
         self.collectionView?.delaysContentTouches = false // for natural content shrinking animation
         
-        // TODO:- iOS 13 버전 이하만 제스처 적용
-        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(askEditing(_:)))
-        self.collectionView?.addGestureRecognizer(gesture)
-        
-        // navigationBar Custom
-        self.navigationController?.navigationBar.barTintColor = .systemOrange
-        self.navigationController?.navigationBar.shadowImage = UIImage() // remove bottom 1pt line
-        self.navigationController?.navigationBar.tintColor = .white
-        self.navigationController?.navigationBar.titleTextAttributes = [.font: UIFont(name: "BMDoHyeon-OTF", size: 27) ?? UIFont.boldSystemFont(ofSize: 24), .foregroundColor: UIColor.white]
-        
+        // navigationItems
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(movePageToAdd(_:)))
         let settingButton = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(startAllTimers(_:)))
         self.navigationItem.rightBarButtonItems = [addButton, settingButton]
+
+        // TODO:- iOS 13 버전 이하만 제스처 적용
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(askEditing(_:)))
+        self.collectionView?.addGestureRecognizer(gesture)
         
         print("viewdidload")
     }

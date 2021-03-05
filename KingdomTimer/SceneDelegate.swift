@@ -31,6 +31,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         pageControl.pageIndicatorTintColor = .lightGray
         pageControl.currentPageIndicatorTintColor = .black
         pageControl.backgroundColor = .white
+        
+        let navigationBar = UINavigationBar.appearance()
+        navigationBar.barTintColor = .systemOrange
+        navigationBar.shadowImage = UIImage()
+        navigationBar.tintColor = .white
+        navigationBar.titleTextAttributes = [
+            .font: UIFont(name: "BMDoHyeon-OTF", size: 27)
+                ?? UIFont.boldSystemFont(ofSize: 24),
+            .foregroundColor: UIColor.white
+        ]
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

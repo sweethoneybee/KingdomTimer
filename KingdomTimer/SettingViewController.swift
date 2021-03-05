@@ -12,12 +12,6 @@ class SettingViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.navigationController?.navigationBar.barTintColor = .systemOrange
-        self.navigationController?.navigationBar.shadowImage = UIImage() // remove bottom 1pt line
-        self.navigationController?.navigationBar.tintColor = .white
-        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white,
-                                                                        .font: UIFont(name: "BMDoHyeon-OTF", size: 27) ?? UIFont.systemFont(ofSize: 24)]
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
