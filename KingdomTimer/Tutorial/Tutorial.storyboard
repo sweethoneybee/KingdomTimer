@@ -13,16 +13,16 @@
         </array>
     </customFonts>
     <scenes>
-        <!--Master View Controller-->
+        <!--Tutorial Master View Controller-->
         <scene sceneID="1nF-dv-dxt">
             <objects>
-                <viewController storyboardIdentifier="Master" id="lgJ-fp-nnA" customClass="MasterViewController" customModule="KingdomTimer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Master" id="lgJ-fp-nnA" customClass="TutorialMasterViewController" customModule="KingdomTimer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="MKh-tr-WtF">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LBf-Z1-SfB">
-                                <rect key="frame" x="50" y="562" width="275" height="35"/>
+                            <button opaque="NO" alpha="0.80000000000000004" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LBf-Z1-SfB">
+                                <rect key="frame" x="30" y="546" width="315" height="51"/>
                                 <color key="backgroundColor" systemColor="systemOrangeColor"/>
                                 <fontDescription key="fontDescription" name="BMDoHyeon-OTF" family="BM DoHyeon OTF" pointSize="19"/>
                                 <state key="normal" title="시작하기">
@@ -36,8 +36,8 @@
                         <viewLayoutGuide key="safeArea" id="atM-ne-UUD"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="LBf-Z1-SfB" firstAttribute="leading" secondItem="atM-ne-UUD" secondAttribute="leading" constant="50" id="E4E-fW-C8C"/>
-                            <constraint firstItem="atM-ne-UUD" firstAttribute="trailing" secondItem="LBf-Z1-SfB" secondAttribute="trailing" constant="50" id="ech-9T-d4y"/>
+                            <constraint firstItem="LBf-Z1-SfB" firstAttribute="leading" secondItem="atM-ne-UUD" secondAttribute="leading" constant="30" id="E4E-fW-C8C"/>
+                            <constraint firstItem="atM-ne-UUD" firstAttribute="trailing" secondItem="LBf-Z1-SfB" secondAttribute="trailing" constant="30" id="ech-9T-d4y"/>
                             <constraint firstItem="atM-ne-UUD" firstAttribute="bottom" secondItem="LBf-Z1-SfB" secondAttribute="bottom" constant="70" id="u7F-yy-wRY"/>
                         </constraints>
                     </view>

@@ -63,7 +63,7 @@ class MainViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         let ud = UserDefaults.standard
         if ud.bool(forKey: "tutorial") == false {
-            if let tutorialVC = self.tutorialVC(withIdentifier: "Master") as? MasterViewController {
+            if let tutorialVC = self.initTutorialVC(withIdentifier: "Master") as? TutorialMasterViewController {
                 tutorialVC.modalPresentationStyle = .fullScreen
                 self.present(tutorialVC, animated: true)
                 return

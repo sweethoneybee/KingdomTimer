@@ -24,7 +24,7 @@
 		40F8593925E7CCF800906F8A /* AddTaskTimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F8593825E7CCF800906F8A /* AddTaskTimerViewController.swift */; };
 		40FF3FAE25EF5CBF002845C4 /* GithubViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FF3FAD25EF5CBF002845C4 /* GithubViewController.swift */; };
 		40FF3FB325EF783B002845C4 /* Tutorial.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40FF3FB225EF783B002845C4 /* Tutorial.storyboard */; };
-		40FF3FB625EF78A5002845C4 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FF3FB525EF78A5002845C4 /* MasterViewController.swift */; };
+		40FF3FB625EF78A5002845C4 /* TutorialMasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FF3FB525EF78A5002845C4 /* TutorialMasterViewController.swift */; };
 		40FF3FB925EF78AB002845C4 /* ContentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FF3FB825EF78AB002845C4 /* ContentsViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -48,7 +48,7 @@
 		40F8593825E7CCF800906F8A /* AddTaskTimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskTimerViewController.swift; sourceTree = "<group>"; };
 		40FF3FAD25EF5CBF002845C4 /* GithubViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubViewController.swift; sourceTree = "<group>"; };
 		40FF3FB225EF783B002845C4 /* Tutorial.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Tutorial.storyboard; sourceTree = "<group>"; };
-		40FF3FB525EF78A5002845C4 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
+		40FF3FB525EF78A5002845C4 /* TutorialMasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialMasterViewController.swift; sourceTree = "<group>"; };
 		40FF3FB825EF78AB002845C4 /* ContentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -108,7 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				40FF3FB225EF783B002845C4 /* Tutorial.storyboard */,
-				40FF3FB525EF78A5002845C4 /* MasterViewController.swift */,
+				40FF3FB525EF78A5002845C4 /* TutorialMasterViewController.swift */,
 				40FF3FB825EF78AB002845C4 /* ContentsViewController.swift */,
 			);
 			path = Tutorial;
@@ -199,7 +199,7 @@
 				40F8593925E7CCF800906F8A /* AddTaskTimerViewController.swift in Sources */,
 				40A8B1D525E9492F0021ECF7 /* EditTaskTimerController.swift in Sources */,
 				40F8592A25E25F3000906F8A /* Utils.swift in Sources */,
-				40FF3FB625EF78A5002845C4 /* MasterViewController.swift in Sources */,
+				40FF3FB625EF78A5002845C4 /* TutorialMasterViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

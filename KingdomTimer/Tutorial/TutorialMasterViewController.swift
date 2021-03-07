@@ -7,16 +7,16 @@
 
 import UIKit
 
-class MasterViewController: UIViewController, UIPageViewControllerDataSource {
+class TutorialMasterViewController: UIViewController, UIPageViewControllerDataSource {
 
     @IBOutlet weak private var closeButton: UIButton?
-    private let contentsTitles = ["1.", "2.", "3.", "4."]
-    private let imageNames = ["page0", "page1", "page2", "page3"]
+    private let contentsTitles = ["", "", ""]
+    private let imageNames = ["page0", "page1", "page2"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let pageVC = self.tutorialVC(withIdentifier: "Page") as? UIPageViewController {
+        if let pageVC = self.initTutorialVC(withIdentifier: "Page") as? UIPageViewController {
             pageVC.dataSource = self
             
             if let firstVC = getContentsVC(index: 0) {
@@ -42,11 +42,11 @@ class MasterViewController: UIViewController, UIPageViewControllerDataSource {
     }
     
     private func getContentsVC(index: Int) -> ContentsViewController? {
-        guard index >= 0, index < contentsTitles.count else {
+        guard index >= 0, index < imageNames.count else {
             return nil
         }
         
-        guard let vc = self.tutorialVC(withIdentifier: "Contents") as? ContentsViewController else {
+        guard let vc = self.initTutorialVC(withIdentifier: "Contents") as? ContentsViewController else {
             return nil
         }
         
@@ -74,7 +74,7 @@ class MasterViewController: UIViewController, UIPageViewControllerDataSource {
             return nil
         }
         
-        guard index < self.contentsTitles.count - 1 else {
+        guard index < self.imageNames.count - 1 else {
             return nil
         }
         
@@ -83,7 +83,7 @@ class MasterViewController: UIViewController, UIPageViewControllerDataSource {
     }
     
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
-        return self.contentsTitles.count
+        return self.imageNames.count
     }
     
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
