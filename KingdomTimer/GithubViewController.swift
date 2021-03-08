@@ -14,7 +14,6 @@ class GithubViewController: UIViewController {
     }
     
     @IBAction func moveToGithubPage(_ sender: UIButton) {
-        print("클릭")
         guard let url = URL(string: "https://github.com/sweethoneybee/KingdomTimer") else {
             return
         }

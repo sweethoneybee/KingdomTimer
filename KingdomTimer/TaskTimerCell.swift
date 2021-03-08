@@ -11,9 +11,6 @@ class TaskTimerCell: UICollectionViewCell, TaskTimerDelegate {
     }
     
     func DidChangeState(_ taskTimer: TaskTimer, originalState from: TaskTimer.State, newState to: TaskTimer.State) {
-
-        print("DidChangeStatus from=.\(from) to=.\(to) ")
-        
         self.stateLabel?.text = TaskTimerCell.changeStateToString(state: to)
         
         switch to {

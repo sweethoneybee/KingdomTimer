@@ -29,11 +29,8 @@ class MainViewController: UIViewController {
         let settingButton = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(startAllTimers(_:)))
         self.navigationItem.rightBarButtonItems = [addButton, settingButton]
 
-        // TODO:- iOS 13 버전 이하만 제스처 적용
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(askEditing(_:)))
         self.collectionView?.addGestureRecognizer(gesture)
-        
-        print("viewdidload")
     }
     
     @objc func movePageToAdd(_ sender: Any) {
@@ -52,7 +49,6 @@ class MainViewController: UIViewController {
     }
     
     @objc func startAllTimers(_ sender: Any) {
-        print("startAllTimers")
         let center = UNUserNotificationCenter.current()
         for taskTimer in self.taskTimers {
             taskTimer.start()
@@ -78,7 +74,6 @@ class MainViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        print("viewWillDisappear")
         for taskTimer in self.taskTimers {
             taskTimer.pauseWithOptimization()
         }

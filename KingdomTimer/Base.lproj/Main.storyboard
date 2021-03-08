@@ -14,7 +14,7 @@
         </array>
     </customFonts>
     <scenes>
-        <!--킹덤타이머-->
+        <!--왕국타이머-->
         <scene sceneID="LoN-sU-FQH">
             <objects>
                 <viewController id="Tq2-bo-bBu" customClass="MainViewController" customModule="KingdomTimer" customModuleProvider="target" sceneMemberID="viewController">
@@ -92,7 +92,7 @@
                             <constraint firstItem="uTG-hc-wvh" firstAttribute="top" secondItem="RW9-ND-g6t" secondAttribute="top" id="htX-K1-POe"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="킹덤타이머" id="4mK-Sx-bkb"/>
+                    <navigationItem key="navigationItem" title="왕국타이머" id="4mK-Sx-bkb"/>
                     <connections>
                         <outlet property="collectionView" destination="uTG-hc-wvh" id="XBz-qk-pu8"/>
                     </connections>

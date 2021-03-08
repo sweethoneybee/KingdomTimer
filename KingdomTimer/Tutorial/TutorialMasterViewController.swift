@@ -10,8 +10,8 @@ import UIKit
 class TutorialMasterViewController: UIViewController, UIPageViewControllerDataSource {
 
     @IBOutlet weak private var closeButton: UIButton?
-    private let contentsTitles = ["", "", ""]
-    private let imageNames = ["page0", "page1", "page2"]
+    private let contentsTitles = ["", "", "", ""]
+    private let imageNames = ["page0", "page1", "page2", "page3"]
     
     override func viewDidLoad() {
         super.viewDidLoad()

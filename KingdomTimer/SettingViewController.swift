@@ -18,14 +18,11 @@ class SettingViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 0 {
             if indexPath.row == 0 {
-                print("사용법 클릭")
                 if let tutorialVC = self.initTutorialVC(withIdentifier: "Master") as? TutorialMasterViewController {
                     tutorialVC.modalPresentationStyle = .fullScreen
                     self.present(tutorialVC, animated: true)
                 }
             } else if indexPath.row == 1 {
-                print("개발자 깃허브 클릭")
-                
                 guard let githubVC = self.storyboard?.instantiateViewController(withIdentifier: "Github") as? GithubViewController else {
                     return
                 }

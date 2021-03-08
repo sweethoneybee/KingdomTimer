@@ -81,7 +81,6 @@ class TaskTimer {
     // MARK:- Methods
     func start() {
         guard self.timerData.state == .idle || self.timerData.state == .paused else {
-            print("ElapsedStopwatch.start 실패. 현재상태=\(self.timerData.state)")
             return
         }
         
@@ -109,7 +108,6 @@ class TaskTimer {
     
     func pause() {
         guard self.timerData.state == .going else {
-            print("ElapsedStopwatch.pause 실패. 현재상태=\(self.timerData.state)")
             return
         }
         
@@ -126,7 +124,6 @@ class TaskTimer {
     
     func finish() {
         guard self.timerData.state == .going else {
-            print("ElapsedStopwatch.finish 실패. 현재상태=\(self.timerData.state)")
             return
         }
         
