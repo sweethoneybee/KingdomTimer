@@ -10,9 +10,9 @@
 그 외 초점을 맞춘 것은 아래와 같음.
 
 - '기능'만 하는 앱에서 그치지 않게 최대한 설계하고 구조화하려고 노력.
-- 타이머 앱에 필요한 핵심 클래스를 직접 설계하여 활용(TaskTimer.swift).
 - 상수, 구조체 type property, Enum을 활용하여 리터럴 값의 사용을 최대한 줄임.
-- Delegate 패턴으로 타이머 View를 타이머 클래스와 분리하여 관리할 수 있도록 함.
+- TaskTimer 객체는 delegate 패턴으로 남은 초, 타이머 상태가 갱신될 때마다 알리도록 구현.  
+  그래서 TaskTimerCell이 그 알림을 받아 자신의 backgroundColor, title 등을 바꿈.
 - 앱에서 생성한 타이머를 `Timer.scheduledTimer(withTimeInterval:repeats:block)` API를 통해 갱신하는데,  
   메인 화면을 벗어날 경우 Timer 객체를 invalidate 하고 이후 메인 화면으로 돌아올 경우 다시 Timer를  
   스케쥴링 하는 방식으로 앱 내 타이머의 동작을 최적화함.
