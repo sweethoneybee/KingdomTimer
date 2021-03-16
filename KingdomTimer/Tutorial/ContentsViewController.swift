@@ -26,7 +26,8 @@ class ContentsViewController: UIViewController {
         if let imageName = self.imageName {
             self.contentImage?.image = UIImage(named: imageName)
             self.contentImage?.contentMode = .scaleAspectFit
-            self.closeButton?.isHidden = true
+        } else {
+            self.closeButton?.isHidden = false
         }
         
         if let btn = self.closeButton {

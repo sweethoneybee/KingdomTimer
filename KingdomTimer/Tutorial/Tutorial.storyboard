@@ -45,12 +45,9 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" alpha="0.80000001192092896" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="39c-sy-3Xd">
-                                <rect key="frame" x="30" y="551" width="315" height="50"/>
+                            <button hidden="YES" opaque="NO" alpha="0.80000001192092896" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="39c-sy-3Xd">
+                                <rect key="frame" x="38" y="446" width="299" height="45"/>
                                 <color key="backgroundColor" systemColor="systemOrangeColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="Iev-XW-EEv"/>
-                                </constraints>
                                 <fontDescription key="fontDescription" name="BMDoHyeon-OTF" family="BM DoHyeon OTF" pointSize="27"/>
                                 <state key="normal" title="시작하기">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -63,15 +60,15 @@
                         <viewLayoutGuide key="safeArea" id="CuU-4v-atp"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="CuU-4v-atp" firstAttribute="trailing" secondItem="39c-sy-3Xd" secondAttribute="trailing" constant="30" id="5gE-fu-ysr"/>
+                            <constraint firstItem="CuU-4v-atp" firstAttribute="trailing" secondItem="39c-sy-3Xd" secondAttribute="trailing" constant="38" id="4CY-TN-b2R"/>
                             <constraint firstItem="fML-Qy-Ene" firstAttribute="centerX" secondItem="pz3-UN-o3P" secondAttribute="centerX" id="BJ0-Te-loQ"/>
                             <constraint firstItem="BNQ-Mn-5FG" firstAttribute="leading" secondItem="CuU-4v-atp" secondAttribute="leading" id="GhV-6U-PoD"/>
-                            <constraint firstItem="39c-sy-3Xd" firstAttribute="leading" secondItem="CuU-4v-atp" secondAttribute="leading" constant="30" id="Nq3-94-cZa"/>
                             <constraint firstItem="BNQ-Mn-5FG" firstAttribute="top" secondItem="CuU-4v-atp" secondAttribute="top" id="Qt2-Vz-Vx8"/>
-                            <constraint firstItem="CuU-4v-atp" firstAttribute="bottom" secondItem="39c-sy-3Xd" secondAttribute="bottom" constant="66" id="XOa-1Y-6jO"/>
+                            <constraint firstItem="39c-sy-3Xd" firstAttribute="leading" secondItem="CuU-4v-atp" secondAttribute="leading" constant="38" id="heg-ih-0NX"/>
                             <constraint firstItem="BNQ-Mn-5FG" firstAttribute="bottom" secondItem="CuU-4v-atp" secondAttribute="bottom" id="icO-zn-p0X"/>
                             <constraint firstItem="fML-Qy-Ene" firstAttribute="centerY" secondItem="pz3-UN-o3P" secondAttribute="centerY" id="rnM-Jn-bcb"/>
                             <constraint firstItem="BNQ-Mn-5FG" firstAttribute="trailing" secondItem="CuU-4v-atp" secondAttribute="trailing" id="xFu-6k-H5L"/>
+                            <constraint firstItem="39c-sy-3Xd" firstAttribute="top" secondItem="fML-Qy-Ene" secondAttribute="bottom" constant="88.5" id="z1y-MV-5eP"/>
                         </constraints>
                     </view>
                     <connections>
