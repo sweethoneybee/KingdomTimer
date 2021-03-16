@@ -9,9 +9,8 @@ import UIKit
 
 class TutorialMasterViewController: UIViewController, UIPageViewControllerDataSource {
 
-    @IBOutlet weak private var closeButton: UIButton?
-    private let contentsTitles = ["", "", "", ""]
-    private let imageNames = ["page0", "page1", "page2", "page3"]
+    private let contentsTitles = ["", "", "", "", "Let's Go!"]
+    private let imageNames = ["page0", "page1", "page2", "page3", nil]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,16 +28,6 @@ class TutorialMasterViewController: UIViewController, UIPageViewControllerDataSo
             self.view.addSubview(pageVC.view)
             pageVC.didMove(toParent: self)
         }
-        if let btn = self.closeButton {
-            btn.layer.cornerRadius = CGFloat(10)
-            self.view.bringSubviewToFront(btn)
-        }
-    }
-    
-    @IBAction func close(_ sender: Any) {
-        let ud = UserDefaults.standard
-        ud.setValue(true, forKey: "tutorial")
-        self.presentingViewController?.dismiss(animated: true)
     }
     
     private func getContentsVC(index: Int) -> ContentsViewController? {

@@ -20,30 +20,9 @@
                     <view key="view" contentMode="scaleToFill" id="MKh-tr-WtF">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" alpha="0.80000000000000004" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LBf-Z1-SfB">
-                                <rect key="frame" x="30" y="546" width="315" height="51"/>
-                                <color key="backgroundColor" systemColor="systemOrangeColor"/>
-                                <fontDescription key="fontDescription" name="BMDoHyeon-OTF" family="BM DoHyeon OTF" pointSize="19"/>
-                                <state key="normal" title="시작하기">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="close:" destination="lgJ-fp-nnA" eventType="touchUpInside" id="sSh-vE-gyX"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="atM-ne-UUD"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="LBf-Z1-SfB" firstAttribute="leading" secondItem="atM-ne-UUD" secondAttribute="leading" constant="30" id="E4E-fW-C8C"/>
-                            <constraint firstItem="atM-ne-UUD" firstAttribute="trailing" secondItem="LBf-Z1-SfB" secondAttribute="trailing" constant="30" id="ech-9T-d4y"/>
-                            <constraint firstItem="atM-ne-UUD" firstAttribute="bottom" secondItem="LBf-Z1-SfB" secondAttribute="bottom" constant="70" id="u7F-yy-wRY"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="closeButton" destination="LBf-Z1-SfB" id="TWh-ZR-AZ4"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hAg-rp-DVJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -60,24 +39,43 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="BNQ-Mn-5FG">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Title" textAlignment="justified" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fML-Qy-Ene">
-                                <rect key="frame" x="166" y="108" width="43" height="23"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="BMDoHyeon-OTF" family="BM DoHyeon OTF" pointSize="19"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="justified" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fML-Qy-Ene">
+                                <rect key="frame" x="143" y="309.5" width="89" height="48"/>
+                                <fontDescription key="fontDescription" name="BMDoHyeon-OTF" family="BM DoHyeon OTF" pointSize="40"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" alpha="0.80000001192092896" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="39c-sy-3Xd">
+                                <rect key="frame" x="30" y="551" width="315" height="50"/>
+                                <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="Iev-XW-EEv"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="BMDoHyeon-OTF" family="BM DoHyeon OTF" pointSize="27"/>
+                                <state key="normal" title="시작하기">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="close:" destination="sVb-vY-CDM" eventType="touchUpInside" id="wrb-UN-C43"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="CuU-4v-atp"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="CuU-4v-atp" firstAttribute="trailing" secondItem="39c-sy-3Xd" secondAttribute="trailing" constant="30" id="5gE-fu-ysr"/>
+                            <constraint firstItem="fML-Qy-Ene" firstAttribute="centerX" secondItem="pz3-UN-o3P" secondAttribute="centerX" id="BJ0-Te-loQ"/>
                             <constraint firstItem="BNQ-Mn-5FG" firstAttribute="leading" secondItem="CuU-4v-atp" secondAttribute="leading" id="GhV-6U-PoD"/>
+                            <constraint firstItem="39c-sy-3Xd" firstAttribute="leading" secondItem="CuU-4v-atp" secondAttribute="leading" constant="30" id="Nq3-94-cZa"/>
                             <constraint firstItem="BNQ-Mn-5FG" firstAttribute="top" secondItem="CuU-4v-atp" secondAttribute="top" id="Qt2-Vz-Vx8"/>
+                            <constraint firstItem="CuU-4v-atp" firstAttribute="bottom" secondItem="39c-sy-3Xd" secondAttribute="bottom" constant="66" id="XOa-1Y-6jO"/>
                             <constraint firstItem="BNQ-Mn-5FG" firstAttribute="bottom" secondItem="CuU-4v-atp" secondAttribute="bottom" id="icO-zn-p0X"/>
+                            <constraint firstItem="fML-Qy-Ene" firstAttribute="centerY" secondItem="pz3-UN-o3P" secondAttribute="centerY" id="rnM-Jn-bcb"/>
                             <constraint firstItem="BNQ-Mn-5FG" firstAttribute="trailing" secondItem="CuU-4v-atp" secondAttribute="trailing" id="xFu-6k-H5L"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="closeButton" destination="39c-sy-3Xd" id="tqX-Z1-U7J"/>
                         <outlet property="contentImage" destination="BNQ-Mn-5FG" id="mf8-ap-n0o"/>
                         <outlet property="titleLabel" destination="fML-Qy-Ene" id="oB8-Zm-WFo"/>
                     </connections>

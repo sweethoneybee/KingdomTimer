@@ -9,6 +9,7 @@ import UIKit
 
 class ContentsViewController: UIViewController {
 
+    @IBOutlet weak var closeButton: UIButton?
     @IBOutlet weak var titleLabel: UILabel?
     @IBOutlet weak var contentImage: UIImageView?
     
@@ -25,6 +26,18 @@ class ContentsViewController: UIViewController {
         if let imageName = self.imageName {
             self.contentImage?.image = UIImage(named: imageName)
             self.contentImage?.contentMode = .scaleAspectFit
+            self.closeButton?.isHidden = true
         }
+        
+        if let btn = self.closeButton {
+            btn.layer.cornerRadius = CGFloat(10)
+            self.view.bringSubviewToFront(btn)
+        }
+    }
+    
+    @IBAction func close(_ sender: Any) {
+        let ud = UserDefaults.standard
+        ud.setValue(true, forKey: "tutorial")
+        self.presentingViewController?.dismiss(animated: true)
     }
 }
