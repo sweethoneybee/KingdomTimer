@@ -1,3 +1,4 @@
+![깃허브용](https://user-images.githubusercontent.com/25628769/111748141-81144b80-88d3-11eb-8547-df55d8da8298.png)
 # 왕국타이머
 
 [App store](https://apps.apple.com/us/app/%EC%99%95%EA%B5%AD%ED%83%80%EC%9D%B4%EB%A8%B8/id1556230748)  
