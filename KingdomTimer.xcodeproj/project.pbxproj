@@ -82,26 +82,82 @@
 		401254CB25D9526C006931AE /* KingdomTimer */ = {
 			isa = PBXGroup;
 			children = (
+				4045B4FA263AFB4500BE3A31 /* Launch */,
+				4045B4F9263AFB1800BE3A31 /* Asset */,
+				4045B4F8263AFAF700BE3A31 /* Main */,
+				4045B4F7263AFAD300BE3A31 /* Data */,
 				40FF3FB125EF7827002845C4 /* Tutorial */,
-				400D0EA225EE5F9A003310E4 /* BMDOHYEON_otf.otf */,
-				401254CC25D9526C006931AE /* AppDelegate.swift */,
-				401254CE25D9526C006931AE /* SceneDelegate.swift */,
-				40A8B1D425E9492F0021ECF7 /* EditTaskTimerController.swift */,
-				4012550125DF8A43006931AE /* TaskTimerCell.swift */,
-				400D0EA625EE634F003310E4 /* Main.storyboard */,
-				400D0EAA25EF2611003310E4 /* SettingViewController.swift */,
+			);
+			path = KingdomTimer;
+			sourceTree = "<group>";
+		};
+		4045B4F4263AFA5A00BE3A31 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
 				401254EA25DABC4C006931AE /* MainViewController.swift */,
 				40F8593825E7CCF800906F8A /* AddTaskTimerViewController.swift */,
+				40A8B1D425E9492F0021ECF7 /* EditTaskTimerController.swift */,
+				400D0EAA25EF2611003310E4 /* SettingViewController.swift */,
 				40FF3FAD25EF5CBF002845C4 /* GithubViewController.swift */,
-				40A8B1D125E8EFE10021ECF7 /* TaskTimerDAO.swift */,
-				40F8592925E25F3000906F8A /* Utils.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		4045B4F5263AFA6100BE3A31 /* Model */ = {
+			isa = PBXGroup;
+			children = (
 				401254E725DAB30A006931AE /* TaskTimer.swift */,
+				40F8592925E25F3000906F8A /* Utils.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		4045B4F6263AFA6700BE3A31 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				4012550125DF8A43006931AE /* TaskTimerCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		4045B4F7263AFAD300BE3A31 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				40A8B1D125E8EFE10021ECF7 /* TaskTimerDAO.swift */,
 				40F8593125E3D4F200906F8A /* KingdomTimer.xcdatamodeld */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		4045B4F8263AFAF700BE3A31 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				400D0EA625EE634F003310E4 /* Main.storyboard */,
+				4045B4F6263AFA6700BE3A31 /* View */,
+				4045B4F5263AFA6100BE3A31 /* Model */,
+				4045B4F4263AFA5A00BE3A31 /* ViewController */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		4045B4F9263AFB1800BE3A31 /* Asset */ = {
+			isa = PBXGroup;
+			children = (
 				401254D525D9526F006931AE /* Assets.xcassets */,
+				400D0EA225EE5F9A003310E4 /* BMDOHYEON_otf.otf */,
+			);
+			path = Asset;
+			sourceTree = "<group>";
+		};
+		4045B4FA263AFB4500BE3A31 /* Launch */ = {
+			isa = PBXGroup;
+			children = (
+				401254CC25D9526C006931AE /* AppDelegate.swift */,
+				401254CE25D9526C006931AE /* SceneDelegate.swift */,
 				401254D725D9526F006931AE /* LaunchScreen.storyboard */,
 				401254DA25D9526F006931AE /* Info.plist */,
 			);
-			path = KingdomTimer;
+			path = Launch;
 			sourceTree = "<group>";
 		};
 		40FF3FB125EF7827002845C4 /* Tutorial */ = {

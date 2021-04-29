@@ -66,7 +66,6 @@ class TutorialMasterViewController: UIViewController, UIPageViewControllerDataSo
         guard index < self.imageNames.count - 1 else {
             return nil
         }
-        
         index += 1
         return self.getContentsVC(index: index)
     }
