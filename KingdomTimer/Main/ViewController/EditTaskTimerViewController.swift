@@ -7,7 +7,7 @@
 
 import UIKit
 
-class EditTaskTimerController: AddTaskTimerViewController {
+class EditTaskTimerViewController: AddTaskTimerViewController {
     private lazy var taskTimerDao = TaskTimerDAO()
     var taskTimer: TaskTimer?
     @IBOutlet weak var countStepper: UIStepper?

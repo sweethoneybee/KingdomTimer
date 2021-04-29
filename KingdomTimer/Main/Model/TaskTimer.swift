@@ -189,7 +189,7 @@ class TaskTimer {
 }
 
 // MARK:- UI 로직을 위해서 구현해야하는 델리게이트
-protocol TaskTimerDelegate: class {
+protocol TaskTimerDelegate: AnyObject {
     func TimerDidTick(leftTime: TimeInterval)
     func DidChangeState(_ taskTimer: TaskTimer, originalState from: TaskTimer.State, newState to: TaskTimer.State)
 }

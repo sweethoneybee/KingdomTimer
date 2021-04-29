@@ -1,14 +1,11 @@
-import UIKit
+//
+//  UNUserNotificationCenterExtension.swift
+//  KingdomTimer
+//
+//  Created by 정성훈 on 2021/04/29.
+//
 
-extension UIColor {
-    static func fromRGB(rgbValue: UInt, alpha: CGFloat = CGFloat(0.7)) -> UIColor {
-        return UIColor(
-            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
-            blue: CGFloat((rgbValue & 0x0000FF)) / 255.0,
-            alpha: alpha)
-    }
-}
+import UIKit
 
 // TODO:- 두 개 메소드 구현. 권한 물어보면서 하기.
 extension UNUserNotificationCenter {
@@ -50,15 +47,5 @@ extension UNUserNotificationCenter {
         let id = String(data.id) + String(data.title) + String(data.finishDate.description)
         let center = UNUserNotificationCenter.current()
         center.removePendingNotificationRequests(withIdentifiers: [String(id)])
-    }
-}
-
-extension UIViewController {
-    var tutorialStoryboard: UIStoryboard {
-        return UIStoryboard(name: "Tutorial", bundle: Bundle.main)
-    }
-    
-    func initTutorialVC(withIdentifier id: String) -> UIViewController {
-        return self.tutorialStoryboard.instantiateViewController(withIdentifier: id)
     }
 }
