@@ -2,9 +2,11 @@
 # 왕국타이머
 
 [App store](https://apps.apple.com/us/app/%EC%99%95%EA%B5%AD%ED%83%80%EC%9D%B4%EB%A8%B8/id1556230748)  
-본격 생산물 관리 타이머 앱(일생생활에도 사용가능!)
+본격 생산물 관리 타이머 앱(일생생활에도 사용가능!)  
 
+<img width="220" alt="page0" src="https://user-images.githubusercontent.com/25628769/118390490-47a95380-b66a-11eb-8d9c-926fd35b11cc.png"> <img width="220" alt="page1" src="https://user-images.githubusercontent.com/25628769/118390492-49731700-b66a-11eb-92dc-68e2eacb584e.png"> <img width="220" alt="page2" src="https://user-images.githubusercontent.com/25628769/118390495-4b3cda80-b66a-11eb-9b4a-26174cf3bc0b.png"> 
 ## 개발 초점
+
 
 코코아터치를 배우는 단계에서, 배운 것들을 최대한 활용하려고 노력함.  
 특히 MVC 디자인 패턴에 맞추어 Model, View, Controller의 역할을 나누려 노력함.  
