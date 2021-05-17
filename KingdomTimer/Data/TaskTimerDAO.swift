@@ -44,9 +44,9 @@ class TaskTimerDAO {
         }
     }
     
-    func create(data: TimerDataInputContainer) {
+    func create(data: TimerDataInputContainer) -> TaskTimer? {
         guard data.title != "" else {
-            return
+            return nil
         }
         let taskTimerMO = TaskTimerEntity(context: AppDelegate.viewContext)
         
@@ -59,6 +59,7 @@ class TaskTimerDAO {
         taskTimerMO.count = Int64(data.count)
         
         self.save()
+        return TaskTimer(fetchedObject: taskTimerMO)
     }
     
     func update(target: TaskTimerEntity, data: TimerDataInputContainer) {
