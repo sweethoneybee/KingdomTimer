@@ -67,9 +67,8 @@ class MainViewController: UIViewController {
                     let askAgain = UIAlertController(title: "정말 삭제할 건가요?", message: item.timerData.title, preferredStyle: .actionSheet)
                     askAgain.addAction(UIAlertAction(title: "취소", style: .cancel))
                     askAgain.addAction(UIAlertAction(title: "삭제", style: .destructive){ action in
-                        if self.taskTimerDao.delete(objectId: item.objectId) {
+                        if TaskTimerManager.shared.remove(at: indexPath.item) {
                             UNUserNotificationCenter.current().deleteLocalPush(data: item.timerData)
-                            TaskTimerManager.shared.remove(at: indexPath.item) // 의되된 에러
                             self.collectionView?.reloadData()
                         }
                     })

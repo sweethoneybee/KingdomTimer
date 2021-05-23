@@ -10,11 +10,14 @@ import UserNotifications
 
 class TaskTimerManager {
     static var shared = TaskTimerManager()
-    private var taskTimers = [TaskTimer]()
-    private let taskTimerDao = TaskTimerDAO()
+    private var taskTimers: [TaskTimer]
+    private let taskTimerDao: TaskTimerDAO
     
     var count: Int { self.taskTimers.count }
-    private init() {}
+    private init() {
+        self.taskTimerDao = TaskTimerDAO()
+        self.taskTimers = self.taskTimerDao.fetch()
+    }
     
     func startAll() {
         let center = UNUserNotificationCenter.current()
@@ -32,7 +35,7 @@ class TaskTimerManager {
     
     func pauseWithOptimization() {
         for timer in self.taskTimers {
-            timer.startWithOptimization()
+            timer.pauseWithOptimization()
         }
     }
     
