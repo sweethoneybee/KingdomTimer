@@ -6,15 +6,21 @@
 //
 
 import Foundation
+import UserNotifications
 
 class TaskTimerManager {
     static var shared = TaskTimerManager()
     private var taskTimers = [TaskTimer]()
     private let taskTimerDao = TaskTimerDAO()
     
+    var count: Int { self.taskTimers.count }
+    private init() {}
+    
     func startAll() {
+        let center = UNUserNotificationCenter.current()
         for timer in self.taskTimers {
             timer.start()
+            center.createLocalPush(data: timer.timerData)
         }
     }
     
@@ -90,5 +96,13 @@ class TaskTimerManager {
             return true
         }
         return false
+    }
+    
+    func fetch() {
+        self.taskTimers = self.taskTimerDao.fetch()
+    }
+    
+    func save() {
+        self.taskTimerDao.save()
     }
 }

@@ -5,7 +5,7 @@ class MainViewController: UIViewController {
     
     @IBOutlet var collectionView: UICollectionView?
     private lazy var taskTimerDao = TaskTimerDAO()
-    lazy var taskTimers: [TaskTimer] = self.taskTimerDao.fetch()
+//    lazy var taskTimers: [TaskTimer] = self.taskTimerDao.fetch()
     
     // MARK:- Override
     override func viewDidLoad() {
@@ -29,26 +29,24 @@ class MainViewController: UIViewController {
         }
         
         // set taskTimers
-        self.taskTimers = self.taskTimerDao.fetch()
-        for taskTimer in self.taskTimers {
-            taskTimer.startWithOptimization()
-        }
+        TaskTimerManager.shared.fetch()
+        TaskTimerManager.shared.startAllWithOptimization()
         self.collectionView?.reloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        for taskTimer in self.taskTimers {
-            taskTimer.pauseWithOptimization()
-        }
-        self.taskTimerDao.save()
+        TaskTimerManager.shared.pauseWithOptimization()
+        TaskTimerManager.shared.save()
     }
     
     // MARK:- objc functions
     @objc func askEditing(_ sender: UILongPressGestureRecognizer) {
         if sender.state == .began {
             let touchedPoint = sender.location(in: self.collectionView)
-            if let indexpath = self.collectionView?.indexPathForItem(at: touchedPoint) {
-                let item = self.taskTimers[indexpath.item]
+            if let indexPath = self.collectionView?.indexPathForItem(at: touchedPoint) {
+                guard let item = TaskTimerManager.shared.taskTimer(at: indexPath.item) else {
+                    return
+                }
                 
                 // add ActionSheet
                 let alert = UIAlertController(title: nil, message: item.timerData.title, preferredStyle: .actionSheet)
@@ -71,7 +69,7 @@ class MainViewController: UIViewController {
                     askAgain.addAction(UIAlertAction(title: "삭제", style: .destructive){ action in
                         if self.taskTimerDao.delete(objectId: item.objectId) {
                             UNUserNotificationCenter.current().deleteLocalPush(data: item.timerData)
-                            self.taskTimers.remove(at: indexpath.item)
+                            TaskTimerManager.shared.remove(at: indexPath.item) // 의되된 에러
                             self.collectionView?.reloadData()
                         }
                     })
@@ -87,7 +85,7 @@ class MainViewController: UIViewController {
     
     @objc func movePageToAdd(_ sender: Any) {
         let MAX_TIMER_COUNT = 50
-        guard self.taskTimers.count < MAX_TIMER_COUNT else {
+        guard TaskTimerManager.shared.count < MAX_TIMER_COUNT else {
             let alertToMany = UIAlertController(title: "타이머 개수 초과", message: "타이머는 최대까지 \(MAX_TIMER_COUNT)개까지 설정할 수 있습니다", preferredStyle: .alert)
             alertToMany.addAction(UIAlertAction(title: "확인", style: .default))
             self.present(alertToMany, animated: true)
@@ -101,11 +99,7 @@ class MainViewController: UIViewController {
     }
     
     @objc func startAllTimers(_ sender: Any) {
-        let center = UNUserNotificationCenter.current()
-        for taskTimer in self.taskTimers {
-            taskTimer.start()
-            center.createLocalPush(data: taskTimer.timerData)
-        }
+        TaskTimerManager.shared.startAll()
     }
     
     private func setupUI() {
@@ -132,7 +126,7 @@ class MainViewController: UIViewController {
 // MARK:- UICollectionView DataSource
 extension MainViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.taskTimers.count
+        return TaskTimerManager.shared.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -141,7 +135,10 @@ extension MainViewController: UICollectionViewDataSource {
             return errorCell
         }
         
-        let taskTimer = self.taskTimers[indexPath.item]
+        guard let taskTimer = TaskTimerManager.shared.taskTimer(at: indexPath.item) else {
+            let errorCell = UICollectionViewCell()
+            return errorCell
+        }
         taskTimer.delegate = cell
         
         cell.stateLabel?.text = TaskTimerCell.changeStateToString(state: taskTimer.timerData.state)
@@ -157,7 +154,9 @@ extension MainViewController: UICollectionViewDataSource {
 // MARK:- UICollectionView Delegate
 extension MainViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let taskTimer = self.taskTimers[indexPath.item]
+        guard let taskTimer = TaskTimerManager.shared.taskTimer(at: indexPath.item) else {
+            return
+        }
         let center = UNUserNotificationCenter.current()
         switch taskTimer.timerData.state {
         case .idle:

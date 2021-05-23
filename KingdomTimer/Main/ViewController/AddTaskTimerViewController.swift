@@ -75,7 +75,7 @@ class AddTaskTimerViewController: UIViewController, UIPickerViewDataSource, UIPi
             return
         }
         
-        self.taskTimerDao.create(data: inputContainer)
+        self.taskTimerDao.create(data: inputContainer) // 의도된 에러
         let center = UNUserNotificationCenter.current()
         center.getNotificationSettings { settings in
             guard (settings.authorizationStatus == .notDetermined) else {
