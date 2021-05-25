@@ -9,16 +9,10 @@ import Foundation
 import UserNotifications
 
 class TaskTimerManager {
-    static var shared = TaskTimerManager()
-    private var taskTimers: [TaskTimer]
-    private let taskTimerDao: TaskTimerDAO
-    
+    private var taskTimers = [TaskTimer]()
     var count: Int { self.taskTimers.count }
-    private init() {
-        self.taskTimerDao = TaskTimerDAO()
-        self.taskTimers = self.taskTimerDao.fetch()
-    }
     
+    // TODO: 알림 생성부분을 분리할 필요 있음
     func startAll() {
         let center = UNUserNotificationCenter.current()
         for timer in self.taskTimers {
@@ -33,7 +27,7 @@ class TaskTimerManager {
         }
     }
     
-    func pauseWithOptimization() {
+    func pauseAllWithOptimization() {
         for timer in self.taskTimers {
             timer.pauseWithOptimization()
         }
@@ -62,7 +56,7 @@ class TaskTimerManager {
  
     // MARK:- CRUD
     func create(data: TimerDataInputContainer) {
-        guard let timer = taskTimerDao.create(data: data) else { return }
+        guard let timer = TaskTimerDAO().create(data: data) else { return }
         self.taskTimers.append(timer)
     }
     
@@ -79,7 +73,7 @@ class TaskTimerManager {
         }
         
         let oldTimer = self.taskTimers[index]
-        self.taskTimerDao.update(target: oldTimer.entity, data: timerData)
+        TaskTimerDAO().update(target: oldTimer.entity, data: timerData)
 
         oldTimer.timerData.title = timerData.title
         oldTimer.timerData.count = timerData.count
@@ -94,7 +88,7 @@ class TaskTimerManager {
         }
         
         let id = self.taskTimers[index].objectId
-        if self.taskTimerDao.delete(objectId: id) {
+        if TaskTimerDAO().delete(objectId: id) {
             self.taskTimers.remove(at: index)
             return true
         }
@@ -102,10 +96,10 @@ class TaskTimerManager {
     }
     
     func fetch() {
-        self.taskTimers = self.taskTimerDao.fetch()
+        self.taskTimers = TaskTimerDAO().fetch()
     }
     
     func save() {
-        self.taskTimerDao.save()
+        TaskTimerDAO().save()
     }
 }

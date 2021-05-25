@@ -12,7 +12,7 @@ struct TimerData {
 }
 
 // MARK:- TaskTimer 클래스 정의
-class TaskTimer {
+final class TaskTimer {
     enum State: String {
         case idle = "idle"
         case paused = "paused"
