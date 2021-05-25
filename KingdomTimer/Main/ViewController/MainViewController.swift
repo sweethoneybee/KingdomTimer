@@ -5,7 +5,7 @@ class MainViewController: UIViewController {
     
     @IBOutlet var collectionView: UICollectionView?
     private lazy var taskTimerDao = TaskTimerDAO()
-//    lazy var taskTimers: [TaskTimer] = self.taskTimerDao.fetch()
+    lazy var taskTimerManager = TaskTimerManager()
     
     // MARK:- Override
     override func viewDidLoad() {
@@ -29,14 +29,14 @@ class MainViewController: UIViewController {
         }
         
         // set taskTimers
-        TaskTimerManager.shared.fetch()
-        TaskTimerManager.shared.startAllWithOptimization()
+        self.taskTimerManager.fetch()
+        self.taskTimerManager.startAllWithOptimization()
         self.collectionView?.reloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        TaskTimerManager.shared.pauseWithOptimization()
-        TaskTimerManager.shared.save()
+        self.taskTimerManager.pauseAllWithOptimization()
+        self.taskTimerManager.save()
     }
     
     // MARK:- objc functions
@@ -44,7 +44,7 @@ class MainViewController: UIViewController {
         if sender.state == .began {
             let touchedPoint = sender.location(in: self.collectionView)
             if let indexPath = self.collectionView?.indexPathForItem(at: touchedPoint) {
-                guard let item = TaskTimerManager.shared.taskTimer(at: indexPath.item) else {
+                guard let item = self.taskTimerManager.taskTimer(at: indexPath.item) else {
                     return
                 }
                 
@@ -67,7 +67,7 @@ class MainViewController: UIViewController {
                     let askAgain = UIAlertController(title: "정말 삭제할 건가요?", message: item.timerData.title, preferredStyle: .actionSheet)
                     askAgain.addAction(UIAlertAction(title: "취소", style: .cancel))
                     askAgain.addAction(UIAlertAction(title: "삭제", style: .destructive){ action in
-                        if TaskTimerManager.shared.remove(at: indexPath.item) {
+                        if self.taskTimerManager.remove(at: indexPath.item) {
                             UNUserNotificationCenter.current().deleteLocalPush(data: item.timerData)
                             self.collectionView?.reloadData()
                         }
@@ -84,7 +84,7 @@ class MainViewController: UIViewController {
     
     @objc func movePageToAdd(_ sender: Any) {
         let MAX_TIMER_COUNT = 50
-        guard TaskTimerManager.shared.count < MAX_TIMER_COUNT else {
+        guard self.taskTimerManager.count < MAX_TIMER_COUNT else {
             let alertToMany = UIAlertController(title: "타이머 개수 초과", message: "타이머는 최대까지 \(MAX_TIMER_COUNT)개까지 설정할 수 있습니다", preferredStyle: .alert)
             alertToMany.addAction(UIAlertAction(title: "확인", style: .default))
             self.present(alertToMany, animated: true)
@@ -98,7 +98,7 @@ class MainViewController: UIViewController {
     }
     
     @objc func startAllTimers(_ sender: Any) {
-        TaskTimerManager.shared.startAll()
+        self.taskTimerManager.startAll()
     }
     
     private func setupUI() {
@@ -125,7 +125,7 @@ class MainViewController: UIViewController {
 // MARK:- UICollectionView DataSource
 extension MainViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return TaskTimerManager.shared.count
+        return self.taskTimerManager.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -134,7 +134,7 @@ extension MainViewController: UICollectionViewDataSource {
             return errorCell
         }
         
-        guard let taskTimer = TaskTimerManager.shared.taskTimer(at: indexPath.item) else {
+        guard let taskTimer = self.taskTimerManager.taskTimer(at: indexPath.item) else {
             let errorCell = UICollectionViewCell()
             return errorCell
         }
@@ -153,7 +153,7 @@ extension MainViewController: UICollectionViewDataSource {
 // MARK:- UICollectionView Delegate
 extension MainViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let taskTimer = TaskTimerManager.shared.taskTimer(at: indexPath.item) else {
+        guard let taskTimer = self.taskTimerManager.taskTimer(at: indexPath.item) else {
             return
         }
         let center = UNUserNotificationCenter.current()
