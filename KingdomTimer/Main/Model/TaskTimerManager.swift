@@ -73,7 +73,7 @@ class TaskTimerManager {
         }
         
         let oldTimer = self.taskTimers[index]
-        TaskTimerDAO().update(target: oldTimer.entity, data: timerData)
+        TaskTimerDAO().update(target: oldTimer.managedObject, data: timerData)
 
         oldTimer.timerData.title = timerData.title
         oldTimer.timerData.count = timerData.count

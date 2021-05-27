@@ -46,7 +46,7 @@ final class TaskTimer {
     }
     
     init(fetchedObject: TaskTimerEntity) {
-        self.entity = fetchedObject
+        self.managedObject = fetchedObject
         self.timerData = TimerData(fetchedObject: fetchedObject)
     }
     
@@ -57,11 +57,11 @@ final class TaskTimer {
     
     // MARK:- Properties
     weak var delegate: TaskTimerDelegate?
-    var entity: TaskTimerEntity
+    var managedObject: TaskTimerEntity
     var timerData: TimerData
     
     var objectId: NSManagedObjectID {
-        return self.entity.objectID
+        return self.managedObject.objectID
     }
 
     var leftTime: TimeInterval {
@@ -91,12 +91,12 @@ final class TaskTimer {
         } else {
             self.timerData.finishDate = Date(timeIntervalSinceNow: self.timerData.savedLeftTime)
         }
-        self.entity.finishDate = self.timerData.finishDate
+        self.managedObject.finishDate = self.timerData.finishDate
         
         let oldState = self.timerData.state
         self.timerData.state = .going
         self.delegate?.DidChangeState(self, originalState: oldState, newState: self.timerData.state)
-        self.entity.state = self.timerData.state.rawValue
+        self.managedObject.state = self.timerData.state.rawValue
         
         // timer 블록에서는 finish()가 호출될 수 있는데 .going 상태에서만 호출 가능하기 때문에
         // 상태를 먼저 변경하고 타이머를 설정하는 것.
@@ -116,12 +116,12 @@ final class TaskTimer {
         self.timer?.invalidate()
         self.timer = nil
         self.timerData.savedLeftTime = self.leftTime
-        self.entity.savedLeftTime = Int64(self.timerData.savedLeftTime)
+        self.managedObject.savedLeftTime = Int64(self.timerData.savedLeftTime)
         
         let oldState = self.timerData.state
         self.timerData.state = .paused
         self.delegate?.DidChangeState(self, originalState: oldState, newState: self.timerData.state)
-        self.entity.state = self.timerData.state.rawValue
+        self.managedObject.state = self.timerData.state.rawValue
     }
     
     func finish() {
@@ -132,12 +132,12 @@ final class TaskTimer {
         let oldState = self.timerData.state
         self.timerData.state = .finished
         self.delegate?.DidChangeState(self, originalState: oldState, newState: self.timerData.state)
-        self.entity.state = self.timerData.state.rawValue
+        self.managedObject.state = self.timerData.state.rawValue
     }
     
     func reset() {
         self.timerData.savedLeftTime = self.timerData.interval
-        self.entity.savedLeftTime = Int64(self.timerData.interval)
+        self.managedObject.savedLeftTime = Int64(self.timerData.interval)
         
         self.timer?.invalidate()
         self.timer = nil
@@ -145,7 +145,7 @@ final class TaskTimer {
         let oldState = self.timerData.state
         self.timerData.state = .idle
         self.delegate?.DidChangeState(self, originalState: oldState, newState: self.timerData.state)
-        self.entity.state = self.timerData.state.rawValue
+        self.managedObject.state = self.timerData.state.rawValue
     }
     
     func startWithOptimization() {

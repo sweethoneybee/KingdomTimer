@@ -57,7 +57,7 @@ class EditTaskTimerViewController: AddTaskTimerViewController {
         }
         
         if let tT = taskTimer {
-            self.taskTimerDao.update(target: tT.entity, data: self.inputContainer)
+            self.taskTimerDao.update(target: tT.managedObject, data: self.inputContainer)
             tT.reset()
             
             UNUserNotificationCenter.current().deleteLocalPush(data: tT.timerData)
