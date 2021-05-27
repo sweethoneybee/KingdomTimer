@@ -9,15 +9,25 @@ struct TimerData {
     var savedLeftTime = TimeInterval.zero
     var interval = TimeInterval.zero
     lazy var finishDate = Date()
+    
+    init(fetchedObject : TaskTimerEntity) {
+        self.id = Int(fetchedObject.id)
+        self.title = fetchedObject.title ?? "이름불러오기실패"
+        self.state = TaskTimer.State.stateFrom(rawValue: fetchedObject.state)
+        self.count = Int(fetchedObject.count)
+        self.savedLeftTime = TimeInterval(fetchedObject.savedLeftTime)
+        self.interval = TimeInterval(fetchedObject.interval)
+        self.finishDate = fetchedObject.finishDate ?? Date()
+    }
 }
 
 // MARK:- TaskTimer 클래스 정의
 final class TaskTimer {
     enum State: String {
-        case idle = "idle"
-        case paused = "paused"
-        case going = "going"
-        case finished = "finished"
+        case idle
+        case paused
+        case going
+        case finished
         
         static func stateFrom(rawValue state: String?) -> State {
             switch state {
@@ -37,14 +47,7 @@ final class TaskTimer {
     
     init(fetchedObject: TaskTimerEntity) {
         self.entity = fetchedObject
-        
-        self.timerData.id = Int(entity.id)
-        self.timerData.title = entity.title ?? "이름불러오기실패"
-        self.timerData.state = State.stateFrom(rawValue: entity.state)
-        self.timerData.count = Int(entity.count)
-        self.timerData.savedLeftTime = TimeInterval(entity.savedLeftTime)
-        self.timerData.interval = TimeInterval(entity.interval)
-        self.timerData.finishDate = entity.finishDate ?? Date()
+        self.timerData = TimerData(fetchedObject: fetchedObject)
     }
     
     deinit {
@@ -53,30 +56,29 @@ final class TaskTimer {
     }
     
     // MARK:- Properties
-    var entity: TaskTimerEntity
-    private var REFRESH_INTERVAL = TimeInterval(1)
-    var timerData = TimerData()
-    
     weak var delegate: TaskTimerDelegate?
+    var entity: TaskTimerEntity
+    var timerData: TimerData
+    
     var objectId: NSManagedObjectID {
         return self.entity.objectID
     }
 
-    private var timer: Timer?
-    
     var leftTime: TimeInterval {
         switch self.timerData.state {
         case .idle:
             return self.timerData.interval
         case .going:
-            let NOW = Date()
-            return self.timerData.finishDate.timeIntervalSince(NOW)
+            return self.timerData.finishDate.timeIntervalSinceNow
         case .paused:
             return self.timerData.savedLeftTime
         case .finished:
             return TimeInterval.zero
         }
     }
+    
+    private var timer: Timer?
+    private var REFRESH_INTERVAL = TimeInterval(1)
     
     // MARK:- Methods
     func start() {
@@ -179,12 +181,6 @@ final class TaskTimer {
         }
         timer.tolerance = self.REFRESH_INTERVAL * 0.1
         return timer
-    }
-    
-    func reflectEditedChangesOnEntity() {
-        self.entity.title = self.timerData.title
-        self.entity.count = Int64(self.timerData.count)
-        self.entity.interval = Int64(self.timerData.interval)
     }
 }
 
