@@ -93,6 +93,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 // MARK:- UNUserNotificationCenterDelegate Methods
 extension AppDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        completionHandler([.sound, .banner, .list])
+        if #available(iOS 14, *) {
+            completionHandler([.sound, .banner, .list])
+        } else {
+            completionHandler([.sound, .alert])
+        }
     }
 }
