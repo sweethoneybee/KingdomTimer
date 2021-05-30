@@ -36,7 +36,6 @@ class MainViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         self.taskTimerManager.pauseAllWithOptimization()
-        self.taskTimerManager.save()
     }
     
     // MARK:- objc functions
