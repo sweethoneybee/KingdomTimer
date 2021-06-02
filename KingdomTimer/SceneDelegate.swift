@@ -18,8 +18,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
         
-        let tabBarAppearance = UITabBarItem.appearance()
-        tabBarAppearance.setTitleTextAttributes([.font: UIFont(name: "BMDoHyeon-OTF", size: 8) ?? UIFont.systemFont(ofSize: 8)], for: .normal)
+        let tabBarItemAppearance = UITabBarItem.appearance()
+        tabBarItemAppearance.setTitleTextAttributes([.font: UIFont(name: "BMDoHyeon-OTF", size: 8) ?? UIFont.systemFont(ofSize: 8)], for: .normal)
         
         if let tbc = self.window?.rootViewController as? UITabBarController {
             tbc.tabBar.tintColor = .black

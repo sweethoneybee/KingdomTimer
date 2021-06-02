@@ -58,7 +58,7 @@ class MainViewController: UIViewController {
                         return
                     }
                     
-                    vc.taskTimer = item
+                    vc.taskTimerArgument = item
                     vc.hidesBottomBarWhenPushed = true
                     self.navigationController?.pushViewController(vc, animated: true)
                 })

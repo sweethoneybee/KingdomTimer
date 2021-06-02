@@ -8,49 +8,34 @@
 import UIKit
 import CoreData
 
-class AddTaskTimerViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate {
+class AddTaskTimerViewController: UIViewController {
 
-    private let MAX_TEXT_LENGTH = 20
-    private lazy var taskTimerDao = TaskTimerDAO()
-    private var timePickerData = [[Int]]()
-    
-    var timePicker: UIPickerView?
     lazy var inputContainer = TimerDataInputContainer()
     
+    private let MAX_TEXT_LENGTH = 20
+    private var timePickerData = [[Int]]()
+    
+    @IBOutlet weak var titleTf: UITextField?
     @IBOutlet weak var timeTf: UITextField?
     @IBOutlet weak var countLabel: UILabel?
     @IBOutlet weak var wholeTimeLabel: UILabel?
-    @IBOutlet weak var titleTf: UITextField?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setUpTimePickerData()
         
-        self.timeTf?.delegate = self
         self.titleTf?.delegate = self
         
-        self.timePicker = UIPickerView()
-        self.timePicker?.delegate = self
-        self.timeTf?.inputView = timePicker
+        let timePickerView = UIPickerView()
+        timePickerView.delegate = self
+        self.timeTf?.inputView = timePickerView
+        self.timeTf?.delegate = self
+        self.setTimePickerData()
         
-        let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 0, height: 35))
-        let done = UIBarButtonItem()
-        done.title = "완료"
-        done.target = self
-        done.action = #selector(timePickerDone(_:))
-        
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        toolBar.setItems([flexibleSpace, done], animated: true)
-        self.timeTf?.inputAccessoryView = toolBar
-        
+        self.setUI()
         NotificationCenter.default.addObserver(self, selector: #selector(textFieldDidChange(_:)), name: UITextField.textDidChangeNotification, object: nil)
     }
     
-    @objc func timePickerDone(_ sender: Any) {
-        self.view.endEditing(true)
-    }
-    
-    private func setUpTimePickerData() {
+    private func setTimePickerData() {
         let hours = Array<Int>(0...240)
         self.timePickerData.append(hours)
         
@@ -60,22 +45,39 @@ class AddTaskTimerViewController: UIViewController, UIPickerViewDataSource, UIPi
         let seconds = Array<Int>(0...59)
         self.timePickerData.append(seconds)
     }
+
+    private func setUI() {
+        let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 0, height: 35))
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let done = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(timePickerDone(_:)))
+        toolBar.setItems([flexibleSpace, done], animated: true)
+        self.timeTf?.inputAccessoryView = toolBar
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    // MARK:- Methods
+    @objc func timePickerDone(_ sender: Any) {
+        self.view.endEditing(true)
+    }
     
     @IBAction func addTaskTimer() {
         self.view.endEditing(true)
         guard self.inputContainer.title != "" else {
-            let alert = self.makeSimpleAlert(message: "이름을 적어주세요")
+            let alert = UIAlertController.makeSimpleAlert(message: "이름을 적어주세요")
             self.present(alert, animated: true)
             return
         }
         
         guard self.inputContainer.wholeTime > 0 else {
-            let alert = self.makeSimpleAlert(message: "시간을 설정해주세요")
+            let alert = UIAlertController.makeSimpleAlert(message: "시간을 설정해주세요")
             self.present(alert, animated: true)
             return
         }
         
-        self.taskTimerDao.create(data: inputContainer) // 의도된 경고
+        TaskTimerDAO().create(data: inputContainer) // 의도된 경고
         let center = UNUserNotificationCenter.current()
         center.getNotificationSettings { settings in
             guard (settings.authorizationStatus == .notDetermined) else {
@@ -90,26 +92,16 @@ class AddTaskTimerViewController: UIViewController, UIPickerViewDataSource, UIPi
         }
         self.navigationController?.popViewController(animated: true)
     }
-
+    
     @IBAction func countStep(_ sender: UIStepper) {
         self.inputContainer.count = Int(sender.value)
         self.countLabel?.text = "\(self.inputContainer.count)개"
         self.wholeTimeLabel?.text = self.inputContainer.wholeTimeToString
     }
-    
-    func makeSimpleAlert(message: String) -> UIAlertController {
-        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "확인", style: .default))
-        return alert
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
 }
 
-// MARK:- UIPickerView Protocols
-extension AddTaskTimerViewController {
+// MARK:- UIPickerView DataSource, Delegate
+extension AddTaskTimerViewController: UIPickerViewDataSource, UIPickerViewDelegate {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return self.timePickerData.count
     }
@@ -118,17 +110,17 @@ extension AddTaskTimerViewController {
         return self.timePickerData[component].count
     }
     
-func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-    switch component {
-    case 0:
-        return "\(self.timePickerData[component][row]) 시간"
-    case 1:
-        return "\(self.timePickerData[component][row]) 분"
-    case 2:
-        return "\(self.timePickerData[component][row]) 초"
-    default:
-        return "오류"
-    }
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        switch component {
+        case 0:
+            return "\(self.timePickerData[component][row]) 시간"
+        case 1:
+            return "\(self.timePickerData[component][row]) 분"
+        case 2:
+            return "\(self.timePickerData[component][row]) 초"
+        default:
+            return "오류"
+        }
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -143,8 +135,8 @@ func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent c
     }
 }
 
-// MARK:- UITextView Protocols
-extension AddTaskTimerViewController {
+// MARK:- UITextField Delegate
+extension AddTaskTimerViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField === self.timeTf {
             textField.backgroundColor = UIColor.fromRGB(rgbValue: 0x8595a1, alpha: 0.2)
