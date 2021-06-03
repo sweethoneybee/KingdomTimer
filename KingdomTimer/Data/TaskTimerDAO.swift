@@ -8,19 +8,17 @@
 import Foundation
 import CoreData
 
-class TaskTimerDAO {
+final class TaskTimerDAO {
     
     func fetch() -> [TaskTimer] {
-        let viewContext = AppDelegate.viewContext
-        var taskTimers = [TaskTimer]()
-        
         // Fetching Data from Core data
         let request: NSFetchRequest<TaskTimerEntity> = NSFetchRequest(entityName: "TaskTimerEntity")
         let sortDescriptor = NSSortDescriptor(key: "id", ascending: true)
         request.sortDescriptors = [sortDescriptor]
         
         do {
-            let fetchedTaskTimers = try viewContext.fetch(request)
+            let fetchedTaskTimers = try AppDelegate.viewContext.fetch(request)
+            var taskTimers = [TaskTimer]()
             for fetchedTaskTimer in fetchedTaskTimers {
                 let taskTimer = TaskTimer(fetchedObject: fetchedTaskTimer)
                 taskTimers.append(taskTimer)
@@ -34,7 +32,6 @@ class TaskTimerDAO {
     
     func save() {
         let context = AppDelegate.viewContext
-        
         if context.hasChanges {
             do {
                 try context.save()
@@ -44,9 +41,9 @@ class TaskTimerDAO {
         }
     }
     
-    func create(data: TimerDataInputContainer) -> TaskTimer? {
+    func create(data: TimerDataInputContainer) -> Bool {
         guard data.title != "" else {
-            return nil
+            return false
         }
         let taskTimerMO = TaskTimerEntity(context: AppDelegate.viewContext)
         
@@ -59,7 +56,7 @@ class TaskTimerDAO {
         taskTimerMO.count = Int64(data.count)
         
         self.save()
-        return TaskTimer(fetchedObject: taskTimerMO)
+        return true
     }
     
     func update(target: TaskTimerEntity, data: TimerDataInputContainer) {
@@ -70,9 +67,8 @@ class TaskTimerDAO {
     
     func delete(objectId: NSManagedObjectID) -> Bool {
         let context = AppDelegate.viewContext
-        let taskTimer = context.object(with: objectId)
-        
-        context.delete(taskTimer)
+        let taskTimerMO = context.object(with: objectId)
+        context.delete(taskTimerMO)
         
         do {
             try context.save()

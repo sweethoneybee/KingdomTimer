@@ -77,20 +77,21 @@ class AddTaskTimerViewController: UIViewController {
             return
         }
         
-        TaskTimerDAO().create(data: inputContainer) // 의도된 경고
-        let center = UNUserNotificationCenter.current()
-        center.getNotificationSettings { settings in
-            guard (settings.authorizationStatus == .notDetermined) else {
-                return
-            }
-            
-            center.requestAuthorization(options: [.alert, .sound]){ granted, error in
-                if let error = error {
-                    NSLog("user noti request auth error: %s", error.localizedDescription)
+        if TaskTimerDAO().create(data: inputContainer) {
+            let center = UNUserNotificationCenter.current()
+            center.getNotificationSettings { settings in
+                guard (settings.authorizationStatus == .notDetermined) else {
+                    return
+                }
+                
+                center.requestAuthorization(options: [.alert, .sound]){ granted, error in
+                    if let error = error {
+                        NSLog("user noti request auth error: %s", error.localizedDescription)
+                    }
                 }
             }
+            self.navigationController?.popViewController(animated: true)
         }
-        self.navigationController?.popViewController(animated: true)
     }
     
     @IBAction func countStep(_ sender: UIStepper) {
