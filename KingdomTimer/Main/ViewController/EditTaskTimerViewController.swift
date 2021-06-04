@@ -105,10 +105,9 @@ class EditTaskTimerViewController: UIViewController {
             
             self.navigationController?.popViewController(animated: true)
         } else {
-            let alert = UIAlertController(title: "편집 실패", message: "변경 사항을 저장하지 못했습니다", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "확인", style: .default){ action in
+            let alert = UIAlertController.makeSimpleAlert(message: "변경 사항을 저장하지 못했습니다") { action in
                 self.navigationController?.popViewController(animated: true)
-            })
+            }
             self.present(alert, animated: true)
         }
     }

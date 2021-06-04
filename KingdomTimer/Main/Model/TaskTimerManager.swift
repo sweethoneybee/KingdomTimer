@@ -55,11 +55,6 @@ class TaskTimerManager {
     }
  
     // MARK:- CRUD
-    func create(data: TimerDataInputContainer) {
-        guard let timer = TaskTimerDAO().create(data: data) else { return }
-        self.taskTimers.append(timer)
-    }
-    
     func taskTimer(at index: Int) -> TaskTimer? {
         guard !self.taskTimers.isEmpty && index < self.taskTimers.count else {
             return nil
