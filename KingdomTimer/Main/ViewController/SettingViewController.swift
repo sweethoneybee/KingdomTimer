@@ -34,21 +34,26 @@ class SettingViewController: UITableViewController {
         
         if indexPath.section == 1 {
             if indexPath.row == 0 {
-                let resetAlert = UIAlertController(title: nil, message: "모든 타이머를 삭제하겠습니까?", preferredStyle: .alert)
-                resetAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
-                resetAlert.addAction(UIAlertAction(title: "네", style: .destructive){ action in
-                    let taskTimerDao = TaskTimerDAO()
-                    if taskTimerDao.deleteAll() {
-                        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-                        let finishAlert = UIAlertController(title: nil, message: "모든 타이머 삭제 완료", preferredStyle: .alert)
-                        finishAlert.addAction(UIAlertAction(title: "확인", style: .default))
-                        self.present(finishAlert, animated: true)
-                    } else {
-                        let finishAlert = UIAlertController(title: nil, message: "삭제를 실패하였습니다", preferredStyle: .alert)
-                        finishAlert.addAction(UIAlertAction(title: "확인", style: .default))
-                        self.present(finishAlert, animated: true)
-                    }
-                })
+                let resetAlert: UIAlertController = { alert in
+                    alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+                    
+                    alert.addAction(UIAlertAction(title: "네", style: .destructive){ action in
+                        let taskTimerDao = TaskTimerDAO()
+                        if taskTimerDao.deleteAll() {
+                            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                            let finishAlert = UIAlertController(title: nil, message: "모든 타이머 삭제 완료", preferredStyle: .alert)
+                            finishAlert.addAction(UIAlertAction(title: "확인", style: .default))
+                            self.present(finishAlert, animated: true)
+                        } else {
+                            let finishAlert = UIAlertController(title: nil, message: "삭제를 실패하였습니다", preferredStyle: .alert)
+                            finishAlert.addAction(UIAlertAction(title: "확인", style: .default))
+                            self.present(finishAlert, animated: true)
+                        }
+                    })
+                
+                    return alert
+                }(UIAlertController(title: nil, message: "모든 타이머를 삭제하겠습니까?", preferredStyle: .alert))
+                
                 self.present(resetAlert, animated: true)
             }
         }

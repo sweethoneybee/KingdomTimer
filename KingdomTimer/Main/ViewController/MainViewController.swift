@@ -40,58 +40,66 @@ class MainViewController: UIViewController {
     
     // MARK:- objc functions
     @objc func askEditing(_ sender: UILongPressGestureRecognizer) {
-        if sender.state == .began {
-            let touchedPoint = sender.location(in: self.collectionView)
-            if let indexPath = self.collectionView?.indexPathForItem(at: touchedPoint) {
-                guard let item = self.taskTimerManager.taskTimer(at: indexPath.item) else {
+        guard sender.state == .began,
+              let indexPath = self.collectionView?.indexPathForItem(at: sender.location(in: self.collectionView)),
+              let item = self.taskTimerManager.taskTimer(at: indexPath.item) else {
+            return
+        }
+        
+        // add ActionSheet
+        let alert: UIAlertController = { alert in
+            // Reset
+            alert.addAction(UIAlertAction(title: "리셋", style: .default){ action in
+                item.reset()
+            })
+            
+            // Edit
+            alert.addAction(UIAlertAction(title: "편집", style: .default){ action in
+                guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "EditTaskTimer")
+                        as? EditTaskTimerViewController else {
                     return
                 }
                 
-                // add ActionSheet
-                let alert = UIAlertController(title: nil, message: item.timerData.title, preferredStyle: .actionSheet)
-                alert.addAction(UIAlertAction(title: "리셋", style: .default){ action in
-                    item.reset()
-                })
-                alert.addAction(UIAlertAction(title: "편집", style: .default){ action in
-                    guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "EditTaskTimer")
-                            as? EditTaskTimerViewController else {
-                        return
+                vc.taskTimerArgument = item
+                vc.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(vc, animated: true)
+            })
+            
+            // Delete
+            alert.addAction(UIAlertAction(title: "삭제", style: .destructive){ action in
+                let askAgain = UIAlertController(title: "정말 삭제할 건가요?", message: item.timerData.title, preferredStyle: .actionSheet)
+                askAgain.addAction(UIAlertAction(title: "취소", style: .cancel))
+                askAgain.addAction(UIAlertAction(title: "삭제", style: .destructive){ action in
+                    if self.taskTimerManager.remove(at: indexPath.item) {
+                        UNUserNotificationCenter.current().deleteLocalPush(data: item.timerData)
+                        self.collectionView?.reloadData()
                     }
-                    
-                    vc.taskTimerArgument = item
-                    vc.hidesBottomBarWhenPushed = true
-                    self.navigationController?.pushViewController(vc, animated: true)
                 })
-                alert.addAction(UIAlertAction(title: "삭제", style: .destructive){ action in
-                    let askAgain = UIAlertController(title: "정말 삭제할 건가요?", message: item.timerData.title, preferredStyle: .actionSheet)
-                    askAgain.addAction(UIAlertAction(title: "취소", style: .cancel))
-                    askAgain.addAction(UIAlertAction(title: "삭제", style: .destructive){ action in
-                        if self.taskTimerManager.remove(at: indexPath.item) {
-                            UNUserNotificationCenter.current().deleteLocalPush(data: item.timerData)
-                            self.collectionView?.reloadData()
-                        }
-                    })
-                    
-                    self.present(askAgain, animated: true)
-                })
-                alert.addAction(UIAlertAction(title: "취소", style: .cancel))
                 
-                self.present(alert, animated: true)
-            }
-        }
+                self.present(askAgain, animated: true)
+            })
+            alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+            
+            return alert
+        }(UIAlertController(title: nil, message: item.timerData.title, preferredStyle: .actionSheet))
+        
+        self.present(alert, animated: true)
     }
     
     @objc func movePageToAdd(_ sender: Any) {
         let MAX_TIMER_COUNT = 50
         guard self.taskTimerManager.count < MAX_TIMER_COUNT else {
-            let alertToMany = UIAlertController(title: "타이머 개수 초과", message: "타이머는 최대까지 \(MAX_TIMER_COUNT)개까지 설정할 수 있습니다", preferredStyle: .alert)
-            alertToMany.addAction(UIAlertAction(title: "확인", style: .default))
-            self.present(alertToMany, animated: true)
+            let alertTooMany = UIAlertController.makeSimpleAlert(title: "타이머 개수 초과",
+                                                                 message: "타이머는 최대 \(MAX_TIMER_COUNT)개까지 설정할 수 있습니다",
+                                                                 actionHandler: nil)
+            self.present(alertTooMany, animated: true)
             return
         }
+        
         guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "AddTaskTimer") as? AddTaskTimerViewController else {
             return
         }
+        
         vc.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(vc, animated: true)
     }
